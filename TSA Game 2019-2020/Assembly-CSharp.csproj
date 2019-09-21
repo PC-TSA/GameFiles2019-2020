@@ -61,7 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\FPSDisplay.cs" />
-    <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
+    <None Include="Assets\Polygonal Particles\Assets\Shaders\GradientBackgroundShader.shader" />
     <Reference Include="Unity.RenderPipelines.Core.Editor">
       <HintPath>D:/Game Stuff/Game Making/TSA Game 2019-2020/GameFiles 2019-2020/TSA Game 2019-2020/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
     </Reference>

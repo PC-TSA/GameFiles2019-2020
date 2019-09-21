@@ -19,7 +19,7 @@ MonoBehaviour:
     overrides: 0
     enableShadow: 1
     enableContactShadows: 1
-    enableShadowMask: 0
+    enableShadowMask: 1
     enableSSR: 1
     enableSSAO: 1
     enableSubsurfaceScattering: 1
@@ -137,7 +137,7 @@ MonoBehaviour:
     supportSSR: 0
     supportSSAO: 0
     supportSubsurfaceScattering: 0
-    increaseSssSampleCount: 1
+    increaseSssSampleCount: 0
     supportVolumetrics: 1
     increaseResolutionOfVolumetrics: 0
     supportLightLayers: 0
@@ -152,15 +152,15 @@ MonoBehaviour:
     lightLoopSettings:
       cookieSize: 128
       cookieTexArraySize: 16
-      pointCookieSize: 512
+      pointCookieSize: 128
       cubeCookieTexArraySize: 16
       planarReflectionProbeCacheSize: 2
       planarReflectionTextureSize: 1024
-      reflectionProbeCacheSize: 128
-      reflectionCubemapSize: 128
+      reflectionProbeCacheSize: 64
+      reflectionCubemapSize: 256
       reflectionCacheCompressed: 0
       planarReflectionCacheCompressed: 0
-      skyReflectionSize: 128
+      skyReflectionSize: 256
       skyLightingOverrideLayerMask:
         serializedVersion: 2
         m_Bits: 0
@@ -171,7 +171,7 @@ MonoBehaviour:
       maxEnvLightsOnScreen: 64
       maxDecalsOnScreen: 512
     hdShadowInitParams:
-      shadowAtlasResolution: 512
+      shadowAtlasResolution: 4096
       maxShadowRequests: 128
       shadowMapsDepthBits: 32
       useDynamicViewportRescale: 1
