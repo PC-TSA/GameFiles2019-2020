@@ -7,24 +7,26 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WaterMat
-  m_Shader: {fileID: 4800000, guid: 7c0357e11d1f0bd47a6d2a9f64b6bacb, type: 3}
+  m_Name: GrassMat
+  m_Shader: {fileID: 4800000, guid: 195c24855785d884797c5c371c8900d2, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
+  stringTagMap:
+    MotionVector: User
+  disabledShaderPasses:
+  - MOTIONVECTORS
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - Texture2D_10052D29:
-        m_Texture: {fileID: 2800000, guid: e67e0921aa46c794fbda918065e0d537, type: 3}
+    - Texture2D_4C86F238:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - Texture2D_61B8FB96:
-        m_Texture: {fileID: 2800000, guid: 288e61d7e23048c44bc705af08723c1e, type: 3}
+    - Texture2D_DABAFF44:
+        m_Texture: {fileID: 2800000, guid: 5bfca2c47193f584a8312e6014240634, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _AnisotropyMap:
@@ -112,19 +114,6 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_155E4B45: 70
-    - Vector1_27B3721E: 0.15
-    - Vector1_2EA72DBE: 0.4
-    - Vector1_489D2A88: 0.6
-    - Vector1_52EAB924: 1
-    - Vector1_7BFE543E: 0.6
-    - Vector1_81E9B60F: 5.8
-    - Vector1_9175E529: 0.8
-    - Vector1_B3153DD4: 0.7
-    - Vector1_CD95B304: 0.2
-    - Vector1_D8D58DD: 0.1
-    - Vector1_DA75359B: 0.9
-    - Vector1_EC15DDEA: 14.8
     - _AORemapMax: 1
     - _AORemapMin: 0
     - _ATDistance: 1
@@ -235,11 +224,6 @@ Material:
     - _ZTestModeDistortion: 8
     - _ZWrite: 1
     m_Colors:
-    - Color_6BD5626A: {r: 51.984146, g: 51.984146, b: 51.984146, a: 0}
-    - Color_71ED02B9: {r: 0.06274474, g: 0.29690033, b: 0.8867924, a: 0}
-    - Color_B2331303: {r: 0.5896226, g: 0.90645814, b: 1, a: 1}
-    - Color_D7695DB3: {r: 1, g: 1, b: 1, a: 1}
-    - Vector2_8053FDFF: {r: 0.05, g: 0.5, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
