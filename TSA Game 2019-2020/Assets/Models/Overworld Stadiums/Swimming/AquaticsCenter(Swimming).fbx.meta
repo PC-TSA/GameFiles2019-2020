@@ -12,7 +12,27 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: AquaticsCenter
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DarkBlue
+    second: {fileID: 2100000, guid: 02fddf83025efe74797a3c070b59578a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LightBlue
+    second: {fileID: 2100000, guid: 46d42cf8a7f9c8240b0be4be57d36c31, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: White
+    second: {fileID: 2100000, guid: 0b89d326404d65d4e99c90fb3228835e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert1
+    second: {fileID: 2100000, guid: f4a542803da496643bbce286f07b5428, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

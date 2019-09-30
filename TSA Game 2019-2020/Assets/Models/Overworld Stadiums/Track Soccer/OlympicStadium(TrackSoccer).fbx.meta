@@ -1178,7 +1178,62 @@ ModelImporter:
     4300418: pasted__pCube1
     4300420: pasted__pPlatonic3
     4300422: SoccerFiekd
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ConcreteShiny
+    second: {fileID: 2100000, guid: e9188a4989d13574aad43f385fca9a56, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DarkBlue
+    second: {fileID: 2100000, guid: 0d5dba82bbcf646449946b9804a19744, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Green
+    second: {fileID: 2100000, guid: 3b87ea1cdd92ae447b7f0e88df8ed513, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Track
+    second: {fileID: 2100000, guid: 0fffd72e17307ea4c921c9902de2c5d1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: White
+    second: {fileID: 2100000, guid: f1c43b04cb2b11846a7c2db26ce1cee4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WhiteLambert
+    second: {fileID: 2100000, guid: 777b6311a0585c2419c3d95ed20a8064, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert1
+    second: {fileID: 2100000, guid: da43bfa0c02bbf54886dc03afcc0a013, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pasted__GreenLeaves
+    second: {fileID: 2100000, guid: fd26c9f37d212a74db1057257473d1d9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pasted__GreenLeaves1
+    second: {fileID: 2100000, guid: 6e68ac9c53733df4080423f09b0c6926, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pasted__Wood
+    second: {fileID: 2100000, guid: af8bc657c7c867640b764c69ed095089, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pasted__Wood1
+    second: {fileID: 2100000, guid: 931a3dc74e18e6141ba8aa62a9a9d61b, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
