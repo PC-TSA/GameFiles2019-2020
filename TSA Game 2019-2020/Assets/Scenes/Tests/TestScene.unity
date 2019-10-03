@@ -402,7 +402,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 4a4461bef86ff1e46bac283223720f1a, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 4a4461bef86ff1e46bac283223720f1a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1954,63 +1954,91 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1887836610}
   m_CullTransparentMesh: 0
---- !u!1001 &1931722550
-PrefabInstance:
+--- !u!23 &1929422678
+MeshRenderer:
   m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 100000, guid: edc5f1f6b6c5c4f45b72ceacbbba7efa, type: 3}
-      propertyPath: m_Name
-      value: AquaticsCenterInterior
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: edc5f1f6b6c5c4f45b72ceacbbba7efa, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 7.10027
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: edc5f1f6b6c5c4f45b72ceacbbba7efa, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.31
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: edc5f1f6b6c5c4f45b72ceacbbba7efa, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -17.47
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: edc5f1f6b6c5c4f45b72ceacbbba7efa, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: edc5f1f6b6c5c4f45b72ceacbbba7efa, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: edc5f1f6b6c5c4f45b72ceacbbba7efa, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: edc5f1f6b6c5c4f45b72ceacbbba7efa, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: edc5f1f6b6c5c4f45b72ceacbbba7efa, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: edc5f1f6b6c5c4f45b72ceacbbba7efa, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: edc5f1f6b6c5c4f45b72ceacbbba7efa, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: edc5f1f6b6c5c4f45b72ceacbbba7efa, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: edc5f1f6b6c5c4f45b72ceacbbba7efa, type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931622802}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 82df6793de6ddfc4d87384b2f2f9db42, type: 2}
+  - {fileID: 2100000, guid: e3be395572242e84484e870e53132608, type: 2}
+  - {fileID: 2100000, guid: ee75ab95ca77e3f47aaf8f8482e73dea, type: 2}
+  - {fileID: 2100000, guid: 3409344a21e775a47a4fd24fee107862, type: 2}
+  - {fileID: 2100000, guid: 9f04bbd0fad03dc47ba4c8b9b984dbcc, type: 2}
+  - {fileID: 2100000, guid: 3c4a77bed21e95246b745aea56ed1c03, type: 2}
+  - {fileID: 2100000, guid: cc37307873246e240a87c114b70f6d22, type: 2}
+  - {fileID: 2100000, guid: 56b46de62028f6b4494a9a683ea5fde0, type: 2}
+  - {fileID: 2100000, guid: e04b79f35ed45da47848fd104b9eb2ce, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &1930552726
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931622802}
+  m_Mesh: {fileID: 4300000, guid: edc5f1f6b6c5c4f45b72ceacbbba7efa, type: 3}
+--- !u!1 &1931622802
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1931847090}
+  - component: {fileID: 1930552726}
+  - component: {fileID: 1929422678}
+  m_Layer: 0
+  m_Name: AquaticsInterior1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1931847090
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931622802}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 7.2031612, y: 4.3972254, z: -17.47}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1963766850
 GameObject:
   m_ObjectHideFlags: 0

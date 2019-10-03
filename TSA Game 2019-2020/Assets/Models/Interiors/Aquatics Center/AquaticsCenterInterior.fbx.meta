@@ -25751,7 +25751,52 @@ ModelImporter:
     2300000: AquaticsInterior1
     3300000: AquaticsInterior1
     4300000: AquaticsInterior1
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BlackLambert
+    second: {fileID: 2100000, guid: 3409344a21e775a47a4fd24fee107862, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bloo
+    second: {fileID: 2100000, guid: ee75ab95ca77e3f47aaf8f8482e73dea, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DarkBlue
+    second: {fileID: 2100000, guid: cc37307873246e240a87c114b70f6d22, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LightBlue
+    second: {fileID: 2100000, guid: 3c4a77bed21e95246b745aea56ed1c03, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShinyBlack
+    second: {fileID: 2100000, guid: e04b79f35ed45da47848fd104b9eb2ce, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Steel
+    second: {fileID: 2100000, guid: 9f04bbd0fad03dc47ba4c8b9b984dbcc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: White
+    second: {fileID: 2100000, guid: e3be395572242e84484e870e53132608, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert2
+    second: {fileID: 2100000, guid: 56b46de62028f6b4494a9a683ea5fde0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: paleBlue
+    second: {fileID: 2100000, guid: 82df6793de6ddfc4d87384b2f2f9db42, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
