@@ -62,8 +62,12 @@
   <ItemGroup>
     <Compile Include="Assets\CameraPathCreator\DEMO\CPC_DEMO_UpDown.cs" />
     <Compile Include="Assets\CameraPathCreator\Scripts\CPC_CameraPath.cs" />
+    <Compile Include="Assets\Scripts\AudioProcessor.cs" />
     <Compile Include="Assets\Scripts\ButtonHighlighter.cs" />
+    <Compile Include="Assets\Scripts\Example.cs" />
     <Compile Include="Assets\Scripts\FPSDisplay.cs" />
+    <Compile Include="Assets\Scripts\NoteController.cs" />
+    <Compile Include="Assets\Scripts\ScrollerController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
