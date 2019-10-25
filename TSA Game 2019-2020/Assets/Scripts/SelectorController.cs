@@ -5,9 +5,22 @@ using TMPro;
 
 public class SelectorController : MonoBehaviour
 {
+    public int laneNumber; //0 = left lane, 1 = mid lane, 2 = right lane; defines it's keycode
     public KeyCode key;
+    public KeyCode manualGenKey; //Used for placing notes in manual mode
 
     public List<GameObject> selectableNotes = new List<GameObject>();
+
+    public bool shouldKillNotes = true; //If false, notes that go past this selector wont die; For 
+
+    public RhythmController rhythmController;
+    public ScrollerController scrollerController;
+
+    private void Start()
+    {
+        key = rhythmController.laneKeycodes[laneNumber]; //Gets this selector's keycode from it's lane index & the keycode list in RhythmController.cs
+        manualGenKey = rhythmController.manualGenKeycodes[laneNumber];
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -28,11 +41,17 @@ public class SelectorController : MonoBehaviour
             if (selectableNotes.Count != 0)
                 foreach (GameObject note in selectableNotes)
                 {
-                    note.GetComponent<NoteController>().Hit();
+                    if (shouldKillNotes)
+                        note.GetComponent<NoteController>().Hit();
+                    else
+                        note.GetComponent<NoteController>().HitNoKill();
                     FindObjectOfType<RhythmController>().UpdateNotesHit(1);
                 }
             else
                 FindObjectOfType<RhythmController>().UpdateMissclicks(1);
         }
+
+        if (Input.GetKeyDown(manualGenKey) && rhythmController.editMode == 1) //If in manual gen edit mode
+            scrollerController.SpawnNote(laneNumber, true);
     }
 }

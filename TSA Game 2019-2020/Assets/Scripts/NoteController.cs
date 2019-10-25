@@ -8,7 +8,7 @@ public class NoteController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.tag == "Selector")
+        if (collision.tag == "Selector" && collision.GetComponent<SelectorController>().shouldKillNotes)
             StartCoroutine(DeathFade());
     }
 
@@ -21,12 +21,19 @@ public class NoteController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    //When the note is hit, play note hit anim and then fade out
+    //When the note is hit, play note hit anim and then kill note
     IEnumerator NoteHit()
     {
         GetComponent<Animation>().Play("NoteHit");
         yield return new WaitForSeconds(0.15f);
         Destroy(gameObject);
+    }
+
+    //When the note is hit, play note hit anim but DONT kill note; For level making purposes
+    public void HitNoKill()
+    {
+        hasBeenHit = true;
+        GetComponent<Animation>().Play("NoteHit");
     }
 
     public void Hit()
