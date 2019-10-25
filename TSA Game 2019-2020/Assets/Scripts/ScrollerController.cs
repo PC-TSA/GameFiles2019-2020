@@ -5,6 +5,7 @@ using UnityEngine;
 public class ScrollerController : MonoBehaviour
 {
     public GameObject notePrefab;
+    public GameObject notesParent;
 
     public GameObject[] lanes;
 
@@ -13,61 +14,48 @@ public class ScrollerController : MonoBehaviour
     public float bpm;
     public float delay;
 
-    private float lastTime, deltaTime, timer;
-
-    /*void Start()
-    {
-        //Select the instance of AudioProcessor and pass a reference
-        //to this object
-        AudioProcessor processor = FindObjectOfType<AudioProcessor>();
-        processor.onBeat.AddListener(onOnbeatDetected);
-        processor.onSpectrum.AddListener(onSpectrum);
-    }
-
-    //this event will be called every time a beat is detected.
-    //Change the threshold parameter in the inspector
-    //to adjust the sensitivity
-    void onOnbeatDetected()
-    {
-        Debug.Log("Beat!!!");
-        Instantiate(notePrefab, noteSpawnPos.transform.position, transform.rotation, transform);
-    }
-
-    //This event will be called every frame while music is playing
-    void onSpectrum(float[] spectrum)
-    {
-        //The spectrum is logarithmically averaged
-        //to 12 bands
-
-        for (int i = 0; i < spectrum.Length; ++i)
-        {
-            Vector3 start = new Vector3(i, 0, 0);
-            Vector3 end = new Vector3(i, spectrum[i], 0);
-            Debug.DrawLine(start, end);
-        }
-    }*/
-
-    private void Update()
-    {
-        //Chooses a random lane to create the note in
-        int rand = Random.Range(0, 4);
-        deltaTime = GetComponent<AudioSource>().time - lastTime;
-        timer += deltaTime;
-
-        if (timer >= (delay / bpm))
-        {
-            //Create the note
-            Instantiate(notePrefab, lanes[Random.Range(0, lanes.Length)].transform.position, transform.rotation, transform);
-            timer = 0;
-        }
-
-        lastTime = GetComponent<AudioSource>().time;
-    }
+    public float lastTime, deltaTime, timer;
 
     private void FixedUpdate()
     {
         //Scroller
         transform.position = new Vector3(transform.position.x, transform.position.y - scrollSpeed, transform.position.z);
 
+        //Prevents first few note spawns from spawning multiple at once
+        if (GetComponent<AudioSource>().time > 1.5f)
+        {
+            deltaTime = GetComponent<AudioSource>().time - lastTime;
+            timer += deltaTime;
+        }
+        else
+            lastTime = GetComponent<AudioSource>().time;
+
+        if (timer >= (delay / bpm))
+        {
+            //Chooses a random lane to create the note in
+            int rand = Random.Range(0, 4);
+
+            //Create the note
+            int lane = Random.Range(0, lanes.Length);
+            GameObject newNote = Instantiate(notePrefab, lanes[lane].transform.position, transform.rotation, notesParent.transform);
+
+            //Rotate Arrow
+            switch (lane)
+            {
+                case 0:
+                    newNote.transform.eulerAngles = new Vector3(0, 0, -90);
+                    break;
+                case 1:
+                    newNote.transform.eulerAngles = new Vector3(0, 0, 180);
+                    break;
+                case 2:
+                    newNote.transform.eulerAngles = new Vector3(0, 0, 90);
+                    break;
+            }
+
+            timer -= (delay / bpm);
+        }
+
+        lastTime = GetComponent<AudioSource>().time;
     }
 }
