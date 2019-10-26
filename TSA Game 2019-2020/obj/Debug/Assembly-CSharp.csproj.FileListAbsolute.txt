@@ -1,0 +1,2 @@
+D:\Game Stuff\Game Making\TSA Game 2019-2020\GameFiles 2019-2020\TSA Game 2019-2020\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
+D:\Game Stuff\Game Making\TSA Game 2019-2020\GameFiles 2019-2020\TSA Game 2019-2020\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
