@@ -7,19 +7,26 @@ using TMPro;
 using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
+using UnityEngine.Rendering.PostProcessing;
 
 public class RhythmRunner : MonoBehaviour
 {
     public string XMLRecordingName; //This is the note track recording that will be used in this scene; Searches for an XML file with this exact name in the 'Assets/Resources/' folder
     public TextAsset xmlRecordingAsset;
 
-    public int notesHit;
-    public int notesMissed;
-    public int missClicks;
+    public int notesHit = 0; //How many notes hit
+    public int notesMissed = 0; //How many notes missed
+    public int missClicks = 0; //How many clicks that didnt hit a note
+    public int combo = 0; //Current combo (ex. 10 notes without missing one / misclicking
+    public int comboLvl = 0; //Level of combo (ex. 10+ combo = lvl1, 20+ combo = lvl2, 30+ combo = lvl3; Different levels = different visual effects / bonuses)
+    public int deathCount = 0; //How many notes have been missed in a row. (ex. if you miss 5, but then get 1 right, your deathCount is 4. Doesnt go above 0 and works independently of combo)
+    public int health = 20; //How much deathCount needs to reach to lose the game
 
     public GameObject notesHitTxt;
     public GameObject notesMissedTxt;
     public GameObject missClicksTxt;
+    public GameObject comboTxt;
+    public GameObject deathCountTxt;
 
     public List<AudioClip> songs;
 
@@ -38,8 +45,21 @@ public class RhythmRunner : MonoBehaviour
 
     public Vector3 originalPos;
 
+    public GameObject playerObj;
+    public TrailRenderer[] trailRenderers;
+    public Gradient[] comboTrailGradients; //0 = lvl 1, 1 = lvl 2, 2 = lvl 3
+
+    public bool isAnimSpeedupRunning; //Made so AnimSpeedUpTimer coorutine cant be started multiple times simultaneously, as that would likely desync that animation 
+
+    public PostProcessVolume postProcessingVolume;
+    Vignette vignette;
+    public float vignetteNewVal;
+
     private void Start()
     {
+        //Get vignette from post processing profile
+        postProcessingVolume.profile.TryGetSettings(out vignette);
+
         //Load xml asset
         xmlRecordingAsset = Resources.Load<TextAsset>(XMLRecordingName);
 
@@ -48,28 +68,47 @@ public class RhythmRunner : MonoBehaviour
         StartCoroutine(DelayedStart());
     }
 
+    private void Update()
+    {
+        //Smoothly lerps vignette to deathCount / 20 value
+        vignette.intensity.value = Mathf.Lerp(vignette.intensity.value, vignetteNewVal, Time.deltaTime);
+    }
+
     private void FixedUpdate()
     {
         //Scroller
         scrollerObj.transform.position = new Vector3(scrollerObj.transform.position.x, scrollerObj.transform.position.y - scrollSpeed, scrollerObj.transform.position.z);
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            UpdateCombo(1);
+            AnimSpeedUp();
+        }
     }
 
     public void UpdateNotesHit(int i)
     {
         notesHit += i;
         notesHitTxt.GetComponent<TextMeshProUGUI>().text = "Notes Hit: " + notesHit;
+        UpdateDeathCount(-i); //-i because the lower the death count the better and hitting a note is good
+        UpdateCombo(i);
+        AnimSpeedUp();
     }
 
     public void UpdateNotesMissed(int i)
     {
         notesMissed += i;
         notesMissedTxt.GetComponent<TextMeshProUGUI>().text = "Notes Missed: " + notesMissed;
+        UpdateDeathCount(i);
+        BreakCombo();
     }
 
     public void UpdateMissclicks(int i)
     {
         missClicks += i;
         missClicksTxt.GetComponent<TextMeshProUGUI>().text = "Misclicks: " + missClicks;
+        UpdateDeathCount(i);
+        BreakCombo();
     }
 
     public void LoadRecording() //Deserializes chosen xml file and sets it as current recording
@@ -84,6 +123,9 @@ public class RhythmRunner : MonoBehaviour
             if (clip.name == currentRecording.clipName)
                 audioSource.clip = clip;
         audioSource.time = 0;
+
+        //Update scroll speed
+        scrollSpeed = currentRecording.scrollSpeed;
 
         //Reset scroller to start
         scrollerObj.transform.position = originalPos;
@@ -119,5 +161,95 @@ public class RhythmRunner : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         LoadRecording();
+    }
+
+    void UpdateDeathCount(int i)
+    {
+        if (deathCount + i >= 0 && deathCount + i <= health)
+        {
+            deathCount += i;
+            deathCountTxt.GetComponent<TextMeshProUGUI>().text = "Death Count: " + deathCount;
+            if (deathCount >= health)
+                Lose();
+
+            if (deathCount == 0)
+                GetComponent<AudioLowPassFilter>().enabled = false;
+            else
+            {
+                //Update audio low pass filter, aka 'distorted/muffled effect'
+                GetComponent<AudioLowPassFilter>().enabled = true;
+                int freq = 6000 - (deathCount * 6000 / health); //Proportion of the deathCount / health = new frequency / 6000 (6000 = arbitrary max frequency I chose)
+                if (freq < 1000)
+                    freq = 1000;
+                GetComponent<AudioLowPassFilter>().cutoffFrequency = freq;
+
+                //Update vignette
+                vignetteNewVal = 0.25f + (deathCount * 0.1f / health);
+            }
+        }
+    }
+
+    void Lose()
+    {
+        //Temp code
+        Debug.Log("You Lost!");
+    }
+
+    void UpdateCombo(int i)
+    {
+        combo += i;
+        comboTxt.GetComponent<TextMeshProUGUI>().text = "Combo: " + combo;
+        if (combo < 10)
+            comboLvl = 0;
+        else
+        {
+            switch (combo)
+            {
+                case 10:
+                    comboLvl = 1;
+                    break;
+                case 20:
+                    comboLvl = 2;
+                    break;
+                case 30:
+                    comboLvl = 3;
+                    break;
+            }
+
+            //Enable trails & set their color
+            foreach (TrailRenderer tr in trailRenderers)
+            {
+                tr.enabled = true;
+                tr.colorGradient = comboTrailGradients[comboLvl - 1];
+            }
+        }
+    }
+
+    void BreakCombo()
+    {
+        combo = 0;
+        comboLvl = 0;
+        foreach (TrailRenderer tr in trailRenderers)
+            tr.enabled = false;
+    }
+
+    void AnimSpeedUp() //Speeds up character animation briefly to increase impact when note is pressed
+    {
+        if(comboLvl >= 0 && !isAnimSpeedupRunning)
+        {
+            playerObj.GetComponent<Animator>().speed = 1f;
+            StartCoroutine(AnimSpeedUpTimer());
+        }
+    }
+
+    IEnumerator AnimSpeedUpTimer()
+    {
+        isAnimSpeedupRunning = true;
+        playerObj.GetComponent<Animator>().speed = 2;
+        yield return new WaitForSeconds(0.3f);
+        playerObj.GetComponent<Animator>().speed = 0.25f;
+        yield return new WaitForSeconds(0.15f);
+        playerObj.GetComponent<Animator>().speed = 1f;
+        isAnimSpeedupRunning = false;
     }
 }

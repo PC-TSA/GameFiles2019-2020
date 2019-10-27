@@ -155,6 +155,10 @@ public class RhythmController : MonoBehaviour
 
     public void SaveRecording() //Serializes recording to xml file
     {
+        //Making sure all vals are set
+        currentRecording.clipName = songs[selectedSongID].name;
+        currentRecording.scrollSpeed = scrollerController.scrollSpeed;
+
         var serializer = new XmlSerializer(typeof(Recording));
         var stream = new FileStream(EditorUtility.SaveFilePanel("Save Recording", "", "new_recording", "xml"), FileMode.Create);
         serializer.Serialize(stream, currentRecording);
@@ -181,6 +185,9 @@ public class RhythmController : MonoBehaviour
         scrollerController.bpm = songBPMs[selectedSongID];
         audioSource.clip = songs[selectedSongID];
         audioSource.time = 0;
+
+        //Update scroll speed
+        scrollerController.scrollSpeed = currentRecording.scrollSpeed;
 
         //Reset scroller to start
         scrollerController.transform.position = scrollerController.originalPos;

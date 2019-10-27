@@ -24,7 +24,7 @@ public class SelectorRunner : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.tag == "Note")
+        if (collision.tag == "Note" && !collision.GetComponent<NoteController>().hasBeenHit)
         {
             selectableNotes.Remove(collision.gameObject);
             collision.GetComponent<NoteController>().StartDeathFade();
@@ -37,11 +37,23 @@ public class SelectorRunner : MonoBehaviour
         if (Input.GetKeyDown(key))
         {
             if (selectableNotes.Count != 0)
+            {
+                //Removes oldest note in the selectable notes list
+                selectableNotes[0].GetComponent<NoteController>().Hit();
+                selectableNotes.RemoveAt(0);
+                rhythmRunner.UpdateNotesHit(1);
+
+                /* CODE TO KILL MULTIPLE NODES WITH SINGLE CLICK
+                List<GameObject> notesToRemove = new List<GameObject>();
                 foreach (GameObject note in selectableNotes)
                 {
                     note.GetComponent<NoteController>().Hit();
-                    rhythmRunner.UpdateNotesHit(1);
+                    notesToRemove.Add(note);
                 }
+                foreach (GameObject note in notesToRemove)
+                    selectableNotes.Remove(note);
+                notesToRemove.Clear();*/
+            }
             else
                 rhythmRunner.UpdateMissclicks(1);
         }

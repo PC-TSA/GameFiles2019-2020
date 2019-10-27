@@ -34,7 +34,8 @@ public class SelectorController : MonoBehaviour
         if (collision.tag == "Note")
         {
             selectableNotes.Remove(collision.gameObject);
-            collision.GetComponent<NoteController>().StartDeathFade();
+            if(shouldKillMissedNotes)
+                collision.GetComponent<NoteController>().StartDeathFade();
             rhythmController.UpdateNotesMissed(1);
         }
     }

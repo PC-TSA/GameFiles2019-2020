@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ScrollerController : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class ScrollerController : MonoBehaviour
     public float lastTime, deltaTime, timer;
 
     public Vector3 originalPos; //Is reset to this
+
+    public GameObject speedPickerInputField;
 
     private void Start()
     {
@@ -114,5 +117,10 @@ public class ScrollerController : MonoBehaviour
         }
 
         rhythmController.noteGameObjects.Add(newNote);
+    }
+
+    public void ChangeScrollSpeed()
+    {
+        scrollSpeed = float.Parse(speedPickerInputField.GetComponent<TMP_InputField>().text);
     }
 }

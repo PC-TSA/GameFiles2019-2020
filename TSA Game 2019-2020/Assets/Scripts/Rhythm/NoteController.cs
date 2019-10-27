@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NoteController : MonoBehaviour
 {
-    bool hasBeenHit;
+    public bool hasBeenHit;
 
     public Note noteCodeObject; //This note's code object counterpart in the noteObjects list in ScrollController; Used for serialization
 
