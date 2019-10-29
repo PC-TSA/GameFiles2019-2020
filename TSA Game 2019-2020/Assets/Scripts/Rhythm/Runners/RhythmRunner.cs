@@ -55,15 +55,17 @@ public class RhythmRunner : MonoBehaviour
     Vignette vignette;
     public float vignetteNewVal;
 
+    public float customSpeed;
+
     private void Start()
     {
+        originalPos = scrollerObj.transform.position;
+
         //Get vignette from post processing profile
         postProcessingVolume.profile.TryGetSettings(out vignette);
 
         //Load xml asset
         xmlRecordingAsset = Resources.Load<TextAsset>(XMLRecordingName);
-
-        originalPos = scrollerObj.transform.position;
 
         StartCoroutine(DelayedStart());
     }
@@ -124,15 +126,29 @@ public class RhythmRunner : MonoBehaviour
                 audioSource.clip = clip;
         audioSource.time = 0;
 
+        //Reset scroller
+        scrollerObj.transform.position = originalPos;
+
         //Update scroll speed
         scrollSpeed = currentRecording.scrollSpeed;
 
-        //Reset scroller to start
-        scrollerObj.transform.position = originalPos;
+        /*/Adjusts for tracks made in low speed being off slightly (OLD, LIKELY DOESNT SERVE A PURPOSE AND RATHER MAKES IT WORSE)
+        if (scrollSpeed <= 10)
+        {
+            float newY = (scrollSpeed * 0.66f) * scrollSpeed;
+            scrollerObj.transform.localPosition = new Vector3(scrollerObj.transform.localPosition.x, newY, scrollerObj.transform.localPosition.z);
+        }*/
 
         //Generate notes
-        foreach (Note n in currentRecording.notes)
-            DeserializeNote(n.lane, n.pos);
+        if (scrollSpeed == customSpeed || customSpeed == 0)
+            foreach (Note n in currentRecording.notes)
+                DeserializeNote(n.lane, n.pos);
+        else
+        {
+            foreach (Note n in currentRecording.notes)
+                DeserializeNote(n.lane, OverrideSpeedPos(n));
+            scrollSpeed = customSpeed;
+        }
 
         audioSource.Play();
     }
@@ -152,7 +168,7 @@ public class RhythmRunner : MonoBehaviour
                 newNote.transform.eulerAngles = new Vector3(0, 0, 180);
                 break;
             case 2:
-                newNote.transform.eulerAngles = new Vector3(0, 0, 90);
+                newNote.transform.eulerAngles = new Vector3(0, 0, 90);  
                 break;
         }
     }
@@ -231,6 +247,7 @@ public class RhythmRunner : MonoBehaviour
         comboLvl = 0;
         foreach (TrailRenderer tr in trailRenderers)
             tr.enabled = false;
+        comboTxt.GetComponent<TextMeshProUGUI>().text = "Combo: " + combo;
     }
 
     void AnimSpeedUp() //Speeds up character animation briefly to increase impact when note is pressed
@@ -251,5 +268,11 @@ public class RhythmRunner : MonoBehaviour
         yield return new WaitForSeconds(0.15f);
         playerObj.GetComponent<Animator>().speed = 1f;
         isAnimSpeedupRunning = false;
+    }
+
+    Vector3 OverrideSpeedPos(Note n)
+    {
+        float speedMultiplier = customSpeed / scrollSpeed;
+        return new Vector3(n.pos.x, n.pos.y * speedMultiplier, n.pos.z);
     }
 }
