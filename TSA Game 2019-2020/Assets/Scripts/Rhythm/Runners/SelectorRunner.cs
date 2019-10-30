@@ -9,8 +9,12 @@ public class SelectorRunner : MonoBehaviour
 
     public List<GameObject> selectableNotes = new List<GameObject>();
     public GameObject selectableSlider;
+    public bool selectableSliderBeingHit;
+    public float sliderHeightChange; //How much the height (not scale) is increased by each FixedUpdate call on the spawned slider
 
     public RhythmRunner rhythmRunner;
+
+    public ParticleSystem noteHitParticle;
 
     private void Start()
     {
@@ -64,7 +68,6 @@ public class SelectorRunner : MonoBehaviour
                 //Removes oldest note in the selectable notes list
                 selectableNotes[0].GetComponent<NoteController>().Hit();
                 selectableNotes.RemoveAt(0);
-                rhythmRunner.UpdateNotesHit(1);
 
                 /* CODE TO KILL MULTIPLE NODES WITH SINGLE CLICK
                 List<GameObject> notesToRemove = new List<GameObject>();
@@ -78,18 +81,38 @@ public class SelectorRunner : MonoBehaviour
                 notesToRemove.Clear();*/
             }
             
-            if(selectableSlider != null && !selectableSlider.GetComponent<SliderController>().canBeHit && !selectableSlider.GetComponent<SliderController>().hasBeenHit) //If there is a selectableSlider that can be hit and hasnt been hit yet
+            if(selectableSlider != null && selectableSlider.GetComponent<SliderController>().canBeHit && !selectableSlider.GetComponent<SliderController>().hasBeenHit) //If there is a selectableSlider that can be hit and hasnt been hit yet
             {
                 selectableSlider.GetComponent<SliderController>().hasBeenHit = true;
                 somethingClicked = true;
+                noteHitParticle.Play();
             }
 
             if (!somethingClicked)
                 rhythmRunner.UpdateMissclicks(1);
+            else
+                rhythmRunner.UpdateNotesHit(1);
         }
 
-        //If you stop hitting a slider mid way
-        if((selectableSlider != null && selectableSlider.GetComponent<SliderController>().hasBeenHit && Input.GetKeyUp(key)))
-            selectableSlider.GetComponent<SliderController>().incompleteHit = true;
+        if (Input.GetKeyUp(key))
+        {
+            //If you stop hitting a slider mid way
+            if (selectableSlider != null && selectableSlider.GetComponent<SliderController>().hasBeenHit)
+            {
+                selectableSlider.GetComponent<SliderController>().incompleteHit = true;
+                selectableSliderBeingHit = false;
+                noteHitParticle.Stop();
+            }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (selectableSliderBeingHit)
+        {
+            selectableSlider.GetComponent<RectTransform>().sizeDelta = selectableSlider.GetComponent<RectTransform>().sizeDelta = new Vector2(selectableSlider.GetComponent<RectTransform>().sizeDelta.x, selectableSlider.GetComponent<RectTransform>().sizeDelta.y - sliderHeightChange);
+            selectableSlider.GetComponent<BoxCollider2D>().size = new Vector2(selectableSlider.GetComponent<BoxCollider2D>().size.x, selectableSlider.GetComponent<RectTransform>().sizeDelta.y);
+            selectableSlider.transform.localPosition = new Vector3(selectableSlider.transform.localPosition.x, selectableSlider.transform.localPosition.y - sliderHeightChange / 2, selectableSlider.transform.localPosition.z);
+        }
     }
 }

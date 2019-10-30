@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 114788240662972734}
   m_Layer: 0
   m_Name: Slider-RhythmMaker
-  m_TagString: Note
+  m_TagString: Slider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -119,6 +119,7 @@ MonoBehaviour:
   canBeHit: 1
   incompleteHit: 0
   canBeHitTime: 0
+  sliderCodeObject: {fileID: 0}
   mouseDown: 0
 --- !u!50 &3096851811985096317
 Rigidbody2D:

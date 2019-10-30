@@ -35,6 +35,7 @@ public class RhythmController : MonoBehaviour
 
     public List<KeyCode> laneKeycodes = new List<KeyCode>(); //index 0 = left lane, 1 = middle lane, 2 == right lane; values gotten by SelectorComponent.cs
     public List<KeyCode> manualGenKeycodes = new List<KeyCode>(); //^; alternate keys used for placing notes in manual gen mode
+    public KeyCode placeSliderKeycode; //This key + a key from manualKeycode will place a slider of that type in manual gen mode
 
     public GameObject waveformObj;
 
@@ -44,6 +45,7 @@ public class RhythmController : MonoBehaviour
     public Recording currentRecording; //Holds the track creations that can be saved
 
     public List<GameObject> noteGameObjects;
+    public List<GameObject> sliderGameObjects;
 
     private void Start()
     {
@@ -200,6 +202,10 @@ public class RhythmController : MonoBehaviour
         //Generate notes
         foreach (Note n in currentRecording.notes)
             scrollerController.DeserializeNote(n.lane, n.pos);
+
+        //Generate sliders
+        foreach (SliderObj s in currentRecording.sliders)
+            scrollerController.DeserializeNote(s.lane, s.pos);
 
         //Set start button to 'Start'
         isPlaying = false;

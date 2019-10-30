@@ -142,13 +142,19 @@ public class RhythmRunner : MonoBehaviour
 
         //Generate notes
         if (scrollSpeed == customSpeed || customSpeed == 0)
+        {
             foreach (Note n in currentRecording.notes)
                 DeserializeNote(n.lane, n.pos);
+            foreach (SliderObj s in currentRecording.sliders)
+                DeserializeSlider(s.lane, s.pos, s.height);
+        }
         else
         {
             scrollSpeed = customSpeed;
             foreach (Note n in currentRecording.notes)
                 DeserializeNote(n.lane, OverrideSpeedPos(n));
+            foreach (SliderObj s in currentRecording.sliders)
+                DeserializeSlider(s.lane, OverrideSpeedPos(s), s.height);
         }
 
         audioSource.Play();
@@ -170,14 +176,23 @@ public class RhythmRunner : MonoBehaviour
                 break;
             case 2:
                 newNote.transform.eulerAngles = new Vector3(0, 0, 90);  
-                break;
+                break;  
         }
+    }
+
+    public void DeserializeSlider(int lane, Vector3 pos, float height)
+    {
+        GameObject newSlider = Instantiate(sliderPrefab, new Vector3(pos.x, 0, 0), transform.rotation, notesParent.transform);
+        newSlider.transform.localPosition = new Vector3(newSlider.transform.localPosition.x, pos.y, pos.z);
+        newSlider.GetComponent<RectTransform>().sizeDelta = new Vector2(newSlider.GetComponent<RectTransform>().sizeDelta.x, height);
+        newSlider.GetComponent<BoxCollider2D>().size = new Vector2(newSlider.GetComponent<BoxCollider2D>().size.x, height);
     }
 
     IEnumerator DelayedStart()
     {
         yield return new WaitForSeconds(1);
         LoadRecording();
+        FindObjectOfType<SelectorRunner>().sliderHeightChange = scrollSpeed * 0.67f;
     }
 
     void UpdateDeathCount(int i)
@@ -275,5 +290,11 @@ public class RhythmRunner : MonoBehaviour
     {
         float speedMultiplier = customSpeed / scrollSpeed;
         return new Vector3(n.pos.x, n.pos.y * speedMultiplier, n.pos.z);
+    }
+
+    Vector3 OverrideSpeedPos(SliderObj s)
+    {
+        float speedMultiplier = customSpeed / scrollSpeed;
+        return new Vector3(s.pos.x, s.pos.y * speedMultiplier, s.pos.z);
     }
 }

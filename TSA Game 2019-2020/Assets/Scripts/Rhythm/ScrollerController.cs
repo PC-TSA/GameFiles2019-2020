@@ -98,6 +98,23 @@ public class ScrollerController : MonoBehaviour
         newNote.GetComponent<NoteController>().noteCodeObject = n;
     }
 
+    public GameObject SpawnSlider(int lane, bool manualDevMode)
+    {
+        GameObject newSlider = null;
+
+        if (manualDevMode)
+            newSlider = Instantiate(sliderPrefab, selectors[lane].transform.position, transform.rotation, notesParent.transform);
+        else
+            newSlider = Instantiate(sliderPrefab, lanes[lane].transform.position, transform.rotation, notesParent.transform);
+
+        rhythmController.sliderGameObjects.Add(newSlider);
+        SliderObj s = new SliderObj(lane, new Vector3(newSlider.transform.position.x, newSlider.transform.localPosition.y, newSlider.transform.position.z));
+        rhythmController.currentRecording.sliders.Add(s);
+        newSlider.GetComponent<SliderController>().sliderCodeObject = s;
+
+        return newSlider;
+    }
+
     public void DeserializeNote(int lane, Vector3 pos)
     {
         GameObject newNote = Instantiate(notePrefab, new Vector3(pos.x, 0, 0), transform.rotation, notesParent.transform);
@@ -118,6 +135,15 @@ public class ScrollerController : MonoBehaviour
         }
 
         rhythmController.noteGameObjects.Add(newNote);
+    }
+
+    public void DeserializeSlider(int lane, Vector3 pos, float height)
+    {
+        GameObject newSlider = Instantiate(sliderPrefab, new Vector3(pos.x, 0, 0), transform.rotation, notesParent.transform);
+        newSlider.transform.localPosition = new Vector3(newSlider.transform.localPosition.x, pos.y, pos.z);
+        newSlider.GetComponent<RectTransform>().sizeDelta = new Vector2(newSlider.GetComponent<RectTransform>().sizeDelta.x, height);
+
+        rhythmController.sliderGameObjects.Add(newSlider);
     }
 
     public void ChangeScrollSpeed()

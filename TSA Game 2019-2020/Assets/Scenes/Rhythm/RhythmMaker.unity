@@ -351,7 +351,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   notePrefab: {fileID: 5015487083743161523, guid: 2b4a7adb2e9120c4c8e6a944470cc72f,
     type: 3}
-  sliderPrfab: {fileID: 5015487083743161523, guid: 17c6437004441114a8dc3e6c68cf8511,
+  sliderPrefab: {fileID: 5015487083743161523, guid: 17c6437004441114a8dc3e6c68cf8511,
     type: 3}
   notesParent: {fileID: 560537487}
   rhythmController: {fileID: 1293953075}
@@ -509,6 +509,10 @@ MonoBehaviour:
   laneNumber: 0
   key: 276
   manualGenKey: 0
+  sliderGenKey: 0
+  isHoldingSliderKeycode: 0
+  spawnedSlider: {fileID: 0}
+  sliderHeightChange: 0
   selectableNotes: []
   shouldKillNotes: 1
   shouldKillMissedNotes: 0
@@ -2719,6 +2723,10 @@ MonoBehaviour:
   laneNumber: 2
   key: 275
   manualGenKey: 0
+  sliderGenKey: 0
+  isHoldingSliderKeycode: 0
+  spawnedSlider: {fileID: 0}
+  sliderHeightChange: 0
   selectableNotes: []
   shouldKillNotes: 1
   shouldKillMissedNotes: 0
@@ -4416,10 +4424,12 @@ MonoBehaviour:
   StartPauseButton: {fileID: 1238847184}
   laneKeycodes: 140100001101000013010000
   manualGenKeycodes: 610000007700000064000000
+  placeSliderKeycode: 304
   waveformObj: {fileID: 2028105593}
   isPlaying: 0
   editMode: 0
   noteGameObjects: []
+  sliderGameObjects: []
 --- !u!82 &1293953076
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5739,6 +5749,10 @@ MonoBehaviour:
   laneNumber: 1
   key: 273
   manualGenKey: 0
+  sliderGenKey: 0
+  isHoldingSliderKeycode: 0
+  spawnedSlider: {fileID: 0}
+  sliderHeightChange: 0
   selectableNotes: []
   shouldKillNotes: 1
   shouldKillMissedNotes: 0

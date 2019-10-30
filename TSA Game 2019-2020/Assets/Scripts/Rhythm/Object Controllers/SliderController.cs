@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SliderController : MonoBehaviour //When scaling in RhythmMaker, RectTransform.height += offset, pos = offset / 2, collider.size.y = RectTransform.height
+public class SliderController : MonoBehaviour //When scaling in RhythmMaker, RectTransform.height += offset, pos = offset / 2, collider.size.y = RectTransform.height; INVERT FOR NOTE SELECTION
 {
     public bool hasBeenHit;
     public bool canBeHit = true; //If false, this slider has existed for too long to be hit
@@ -10,7 +10,7 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
 
     public float canBeHitTime; //How long the player has from the start of the slider to hit it
 
-    public Note noteCodeObject; //This note's code object counterpart in the noteObjects list in ScrollController; Used for serialization
+    public SliderObj sliderCodeObject; //This slider's code object counterpart in the noteObjects list in ScrollController; Used for serialization
 
     public bool mouseDown;
 
