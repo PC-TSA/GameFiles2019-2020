@@ -8,6 +8,8 @@ public class NoteController : MonoBehaviour
 
     public Note noteCodeObject; //This note's code object counterpart in the noteObjects list in ScrollController; Used for serialization
 
+    public bool mouseDown;
+
     //Waits until after the note has faded out, then deletes
     IEnumerator DeathFade()
     {
@@ -53,5 +55,21 @@ public class NoteController : MonoBehaviour
             FindObjectOfType<RhythmController>().noteGameObjects.Remove(gameObject);
         }
         Destroy(gameObject);
+    }
+
+    private void Update()
+    {
+        if (mouseDown) //Note dragging for RhythmMaker
+            transform.position = new Vector3(transform.position.x, Input.mousePosition.y, transform.position.z);
+    }
+
+    public void MouseDown()
+    {
+        mouseDown = true;
+    }
+
+    public void MouseUp()
+    {
+        mouseDown = false;
     }
 }

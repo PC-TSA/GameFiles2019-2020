@@ -56,7 +56,7 @@ public class RhythmController : MonoBehaviour
 
     private void Update()
     {
-        if(isPlaying) //Update Waveform \/
+        if (isPlaying) //Update Waveform \/
             waveformObj.transform.GetChild(0).transform.localPosition = new Vector3(((audioSource.time * waveformObj.GetComponent<RectTransform>().sizeDelta.x) / audioSource.clip.length) - (waveformObj.GetComponent<RectTransform>().sizeDelta.x / 2), 0, 0);
     }
 
@@ -127,7 +127,6 @@ public class RhythmController : MonoBehaviour
             ManualEditMode();
         else if (editMode == 1)
             AutoGenEditMode();
-
     }
 
     void CreateWaveform()
