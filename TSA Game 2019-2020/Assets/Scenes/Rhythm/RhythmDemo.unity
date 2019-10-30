@@ -2868,6 +2868,7 @@ MonoBehaviour:
   laneNumber: 0
   key: 0
   selectableNotes: []
+  selectableSlider: {fileID: 0}
   rhythmRunner: {fileID: 1288036211}
 --- !u!50 &883592389
 Rigidbody2D:
@@ -3473,6 +3474,8 @@ MonoBehaviour:
   scrollerObj: {fileID: 645152633}
   laneKeycodes: 140100001101000013010000
   notePrefab: {fileID: 5015487083743161523, guid: c79558e4bf472c44bb3975f91a44be2e,
+    type: 3}
+  sliderPrefab: {fileID: 5015487083743161523, guid: 8b249b45b54e414458def0997bd9067f,
     type: 3}
   notesParent: {fileID: 169140289}
   audioSource: {fileID: 1288036212}
@@ -4542,6 +4545,7 @@ MonoBehaviour:
   laneNumber: 1
   key: 0
   selectableNotes: []
+  selectableSlider: {fileID: 0}
   rhythmRunner: {fileID: 1288036211}
 --- !u!50 &1932500709
 Rigidbody2D:
@@ -5010,6 +5014,7 @@ MonoBehaviour:
   laneNumber: 2
   key: 0
   selectableNotes: []
+  selectableSlider: {fileID: 0}
   rhythmRunner: {fileID: 1288036211}
 --- !u!50 &2091560093
 Rigidbody2D:

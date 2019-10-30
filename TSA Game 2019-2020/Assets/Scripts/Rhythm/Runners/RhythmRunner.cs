@@ -37,6 +37,7 @@ public class RhythmRunner : MonoBehaviour
     public Recording currentRecording;
 
     public GameObject notePrefab;
+    public GameObject sliderPrefab;
     public GameObject notesParent;
 
     public AudioSource audioSource;
@@ -132,7 +133,7 @@ public class RhythmRunner : MonoBehaviour
         //Update scroll speed
         scrollSpeed = currentRecording.scrollSpeed;
 
-        /*/Adjusts for tracks made in low speed being off slightly (OLD, LIKELY DOESNT SERVE A PURPOSE AND RATHER MAKES IT WORSE)
+        /*/Adjusts for tracks made in low speed being off slightly (OLD, LIKELY DOESNT SERVE A PURPOSE AND MIGHT MAKE THE DELAY WORSE)
         if (scrollSpeed <= 10)
         {
             float newY = (scrollSpeed * 0.66f) * scrollSpeed;
@@ -145,9 +146,9 @@ public class RhythmRunner : MonoBehaviour
                 DeserializeNote(n.lane, n.pos);
         else
         {
+            scrollSpeed = customSpeed;
             foreach (Note n in currentRecording.notes)
                 DeserializeNote(n.lane, OverrideSpeedPos(n));
-            scrollSpeed = customSpeed;
         }
 
         audioSource.Play();

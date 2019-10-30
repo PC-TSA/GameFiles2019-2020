@@ -351,6 +351,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   notePrefab: {fileID: 5015487083743161523, guid: 2b4a7adb2e9120c4c8e6a944470cc72f,
     type: 3}
+  sliderPrfab: {fileID: 5015487083743161523, guid: 17c6437004441114a8dc3e6c68cf8511,
+    type: 3}
   notesParent: {fileID: 560537487}
   rhythmController: {fileID: 1293953075}
   lanes:

@@ -6,6 +6,7 @@ using TMPro;
 public class ScrollerController : MonoBehaviour
 {
     public GameObject notePrefab;
+    public GameObject sliderPrefab;
     public GameObject notesParent;
 
     public RhythmController rhythmController;

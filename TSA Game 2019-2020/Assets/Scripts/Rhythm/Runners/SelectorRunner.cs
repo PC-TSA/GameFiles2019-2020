@@ -8,6 +8,7 @@ public class SelectorRunner : MonoBehaviour
     public KeyCode key;
 
     public List<GameObject> selectableNotes = new List<GameObject>();
+    public GameObject selectableSlider;
 
     public RhythmRunner rhythmRunner;
 
@@ -20,6 +21,11 @@ public class SelectorRunner : MonoBehaviour
     {
         if (collision.tag == "Note")
             selectableNotes.Add(collision.gameObject);
+        else if (collision.tag == "Slider" && selectableSlider == null)
+        {
+            selectableSlider = collision.gameObject;
+            collision.gameObject.GetComponent<SliderController>().StartCanBeHitTimer();
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -30,14 +36,31 @@ public class SelectorRunner : MonoBehaviour
             collision.GetComponent<NoteController>().StartDeathFade();
             rhythmRunner.UpdateNotesMissed(1);
         }
+        else if (collision.tag == "Slider")
+        {
+            if (!collision.GetComponent<SliderController>().hasBeenHit || collision.GetComponent<SliderController>().incompleteHit)
+            {
+                collision.GetComponent<SliderController>().StartDeathFade();
+                rhythmRunner.UpdateNotesMissed(1);
+                selectableSlider = null;
+            }
+            else
+            {
+                collision.GetComponent<SliderController>().HitDeath();
+                rhythmRunner.UpdateNotesHit(1);
+            }
+        }
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(key))
         {
+            bool somethingClicked = false; //If false by the end of this if, this click counts as a misclick
             if (selectableNotes.Count != 0)
             {
+                somethingClicked = true;
+
                 //Removes oldest note in the selectable notes list
                 selectableNotes[0].GetComponent<NoteController>().Hit();
                 selectableNotes.RemoveAt(0);
@@ -54,8 +77,19 @@ public class SelectorRunner : MonoBehaviour
                     selectableNotes.Remove(note);
                 notesToRemove.Clear();*/
             }
-            else
+            
+            if(selectableSlider != null && !selectableSlider.GetComponent<SliderController>().canBeHit && !selectableSlider.GetComponent<SliderController>().hasBeenHit) //If there is a selectableSlider that can be hit and hasnt been hit yet
+            {
+                selectableSlider.GetComponent<SliderController>().hasBeenHit = true;
+                somethingClicked = true;
+            }
+
+            if (!somethingClicked)
                 rhythmRunner.UpdateMissclicks(1);
         }
+
+        //If you stop hitting a slider mid way
+        if((selectableSlider != null && selectableSlider.GetComponent<SliderController>().hasBeenHit && Input.GetKeyUp(key)))
+            selectableSlider.GetComponent<SliderController>().incompleteHit = true;
     }
 }
