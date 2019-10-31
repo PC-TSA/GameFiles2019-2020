@@ -105,7 +105,7 @@ public class RhythmController : MonoBehaviour
         }
 
         //Reset scroller
-        sliderController.UpdateVals();
+        //sliderController.UpdateVals();
     }
 
     //Auto generates notes that scroll down in random lanes at the bpm of the song
@@ -151,7 +151,7 @@ public class RhythmController : MonoBehaviour
         currentRecording.clipName = songs[selectedSongID].name;
 
         //Reset scroller
-        sliderController.UpdateVals();
+        //sliderController.UpdateVals();
     }
 
     public void SaveRecording() //Serializes recording to xml file
@@ -192,9 +192,6 @@ public class RhythmController : MonoBehaviour
 
         //Reset scroller to start
         scrollerController.transform.localPosition = scrollerController.originalPos;
-
-        //Update slider
-        sliderController.UpdateSlider();
 
         //Update waveform
         CreateWaveform();

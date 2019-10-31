@@ -42,6 +42,7 @@ public class RhythmRunner : MonoBehaviour
     public GameObject sliderPrefab;
     public GameObject notesParent;
     public GameObject slidersParent;
+    public GameObject sliderMaskPrefab;
 
     public AudioSource audioSource;
 
@@ -190,9 +191,12 @@ public class RhythmRunner : MonoBehaviour
 
     public void DeserializeSlider(int lane, Vector3 pos, float height)
     {
-        GameObject newSlider = Instantiate(sliderPrefab, new Vector3(0, 0, 0), transform.rotation, slidersParent.transform);
-        newSlider.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
+        GameObject newSliderMask = Instantiate(sliderMaskPrefab, new Vector3(0, 0, 0), transform.rotation, slidersParent.transform);
+        newSliderMask.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
+        GameObject newSlider = Instantiate(sliderPrefab, new Vector3(0, 0, 0), newSliderMask.transform.rotation, newSliderMask.transform);
+        newSlider.transform.localPosition = new Vector3(0, 0, 0);
         newSlider.GetComponent<RectTransform>().sizeDelta = new Vector2(newSlider.GetComponent<RectTransform>().sizeDelta.x, height);
+        newSliderMask.GetComponent<RectTransform>().sizeDelta = new Vector2(newSlider.GetComponent<RectTransform>().sizeDelta.x, height);
         newSlider.GetComponent<BoxCollider2D>().size = new Vector2(newSlider.GetComponent<BoxCollider2D>().size.x, height);
     }
 

@@ -59,9 +59,9 @@ public class NoteController : MonoBehaviour
 
     private void Update()
     {
-        if (mouseDown) //Note dragging for RhythmMaker
-            transform.position = new Vector3(transform.position.x, Input.mousePosition.y, transform.position.z);
-        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, 0.1f); //Prevents note from swaying slowly toward negative z (idk why) which would cause it to eventually clip behind the canvas / dissapear
+        Debug.Log(Input.mousePosition);
+        if (mouseDown) //Note dragging for RhythmMaker; BROKEN, may not be fixable. Replacement with note 'select' and adjust using keys to move up / down a bit?
+            transform.localPosition = new Vector3(transform.localPosition.x, Input.mousePosition.y, transform.localPosition.z);
     }
 
     public void MouseDown()

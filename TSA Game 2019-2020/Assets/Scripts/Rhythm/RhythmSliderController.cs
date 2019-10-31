@@ -30,20 +30,21 @@ public class RhythmSliderController : MonoBehaviour
 
     public void UpdateVals()
     {
-        //BROKEN AF, NEEDS FIXING
-        //scroller.transform.position = new Vector3(scroller.transform.position.x, -((GetComponent<Slider>().value) * 50 * scrollerController.scrollSpeed) + 530, 0); //*50 because FixedUpdate runs 50 times a second and +530 because it (for some reason) was off by around that much
+        scroller.transform.localPosition = new Vector3(0, -((GetComponent<Slider>().value) * 50 * scrollerController.scrollSpeed), 0); //*50 because FixedUpdate runs 50 times a second and +530 because it (for some reason) was off by around that much
         audioSource.time = GetComponent<Slider>().value;
     }
 
     public void OnSliderSelected()
     {
         sliderInUse = true;
+        scrollerController.slideScrollOverride = true;
         //audioSource.Pause();
     }
 
     public void OnSliderDeSelected()
     {
         sliderInUse = false;
+        scrollerController.slideScrollOverride = false;
         //audioSource.UnPause();
     }
 }

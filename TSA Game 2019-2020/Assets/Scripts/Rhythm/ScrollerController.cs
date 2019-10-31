@@ -28,6 +28,8 @@ public class ScrollerController : MonoBehaviour
 
     public GameObject speedPickerInputField;
 
+    public bool slideScrollOverride; //If this scroller's position is being overriden by the UI slider in the rhythm maker
+
     private void Start()
     {
         originalPos = transform.localPosition;
@@ -60,7 +62,8 @@ public class ScrollerController : MonoBehaviour
             lastTime = audioSource.time;
 
             //Scroller
-            transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y - scrollSpeed, transform.localPosition.z);
+            if(!slideScrollOverride)
+                transform.localPosition = new Vector3(0, transform.localPosition.y - scrollSpeed, 0);
         }
     }
      

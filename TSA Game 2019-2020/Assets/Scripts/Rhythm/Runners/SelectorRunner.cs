@@ -106,7 +106,21 @@ public class SelectorRunner : MonoBehaviour
     {
         if (selectableSliderBeingHit)
         {
-            selectableSlider.GetComponent<RectTransform>().sizeDelta = selectableSlider.GetComponent<RectTransform>().sizeDelta = new Vector2(selectableSlider.GetComponent<RectTransform>().sizeDelta.x, selectableSlider.GetComponent<RectTransform>().sizeDelta.y - sliderHeightChange);
+            //Move slider's mask parent up, counteracting scroller
+            selectableSlider.transform.parent.localPosition = new Vector3(selectableSlider.transform.parent.localPosition.x, selectableSlider.transform.parent.localPosition.y + rhythmRunner.scrollSpeed, selectableSlider.transform.parent.localPosition.z);
+            selectableSlider.transform.localPosition = new Vector3(selectableSlider.transform.localPosition.x, selectableSlider.transform.localPosition.y - rhythmRunner.scrollSpeed, selectableSlider.transform.localPosition.z);
+
+            if(-selectableSlider.transform.localPosition.y > selectableSlider.GetComponent<RectTransform>().sizeDelta.y)
+            {
+                selectableSlider.GetComponent<SliderController>().HitDeath();
+                selectableSlider = null;
+                selectableSliderBeingHit = false;
+                noteHitParticle.Stop();
+                rhythmRunner.UpdateNotesHit(1);
+            }
+
+            //OLD SLIDER HIT CODE
+            /*selectableSlider.GetComponent<RectTransform>().sizeDelta = selectableSlider.GetComponent<RectTransform>().sizeDelta = new Vector2(selectableSlider.GetComponent<RectTransform>().sizeDelta.x, selectableSlider.GetComponent<RectTransform>().sizeDelta.y - sliderHeightChange);
             selectableSlider.GetComponent<BoxCollider2D>().size = new Vector2(selectableSlider.GetComponent<BoxCollider2D>().size.x, selectableSlider.GetComponent<RectTransform>().sizeDelta.y);
             selectableSlider.transform.localPosition = new Vector3(selectableSlider.transform.localPosition.x, selectableSlider.transform.localPosition.y + sliderHeightChange / 2, selectableSlider.transform.localPosition.z);
 
@@ -117,7 +131,7 @@ public class SelectorRunner : MonoBehaviour
                 selectableSliderBeingHit = false;
                 noteHitParticle.Stop();
                 rhythmRunner.UpdateNotesHit(1);
-            }
+            }*/
         }
     }
 }
