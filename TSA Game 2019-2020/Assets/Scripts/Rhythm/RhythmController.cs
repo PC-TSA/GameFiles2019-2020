@@ -191,7 +191,7 @@ public class RhythmController : MonoBehaviour
         scrollerController.scrollSpeed = currentRecording.scrollSpeed;
 
         //Reset scroller to start
-        scrollerController.transform.position = scrollerController.originalPos;
+        scrollerController.transform.localPosition = scrollerController.originalPos;
 
         //Update slider
         sliderController.UpdateSlider();
@@ -205,7 +205,7 @@ public class RhythmController : MonoBehaviour
 
         //Generate sliders
         foreach (SliderObj s in currentRecording.sliders)
-            scrollerController.DeserializeNote(s.lane, s.pos);
+            scrollerController.DeserializeSlider(s.lane, s.pos, s.height);
 
         //Set start button to 'Start'
         isPlaying = false;

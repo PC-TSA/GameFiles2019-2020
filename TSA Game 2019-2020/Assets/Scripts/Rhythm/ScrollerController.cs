@@ -8,6 +8,7 @@ public class ScrollerController : MonoBehaviour
     public GameObject notePrefab;
     public GameObject sliderPrefab;
     public GameObject notesParent;
+    public GameObject slidersParent;
 
     public RhythmController rhythmController;
 
@@ -29,7 +30,7 @@ public class ScrollerController : MonoBehaviour
 
     private void Start()
     {
-        originalPos = transform.position;
+        originalPos = transform.localPosition;
     }
 
     private void FixedUpdate()
@@ -59,7 +60,7 @@ public class ScrollerController : MonoBehaviour
             lastTime = audioSource.time;
 
             //Scroller
-            transform.position = new Vector3(transform.position.x, transform.position.y - scrollSpeed, transform.position.z);
+            transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y - scrollSpeed, transform.localPosition.z);
         }
     }
      
@@ -93,22 +94,19 @@ public class ScrollerController : MonoBehaviour
         }
 
         rhythmController.noteGameObjects.Add(newNote);
-        Note n = new Note(lane, new Vector3(newNote.transform.position.x, newNote.transform.localPosition.y, newNote.transform.position.z));
+        Note n = new Note(lane, new Vector3(newNote.transform.localPosition.x, newNote.transform.localPosition.y, newNote.transform.localPosition.z));
         rhythmController.currentRecording.notes.Add(n);
         newNote.GetComponent<NoteController>().noteCodeObject = n;
     }
 
-    public GameObject SpawnSlider(int lane, bool manualDevMode)
+    public GameObject SpawnSlider(int lane)
     {
         GameObject newSlider = null;
 
-        if (manualDevMode)
-            newSlider = Instantiate(sliderPrefab, selectors[lane].transform.position, transform.rotation, notesParent.transform);
-        else
-            newSlider = Instantiate(sliderPrefab, lanes[lane].transform.position, transform.rotation, notesParent.transform);
+        newSlider = Instantiate(sliderPrefab, selectors[lane].transform.position, transform.rotation, slidersParent.transform);
 
         rhythmController.sliderGameObjects.Add(newSlider);
-        SliderObj s = new SliderObj(lane, new Vector3(newSlider.transform.position.x, newSlider.transform.localPosition.y, newSlider.transform.position.z));
+        SliderObj s = new SliderObj(lane, new Vector3(newSlider.transform.localPosition.x, newSlider.transform.localPosition.y, newSlider.transform.localPosition.z));
         rhythmController.currentRecording.sliders.Add(s);
         newSlider.GetComponent<SliderController>().sliderCodeObject = s;
 
@@ -117,20 +115,20 @@ public class ScrollerController : MonoBehaviour
 
     public void DeserializeNote(int lane, Vector3 pos)
     {
-        GameObject newNote = Instantiate(notePrefab, new Vector3(pos.x, 0, 0), transform.rotation, notesParent.transform);
-        newNote.transform.localPosition = new Vector3(newNote.transform.localPosition.x, pos.y, pos.z);
+        GameObject newNote = Instantiate(notePrefab, new Vector3(0, 0, 0), transform.rotation, notesParent.transform);
+        newNote.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
 
         //Rotate Arrow
         switch (lane)
         {
             case 0:
-                newNote.transform.eulerAngles = new Vector3(0, 0, -90);
+                newNote.transform.localEulerAngles = new Vector3(0, 0, -90);
                 break;
             case 1:
-                newNote.transform.eulerAngles = new Vector3(0, 0, 180);
+                newNote.transform.localEulerAngles = new Vector3(0, 0, 180);
                 break;
             case 2:
-                newNote.transform.eulerAngles = new Vector3(0, 0, 90);
+                newNote.transform.localEulerAngles = new Vector3(0, 0, 90);
                 break;
         }
 
@@ -139,10 +137,10 @@ public class ScrollerController : MonoBehaviour
 
     public void DeserializeSlider(int lane, Vector3 pos, float height)
     {
-        GameObject newSlider = Instantiate(sliderPrefab, new Vector3(pos.x, 0, 0), transform.rotation, notesParent.transform);
-        newSlider.transform.localPosition = new Vector3(newSlider.transform.localPosition.x, pos.y, pos.z);
+        GameObject newSlider = Instantiate(sliderPrefab, new Vector3(0, 0, 0), transform.rotation, slidersParent.transform);
+        newSlider.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
         newSlider.GetComponent<RectTransform>().sizeDelta = new Vector2(newSlider.GetComponent<RectTransform>().sizeDelta.x, height);
-
+        newSlider.GetComponent<BoxCollider2D>().size = new Vector2(newSlider.GetComponent<BoxCollider2D>().size.x, height);
         rhythmController.sliderGameObjects.Add(newSlider);
     }
 

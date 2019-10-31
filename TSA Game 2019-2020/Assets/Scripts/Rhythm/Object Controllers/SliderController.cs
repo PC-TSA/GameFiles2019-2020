@@ -8,8 +8,10 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
     public bool canBeHit = true; //If false, this slider has existed for too long to be hit
     public bool incompleteHit; //If true, this hit was stopped half way
 
-    public float canBeHitTime; //How long the player has from the start of the slider to hit it
+    public float sliderHeightChange; //How much the height (not scale) is changed by each FixedUpdate call
 
+    public float canBeHitTime; //How long the player has from the start of the slider to hit it
+        
     public SliderObj sliderCodeObject; //This slider's code object counterpart in the noteObjects list in ScrollController; Used for serialization
 
     public bool mouseDown;
@@ -17,10 +19,16 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
     private void Start()
     {
         //Generates canBeHitTime, adjusting for faster tracks
-        if (FindObjectOfType<RhythmRunner>() != null) 
-            canBeHitTime = FindObjectOfType<RhythmRunner>().scrollSpeed * 0.03f;
-        else if (FindObjectOfType<ScrollerController>() != null) 
-            canBeHitTime = FindObjectOfType<ScrollerController>().scrollSpeed * 0.03f;
+        if (FindObjectOfType<RhythmRunner>() != null)
+        {
+            canBeHitTime = FindObjectOfType<RhythmRunner>().scrollSpeed * 0.05f;
+            sliderHeightChange = FindObjectOfType<RhythmRunner>().scrollSpeed;
+        }
+        else if (FindObjectOfType<ScrollerController>() != null)
+        {
+            canBeHitTime = FindObjectOfType<ScrollerController>().scrollSpeed * 0.05f;
+            sliderHeightChange = FindObjectOfType<ScrollerController>().scrollSpeed;
+        }
     }
 
     //Waits until after the note has faded out, then deletes
@@ -40,8 +48,8 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
     //When the note is done being hit, play note hit anim and then kill note
     IEnumerator NoteHitDeath()
     {
-        GetComponent<Animation>().Play("NoteHit");
-        yield return new WaitForSeconds(0.15f);
+        //GetComponent<Animation>().Play("NoteHit"); No death anim for sliders currently since they shrink into nothingness
+        yield return new WaitForSeconds(0.15f); 
         Die();
     }
 
@@ -75,6 +83,7 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
     {
         if (mouseDown) //Note dragging for RhythmMaker
             transform.position = new Vector3(transform.position.x, Input.mousePosition.y, transform.position.z);
+        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, 0.1f); //Prevents note from swaying slowly toward negative z (idk why) which would cause it to eventually clip behind the canvas / dissapear
     }
 
     public void MouseDown()

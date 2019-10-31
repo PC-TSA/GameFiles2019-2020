@@ -32,6 +32,8 @@ public class RhythmRunner : MonoBehaviour
 
     public GameObject scrollerObj;
 
+    public bool isRunning; //If the rhythm portion is currently running, meaning a song is playing and notes are scrolling
+
     public List<KeyCode> laneKeycodes = new List<KeyCode>(); //index 0 = left lane, 1 = middle lane, 2 == right lane; values gotten by SelectorComponent.cs
 
     public Recording currentRecording;
@@ -39,6 +41,7 @@ public class RhythmRunner : MonoBehaviour
     public GameObject notePrefab;
     public GameObject sliderPrefab;
     public GameObject notesParent;
+    public GameObject slidersParent;
 
     public AudioSource audioSource;
 
@@ -60,7 +63,7 @@ public class RhythmRunner : MonoBehaviour
 
     private void Start()
     {
-        originalPos = scrollerObj.transform.position;
+        originalPos = scrollerObj.transform.localPosition;
 
         //Get vignette from post processing profile
         postProcessingVolume.profile.TryGetSettings(out vignette);
@@ -80,7 +83,8 @@ public class RhythmRunner : MonoBehaviour
     private void FixedUpdate()
     {
         //Scroller
-        scrollerObj.transform.position = new Vector3(scrollerObj.transform.position.x, scrollerObj.transform.position.y - scrollSpeed, scrollerObj.transform.position.z);
+        if (isRunning)
+            scrollerObj.transform.localPosition = new Vector3(scrollerObj.transform.localPosition.x, scrollerObj.transform.localPosition.y - scrollSpeed, scrollerObj.transform.localPosition.z);
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -128,7 +132,7 @@ public class RhythmRunner : MonoBehaviour
         audioSource.time = 0;
 
         //Reset scroller
-        scrollerObj.transform.position = originalPos;
+        scrollerObj.transform.localPosition = originalPos;
 
         //Update scroll speed
         scrollSpeed = currentRecording.scrollSpeed;
@@ -157,33 +161,37 @@ public class RhythmRunner : MonoBehaviour
                 DeserializeSlider(s.lane, OverrideSpeedPos(s), s.height);
         }
 
+        foreach(SelectorRunner selector in FindObjectsOfType<SelectorRunner>())
+            selector.sliderHeightChange = scrollSpeed;
+
         audioSource.Play();
+        isRunning = true;
     }
 
     public void DeserializeNote(int lane, Vector3 pos)
     {
-        GameObject newNote = Instantiate(notePrefab, new Vector3(pos.x, 0, 0), transform.rotation, notesParent.transform);
-        newNote.transform.localPosition = new Vector3(newNote.transform.localPosition.x, pos.y, pos.z);
+        GameObject newNote = Instantiate(notePrefab, new Vector3(0, 0, 0), transform.rotation, notesParent.transform);
+        newNote.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
 
-        //Rotate Note
+        //Rotate Arrow
         switch (lane)
         {
             case 0:
-                newNote.transform.eulerAngles = new Vector3(0, 0, -90);
+                newNote.transform.localEulerAngles = new Vector3(0, 0, -90);
                 break;
             case 1:
-                newNote.transform.eulerAngles = new Vector3(0, 0, 180);
+                newNote.transform.localEulerAngles = new Vector3(0, 0, 180);
                 break;
             case 2:
-                newNote.transform.eulerAngles = new Vector3(0, 0, 90);  
-                break;  
+                newNote.transform.localEulerAngles = new Vector3(0, 0, 90);
+                break;
         }
     }
 
     public void DeserializeSlider(int lane, Vector3 pos, float height)
     {
-        GameObject newSlider = Instantiate(sliderPrefab, new Vector3(pos.x, 0, 0), transform.rotation, notesParent.transform);
-        newSlider.transform.localPosition = new Vector3(newSlider.transform.localPosition.x, pos.y, pos.z);
+        GameObject newSlider = Instantiate(sliderPrefab, new Vector3(0, 0, 0), transform.rotation, slidersParent.transform);
+        newSlider.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
         newSlider.GetComponent<RectTransform>().sizeDelta = new Vector2(newSlider.GetComponent<RectTransform>().sizeDelta.x, height);
         newSlider.GetComponent<BoxCollider2D>().size = new Vector2(newSlider.GetComponent<BoxCollider2D>().size.x, height);
     }
@@ -192,7 +200,7 @@ public class RhythmRunner : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         LoadRecording();
-        FindObjectOfType<SelectorRunner>().sliderHeightChange = scrollSpeed * 0.67f;
+        FindObjectOfType<SelectorRunner>().sliderHeightChange = scrollSpeed;
     }
 
     void UpdateDeathCount(int i)

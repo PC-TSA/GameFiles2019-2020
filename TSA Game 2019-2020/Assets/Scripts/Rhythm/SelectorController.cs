@@ -63,16 +63,25 @@ public class SelectorController : MonoBehaviour
         if (Input.GetKeyUp(sliderGenKey) || Input.GetKeyUp(key))
         {
             isHoldingSliderKeycode = false;
-            spawnedSlider.GetComponent<SliderController>().sliderCodeObject.height = spawnedSlider.GetComponent<RectTransform>().sizeDelta.y;
-            spawnedSlider = null;
+            if(spawnedSlider != null)
+            {
+                spawnedSlider.GetComponent<SliderController>().sliderCodeObject.height = spawnedSlider.GetComponent<RectTransform>().sizeDelta.y;
+                spawnedSlider.GetComponent<SliderController>().sliderCodeObject.pos = spawnedSlider.transform.localPosition;
+                spawnedSlider = null;
+            }
         }
 
         if (Input.GetKeyDown(key))
         {
             if (selectableNotes.Count != 0)
+            {
+                selectableNotes[0].GetComponent<NoteController>().Hit();
+                selectableNotes.RemoveAt(0);
+
+                /* CODE TO DELETE MULTIPLE NODES AT ONCE
                 foreach (GameObject note in selectableNotes)
                 {
-                    if(shouldKillNotes)
+                    if (shouldKillNotes)
                         note.GetComponent<NoteController>().Hit();
                     else
                         note.GetComponent<NoteController>().HitNoKill();
@@ -80,7 +89,8 @@ public class SelectorController : MonoBehaviour
                     FindObjectOfType<RhythmController>().UpdateNotesHit(1);
                 }
             else
-                FindObjectOfType<RhythmController>().UpdateMissclicks(1);
+                FindObjectOfType<RhythmController>().UpdateMissclicks(1);*/
+            }
         }
 
         if (Input.GetKeyDown(manualGenKey)) //If in manual gen edit mode
@@ -89,8 +99,8 @@ public class SelectorController : MonoBehaviour
             {
                 if (isHoldingSliderKeycode)
                 {
-                    sliderHeightChange = scrollerController.scrollSpeed * 0.67f;
-                    spawnedSlider = scrollerController.SpawnSlider(laneNumber, true);
+                    sliderHeightChange = scrollerController.scrollSpeed;
+                    spawnedSlider = scrollerController.SpawnSlider(laneNumber);
                 }
                 else
                     scrollerController.SpawnNote(laneNumber, true);

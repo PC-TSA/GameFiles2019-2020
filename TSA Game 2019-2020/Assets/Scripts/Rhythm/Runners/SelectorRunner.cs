@@ -10,7 +10,7 @@ public class SelectorRunner : MonoBehaviour
     public List<GameObject> selectableNotes = new List<GameObject>();
     public GameObject selectableSlider;
     public bool selectableSliderBeingHit;
-    public float sliderHeightChange; //How much the height (not scale) is increased by each FixedUpdate call on the spawned slider
+    public float sliderHeightChange; //How much the height (not scale) is increased by each FixedUpdate call on the spawned slider; Set to scroll speed by rhythmRunner
 
     public RhythmRunner rhythmRunner;
 
@@ -48,11 +48,6 @@ public class SelectorRunner : MonoBehaviour
                 rhythmRunner.UpdateNotesMissed(1);
                 selectableSlider = null;
             }
-            else
-            {
-                collision.GetComponent<SliderController>().HitDeath();
-                rhythmRunner.UpdateNotesHit(1);
-            }
         }
     }
 
@@ -86,6 +81,7 @@ public class SelectorRunner : MonoBehaviour
                 selectableSlider.GetComponent<SliderController>().hasBeenHit = true;
                 somethingClicked = true;
                 noteHitParticle.Play();
+                selectableSliderBeingHit = true;
             }
 
             if (!somethingClicked)
@@ -99,9 +95,9 @@ public class SelectorRunner : MonoBehaviour
             //If you stop hitting a slider mid way
             if (selectableSlider != null && selectableSlider.GetComponent<SliderController>().hasBeenHit)
             {
+                noteHitParticle.Stop();
                 selectableSlider.GetComponent<SliderController>().incompleteHit = true;
                 selectableSliderBeingHit = false;
-                noteHitParticle.Stop();
             }
         }
     }
@@ -112,7 +108,16 @@ public class SelectorRunner : MonoBehaviour
         {
             selectableSlider.GetComponent<RectTransform>().sizeDelta = selectableSlider.GetComponent<RectTransform>().sizeDelta = new Vector2(selectableSlider.GetComponent<RectTransform>().sizeDelta.x, selectableSlider.GetComponent<RectTransform>().sizeDelta.y - sliderHeightChange);
             selectableSlider.GetComponent<BoxCollider2D>().size = new Vector2(selectableSlider.GetComponent<BoxCollider2D>().size.x, selectableSlider.GetComponent<RectTransform>().sizeDelta.y);
-            selectableSlider.transform.localPosition = new Vector3(selectableSlider.transform.localPosition.x, selectableSlider.transform.localPosition.y - sliderHeightChange / 2, selectableSlider.transform.localPosition.z);
+            selectableSlider.transform.localPosition = new Vector3(selectableSlider.transform.localPosition.x, selectableSlider.transform.localPosition.y + sliderHeightChange / 2, selectableSlider.transform.localPosition.z);
+
+            if(selectableSlider.GetComponent<RectTransform>().sizeDelta.y <= 2) //If this slider has been fully activated, clear slider vals and kill slider
+            {
+                selectableSlider.GetComponent<SliderController>().HitDeath();
+                selectableSlider = null;
+                selectableSliderBeingHit = false;
+                noteHitParticle.Stop();
+                rhythmRunner.UpdateNotesHit(1);
+            }
         }
     }
 }

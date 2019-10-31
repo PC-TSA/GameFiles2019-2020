@@ -61,6 +61,7 @@ public class NoteController : MonoBehaviour
     {
         if (mouseDown) //Note dragging for RhythmMaker
             transform.position = new Vector3(transform.position.x, Input.mousePosition.y, transform.position.z);
+        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, 0.1f); //Prevents note from swaying slowly toward negative z (idk why) which would cause it to eventually clip behind the canvas / dissapear
     }
 
     public void MouseDown()
