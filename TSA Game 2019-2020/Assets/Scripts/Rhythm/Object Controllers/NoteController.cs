@@ -59,7 +59,6 @@ public class NoteController : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(Input.mousePosition);
         if (mouseDown) //Note dragging for RhythmMaker; BROKEN, may not be fixable. Replacement with note 'select' and adjust using keys to move up / down a bit?
             transform.position = new Vector3(transform.position.x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, transform.position.z);
     }
