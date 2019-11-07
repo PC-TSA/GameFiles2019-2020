@@ -6,7 +6,6 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
 {
     public bool hasBeenHit;
     public bool canBeHit = true; //If false, this slider has existed for too long to be hit
-    public bool fullHit = true; //If true, this slider was hit in its entirity
     public bool incompleteHit; //If true, this hit was stopped half way
 
     public float sliderHeightChange; //How much the height (not scale) is changed by each FixedUpdate call

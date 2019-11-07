@@ -42,10 +42,15 @@ public class SelectorRunner : MonoBehaviour
         }
         else if (collision.tag == "Slider")
         {
-            if (!collision.GetComponent<SliderController>().hasBeenHit || collision.GetComponent<SliderController>().incompleteHit)
+            if (!collision.GetComponent<SliderController>().hasBeenHit)
             {
                 collision.GetComponent<SliderController>().StartDeathFade();
                 rhythmRunner.UpdateNotesMissed(1);
+                selectableSlider = null;
+            }
+            else if(collision.GetComponent<SliderController>().incompleteHit) //Separate from top if b/c notesMissed is called when the slider stops being hit half way instead of doing it here when it is dissapearing
+            {
+                collision.GetComponent<SliderController>().StartDeathFade();
                 selectableSlider = null;
             }
         }
@@ -98,6 +103,7 @@ public class SelectorRunner : MonoBehaviour
                 noteHitParticle.Stop();
                 selectableSlider.GetComponent<SliderController>().incompleteHit = true;
                 selectableSliderBeingHit = false;
+                rhythmRunner.UpdateNotesMissed(1);
             }
         }
     }
@@ -114,7 +120,7 @@ public class SelectorRunner : MonoBehaviour
 
             if (-selectableSlider.transform.localPosition.y > selectableSlider.GetComponent<RectTransform>().sizeDelta.y)
             {
-                if(selectableSlider.GetComponent<SliderController>().fullHit) //If the slider was hit in it's entirity, give note score
+                if(!selectableSlider.GetComponent<SliderController>().incompleteHit) //If the slider was hit in it's entirity, give note score
                 {
                     rhythmRunner.UpdateNotesHit(1);
                     rhythmRunner.UpdateScore(1);

@@ -8180,7 +8180,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1193846942}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.244, y: 1.110297, z: 1.9423798}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 65952411}
@@ -8250,7 +8250,7 @@ RectTransform:
   m_GameObject: {fileID: 1288036209}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0033398, y: 1.0033398, z: 1.0033398}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1348055185}
   - {fileID: 312214421}
@@ -8277,7 +8277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5eba67d9a9c59f4495d1c0ff359e424, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  XMLRecordingName: Spencer
+  XMLRecordingName: Test
   xmlRecordingAsset: {fileID: 0}
   notesHit: 0
   notesMissed: 0
@@ -8905,7 +8905,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 1193846946}
-  m_PlaneDistance: 0.3
+  m_PlaneDistance: 0.5
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0

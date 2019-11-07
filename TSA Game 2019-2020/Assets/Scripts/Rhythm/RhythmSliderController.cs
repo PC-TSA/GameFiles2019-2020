@@ -30,7 +30,7 @@ public class RhythmSliderController : MonoBehaviour
 
     public void UpdateVals()
     {
-        scroller.transform.localPosition = new Vector3(0, -((GetComponent<Slider>().value) * 50 * scrollerController.scrollSpeed), 0); //*50 because FixedUpdate runs 50 times a second and +530 because it (for some reason) was off by around that much
+        scroller.transform.localPosition = new Vector3(scrollerController.originalPos.x, -((GetComponent<Slider>().value) * 50 * scrollerController.scrollSpeed), scrollerController.originalPos.z); //*50 because FixedUpdate runs 50 times a second and +530 because it (for some reason) was off by around that much
         audioSource.time = GetComponent<Slider>().value;
     }
 
