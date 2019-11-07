@@ -59,12 +59,14 @@ public class SelectorRunner : MonoBehaviour
             if (selectableNotes.Count != 0)
             {
                 somethingClicked = true;
+                rhythmRunner.UpdateNotesHit(1);
+                rhythmRunner.UpdateScore(1);
 
                 //Removes oldest note in the selectable notes list
                 selectableNotes[0].GetComponent<NoteController>().Hit();
                 selectableNotes.RemoveAt(0);
 
-                /* CODE TO KILL MULTIPLE NODES WITH SINGLE CLICK
+                /*CODE TO KILL MULTIPLE NODES WITH SINGLE CLICK
                 List<GameObject> notesToRemove = new List<GameObject>();
                 foreach (GameObject note in selectableNotes)
                 {
@@ -86,8 +88,6 @@ public class SelectorRunner : MonoBehaviour
 
             if (!somethingClicked)
                 rhythmRunner.UpdateMissclicks(1);
-            else
-                rhythmRunner.UpdateNotesHit(1);
         }
 
         if (Input.GetKeyUp(key))
@@ -106,17 +106,23 @@ public class SelectorRunner : MonoBehaviour
     {
         if (selectableSliderBeingHit)
         {
+            rhythmRunner.UpdateScore(0.1f);
+
             //Move slider's mask parent up, counteracting scroller
             selectableSlider.transform.parent.localPosition = new Vector3(selectableSlider.transform.parent.localPosition.x, selectableSlider.transform.parent.localPosition.y + rhythmRunner.scrollSpeed, selectableSlider.transform.parent.localPosition.z);
             selectableSlider.transform.localPosition = new Vector3(selectableSlider.transform.localPosition.x, selectableSlider.transform.localPosition.y - rhythmRunner.scrollSpeed, selectableSlider.transform.localPosition.z);
 
-            if(-selectableSlider.transform.localPosition.y > selectableSlider.GetComponent<RectTransform>().sizeDelta.y)
+            if (-selectableSlider.transform.localPosition.y > selectableSlider.GetComponent<RectTransform>().sizeDelta.y)
             {
+                if(selectableSlider.GetComponent<SliderController>().fullHit) //If the slider was hit in it's entirity, give note score
+                {
+                    rhythmRunner.UpdateNotesHit(1);
+                    rhythmRunner.UpdateScore(1);
+                }
                 selectableSlider.GetComponent<SliderController>().HitDeath();
                 selectableSlider = null;
                 selectableSliderBeingHit = false;
                 noteHitParticle.Stop();
-                rhythmRunner.UpdateNotesHit(1);
             }
 
             //OLD SLIDER HIT CODE

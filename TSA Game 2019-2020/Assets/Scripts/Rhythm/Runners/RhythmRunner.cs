@@ -17,16 +17,18 @@ public class RhythmRunner : MonoBehaviour
     public int notesHit = 0; //How many notes hit
     public int notesMissed = 0; //How many notes missed
     public int missClicks = 0; //How many clicks that didnt hit a note
-    public int combo = 0; //Current combo (ex. 10 notes without missing one / misclicking
+    public int combo = 1; //Current combo (ex. 10 notes without missing one / misclicking
     public int comboLvl = 0; //Level of combo (ex. 10+ combo = lvl1, 20+ combo = lvl2, 30+ combo = lvl3; Different levels = different visual effects / bonuses)
     public int deathCount = 0; //How many notes have been missed in a row. (ex. if you miss 5, but then get 1 right, your deathCount is 4. Doesnt go above 0 and works independently of combo)
     public int health = 20; //How much deathCount needs to reach to lose the game
+    public float score; //Current score in a run; Every note hit += current combo, every FixedUpdate call a slider is hit + current combo * 0.01
 
     public GameObject notesHitTxt;
     public GameObject notesMissedTxt;
     public GameObject missClicksTxt;
     public GameObject comboTxt;
     public GameObject deathCountTxt;
+    public GameObject scoreCountTxt;
 
     public List<AudioClip> songs;
 
@@ -119,6 +121,12 @@ public class RhythmRunner : MonoBehaviour
         BreakCombo();
     }
 
+    public void UpdateScore(float multiplier)
+    {
+        score += combo * multiplier;
+        scoreCountTxt.GetComponent<TextMeshProUGUI>().text = "Score: " + score;
+    }
+
     public void LoadRecording() //Deserializes chosen xml file and sets it as current recording
     {
         var serializer = new XmlSerializer(typeof(Recording));
@@ -138,7 +146,7 @@ public class RhythmRunner : MonoBehaviour
         //Update scroll speed
         scrollSpeed = currentRecording.scrollSpeed;
 
-        /*/Adjusts for tracks made in low speed being off slightly (OLD, LIKELY DOESNT SERVE A PURPOSE AND MIGHT MAKE THE DELAY WORSE)
+        /*Adjusts for tracks made in low speed being off slightly (OLD, LIKELY DOESNT SERVE A PURPOSE AND MIGHT MAKE THE DELAY WORSE)
         if (scrollSpeed <= 10)
         {
             float newY = (scrollSpeed * 0.66f) * scrollSpeed;
@@ -271,7 +279,7 @@ public class RhythmRunner : MonoBehaviour
 
     void BreakCombo()
     {
-        combo = 0;
+        combo = 1;
         comboLvl = 0;
         foreach (TrailRenderer tr in trailRenderers)
             tr.enabled = false;
