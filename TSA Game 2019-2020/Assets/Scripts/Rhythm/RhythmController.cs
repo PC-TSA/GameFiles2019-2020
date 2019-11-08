@@ -26,6 +26,10 @@ public class RhythmController : MonoBehaviour
     public List<GameObject> lanes;
     public GameObject laneCountPicker;
 
+    public GameObject spaceSelector;
+    public float backgroundWidth;
+    public float dividerWidth;
+
     public GameObject songPickerDropdown;
     public int selectedSongID; //Index of the selected song in the songs list
 
@@ -299,6 +303,8 @@ public class RhythmController : MonoBehaviour
                     index++;
                 }
             }
+
+            UpdateSpaceSelector();
         }
     }
 
@@ -315,6 +321,19 @@ public class RhythmController : MonoBehaviour
                 lanes[index].SetActive(false);
             index++;
         }
+
+        UpdateSpaceSelector();
+    }
+
+    void UpdateSpaceSelector()
+    {
+        float w = (laneCount * backgroundWidth) + ((laneCount - 1) * dividerWidth);
+        spaceSelector.GetComponent<RectTransform>().sizeDelta = new Vector2(w, spaceSelector.GetComponent<RectTransform>().sizeDelta.y); //Sets space selector width
+
+        spaceSelector.transform.GetComponent<BoxCollider2D>().size = new Vector2(w, spaceSelector.transform.GetComponent<BoxCollider2D>().size.y); //Sets space selector collider width
+
+        float x = (lanes[0].transform.localPosition.x + lanes[laneCount - 1].transform.localPosition.x) / 2;
+        spaceSelector.transform.localPosition = new Vector3(x, spaceSelector.transform.localPosition.y, spaceSelector.transform.localPosition.z); //Sets space selector localPos.x
     }
 
     public void TestModeToggle()
