@@ -18,7 +18,8 @@ public class SelectorRunner : MonoBehaviour
 
     private void Start()
     {
-        key = rhythmRunner.laneKeycodes[laneNumber]; //Gets this selector's keycode from it's lane index & the keycode list in RhythmController.cs
+        //KEY HARD CODED IN INSPECTOR ON SELECTOR IN NEW MULTI-LANE SYSTEM
+        //key = rhythmRunner.laneKeycodes[laneNumber]; //Gets this selector's keycode from it's lane index & the keycode list in RhythmController.cs
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

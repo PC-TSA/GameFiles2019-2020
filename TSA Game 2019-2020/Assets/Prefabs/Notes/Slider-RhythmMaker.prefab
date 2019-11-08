@@ -177,8 +177,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 114137690348320300, guid: 2b4a7adb2e9120c4c8e6a944470cc72f,
-            type: 3}
+        - m_Target: {fileID: 114294946468502454}
           m_MethodName: MouseDown
           m_Mode: 1
           m_Arguments:
@@ -193,8 +192,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 114137690348320300, guid: 2b4a7adb2e9120c4c8e6a944470cc72f,
-            type: 3}
+        - m_Target: {fileID: 114294946468502454}
           m_MethodName: MouseUp
           m_Mode: 1
           m_Arguments:

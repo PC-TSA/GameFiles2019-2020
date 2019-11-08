@@ -17,15 +17,15 @@ public class SelectorController : MonoBehaviour
     public List<GameObject> selectableNotes = new List<GameObject>();
 
     public bool shouldKillNotes = true; //If false, notes are hit by this selector wont die; For map making/testing purposes 
-    public bool shouldKillMissedNotes = true; //If false, notes that go past this selector wont die; For map making/testing purposes 
 
     public RhythmController rhythmController;
     public ScrollerController scrollerController;
 
     private void Start()
     {
-        key = rhythmController.laneKeycodes[laneNumber]; //Gets this selector's keycode from it's lane index & the keycode list in RhythmController.cs
-        manualGenKey = rhythmController.manualGenKeycodes[laneNumber];
+        //KEY AND MANUAL GEN KEY ARE HARD SET IN INSPECTOR FOR EACH LANE IN NEW MULTI-LANE SYSTEM
+        //key = rhythmController.laneKeycodes[laneNumber]; //Gets this selector's keycode from it's lane index & the keycode list in RhythmController.cs
+        //manualGenKey = rhythmController.manualGenKeycodes[laneNumber];
         sliderGenKey = rhythmController.placeSliderKeycode;
     }
 
@@ -38,13 +38,8 @@ public class SelectorController : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.tag == "Note")
-        {
             selectableNotes.Remove(collision.gameObject);
-            if(shouldKillMissedNotes)
-                collision.GetComponent<NoteController>().StartDeathFade();
-            rhythmController.UpdateNotesMissed(1);
-        }
-    }   
+    }
 
     private void FixedUpdate()
     {
@@ -75,7 +70,10 @@ public class SelectorController : MonoBehaviour
         {
             if (selectableNotes.Count != 0)
             {
-                selectableNotes[0].GetComponent<NoteController>().Hit();
+                if (shouldKillNotes)
+                    selectableNotes[0].GetComponent<NoteController>().Hit();
+                else
+                    selectableNotes[0].GetComponent<NoteController>().HitNoKill();
                 selectableNotes.RemoveAt(0);
 
                 /* CODE TO DELETE MULTIPLE NODES AT ONCE
@@ -105,15 +103,6 @@ public class SelectorController : MonoBehaviour
                 else
                     scrollerController.SpawnNote(laneNumber, true);
             }
-            else
-            {
-
-            }
         }
-    }
-
-    public void IsTestingToggle()
-    {
-        shouldKillNotes = !shouldKillNotes;
     }
 }

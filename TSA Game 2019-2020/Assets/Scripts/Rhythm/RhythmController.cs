@@ -13,16 +13,18 @@ public class RhythmController : MonoBehaviour
 {
     public AudioSource audioSource;
 
-    public int notesHit;
-    public int notesMissed;
-    public int missClicks;
-
     public List<AudioClip> songs;
     public List<int> songBPMs;
 
-    public GameObject notesHitTxt;
-    public GameObject notesMissedTxt;
-    public GameObject missClicksTxt;
+    public int noteCount;
+    public int sliderCount;
+    public int laneCount;
+
+    public GameObject noteCountTxt;
+    public GameObject sliderCountTxt;
+
+    public List<GameObject> lanes;
+    public GameObject laneCountPicker;
 
     public GameObject songPickerDropdown;
     public int selectedSongID; //Index of the selected song in the songs list
@@ -62,7 +64,7 @@ public class RhythmController : MonoBehaviour
             waveformObj.transform.GetChild(0).transform.localPosition = new Vector3(((audioSource.time * waveformObj.GetComponent<RectTransform>().sizeDelta.x) / audioSource.clip.length) - (waveformObj.GetComponent<RectTransform>().sizeDelta.x / 2), 0, 0);
     }
 
-    public void UpdateNotesHit(int i)
+    /*public void UpdateNotesHit(int i)
     {
         notesHit += i;
         notesHitTxt.GetComponent<TextMeshProUGUI>().text = "Notes Hit: " + notesHit;
@@ -78,6 +80,18 @@ public class RhythmController : MonoBehaviour
     {
         missClicks += i;
         missClicksTxt.GetComponent<TextMeshProUGUI>().text = "Misclicks: " + missClicks;
+    }*/
+
+    public void UpdateNoteCount(int i)
+    {
+        noteCount += i;
+        noteCountTxt.GetComponent<TextMeshProUGUI>().text = "Note Count: " + noteCount;
+    }
+
+    public void UpdateSliderCount(int i)
+    {
+        sliderCount += i;
+        sliderCountTxt.GetComponent<TextMeshProUGUI>().text = "Slider Count: " + sliderCount;
     }
 
     void StartLevel()
@@ -161,57 +175,83 @@ public class RhythmController : MonoBehaviour
         currentRecording.scrollSpeed = scrollerController.scrollSpeed;
 
         var serializer = new XmlSerializer(typeof(Recording));
-        var stream = new FileStream(EditorUtility.SaveFilePanel("Save Recording", "", "new_recording", "xml"), FileMode.Create);
-        serializer.Serialize(stream, currentRecording);
-        stream.Close();
+        string path = EditorUtility.SaveFilePanel("Save Recording", "", "new_recording", "xml");
+        if (path != null && path != "")
+        {
+            var stream = new FileStream(path, FileMode.Create);
+            serializer.Serialize(stream, currentRecording);
+            stream.Close();
+        }
     }
 
     public void LoadRecording() //Deserializes chosen xml file and sets it as current recording
     {
         var serializer = new XmlSerializer(typeof(Recording));
-        var stream = new FileStream(EditorUtility.OpenFilePanel("Pick Recording", "", "xml"), FileMode.Open);
-        currentRecording = serializer.Deserialize(stream) as Recording;
-        stream.Close();
+        string path = EditorUtility.OpenFilePanel("Pick Recording", "", "xml");
+        if(path != null && path != "")
+        {
+            var stream = new FileStream(path, FileMode.Open);
+            currentRecording = serializer.Deserialize(stream) as Recording;
+            stream.Close();
 
-        //Clear existing notes
-        foreach (GameObject n in noteGameObjects)
-            Destroy(n);
-        noteGameObjects.Clear();
+            ClearRhythmInScene();
 
-        //Update currently selected song
-        foreach (AudioClip clip in songs)
-            if (clip.name == currentRecording.clipName)
-                selectedSongID = songs.IndexOf(clip);
+            //Update currently selected song
+            foreach (AudioClip clip in songs)
+                if (clip.name == currentRecording.clipName)
+                    selectedSongID = songs.IndexOf(clip);
 
-        scrollerController.bpm = songBPMs[selectedSongID];
-        audioSource.clip = songs[selectedSongID];
-        audioSource.time = 0;
+            scrollerController.bpm = songBPMs[selectedSongID];
+            audioSource.clip = songs[selectedSongID];
+            audioSource.time = 0;
 
-        //Update scroll speed
-        scrollerController.scrollSpeed = currentRecording.scrollSpeed;
+            //Update scroll speed
+            scrollerController.scrollSpeed = currentRecording.scrollSpeed;
 
-        //Reset scroller to start
-        scrollerController.transform.localPosition = scrollerController.originalPos;
+            //Reset scroller to start
+            scrollerController.transform.localPosition = scrollerController.originalPos;
 
-        //Update waveform
-        CreateWaveform();
+            //Update waveform
+            CreateWaveform();
 
-        //Generate notes
-        foreach (Note n in currentRecording.notes)
-            scrollerController.DeserializeNote(n.lane, n.pos);
+            //Load lane count
+            LoadLaneCount();
 
-        //Generate sliders
-        foreach (SliderObj s in currentRecording.sliders)
-            scrollerController.DeserializeSlider(s.lane, s.pos, s.height);
+            //Reset note/slider counts
+            noteCount = 0;
+            sliderCount = 0;
 
-        //Set start button to 'Start'
-        isPlaying = false;
-        PauseLevel();
+            //Generate notes
+            foreach (Note n in currentRecording.notes)
+            {
+                scrollerController.DeserializeNote(n.lane, n.pos);
+                noteCount += 1;
+            }
+            UpdateNoteCount(0);
 
-        songPickerDropdown.GetComponent<TMP_Dropdown>().value = selectedSongID;
+            //Generate sliders
+            foreach (SliderObj s in currentRecording.sliders)
+            {
+                scrollerController.DeserializeSlider(s.lane, s.pos, s.height);
+                sliderCount += 1;
+            }
+            UpdateSliderCount(0);
+
+            //Set start button to 'Start'
+            isPlaying = false;
+            PauseLevel();
+
+            songPickerDropdown.GetComponent<TMP_Dropdown>().value = selectedSongID;
+        }      
     }
 
-    public void ClearNotes()
+    public void ClearRhythmInScene() //Clears all sliders and notes
+    {
+        ClearNotes();
+        ClearSliders();
+    }
+
+    void ClearNotes()
     {
         //Clear existing notes
         foreach (GameObject n in noteGameObjects)
@@ -219,6 +259,67 @@ public class RhythmController : MonoBehaviour
             currentRecording.notes.Remove(n.GetComponent<NoteController>().noteCodeObject);
             Destroy(n);
         }
-        noteGameObjects.Clear();
+        noteGameObjects.Clear();    
+
+        UpdateNoteCount(-noteCount);
+    }
+
+    void ClearSliders()
+    {
+        //Clear existing sliders
+        foreach (GameObject s in sliderGameObjects)
+        {
+            currentRecording.sliders.Remove(s.GetComponent<SliderController>().sliderCodeObject);
+            Destroy(s);
+        }
+        sliderGameObjects.Clear();
+
+        UpdateSliderCount(-sliderCount);
+    }
+
+    public void SetLaneCount()
+    {
+        int canParse = 0;
+        int.TryParse(laneCountPicker.GetComponent<TMP_InputField>().text, out canParse); //Prevents parse error
+        if(canParse != 0)
+        {
+            int count = int.Parse(laneCountPicker.GetComponent<TMP_InputField>().text);
+            if (count > 0 && count < 6)
+            {
+                laneCount = count;
+                currentRecording.laneCount = laneCount;
+
+                int index = 0;
+                foreach (GameObject obj in lanes)
+                {
+                    if (index <= count - 1)
+                        lanes[index].SetActive(true);
+                    else
+                        lanes[index].SetActive(false);
+                    index++;
+                }
+            }
+        }
+    }
+
+    void LoadLaneCount()
+    {
+        laneCount = currentRecording.laneCount;
+
+        int index = 0;
+        foreach (GameObject obj in lanes)
+        {
+            if (index <= laneCount - 1)
+                lanes[index].SetActive(true);
+            else
+                lanes[index].SetActive(false);
+            index++;
+        }
+    }
+
+    public void TestModeToggle()
+    {
+        foreach(SelectorController sc in FindObjectsOfType<SelectorController>())
+            sc.shouldKillNotes = !sc.shouldKillNotes;
     }
 }

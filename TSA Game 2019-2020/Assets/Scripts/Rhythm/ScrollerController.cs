@@ -78,40 +78,47 @@ public class ScrollerController : MonoBehaviour
         GameObject newNote = null;
 
         if(manualDevMode)
-            newNote = Instantiate(notePrefab, selectors[lane].transform.position, transform.rotation, notesParent.transform);
+            newNote = Instantiate(notePrefab, selectors[lane - 1].transform.position, transform.rotation, notesParent.transform);
         else
             newNote = Instantiate(notePrefab, lanes[lane].transform.position, transform.rotation, notesParent.transform);
 
-        //Rotate Arrow
+        //Rotate note
         switch (lane)
         {
-            case 0:
-                newNote.transform.eulerAngles = new Vector3(0, 0, -90);
-                break;
             case 1:
-                newNote.transform.eulerAngles = new Vector3(0, 0, 180);
+                newNote.transform.eulerAngles = new Vector3(0, 0, 90); //Right
                 break;
             case 2:
-                newNote.transform.eulerAngles = new Vector3(0, 0, 90);
+                newNote.transform.eulerAngles = new Vector3(0, 0, 180); //Up
                 break;
+            case 3:
+                newNote.transform.eulerAngles = new Vector3(0, 0, -90); //Left
+                break;
+            case 4:
+                newNote.transform.eulerAngles = new Vector3(0, 0, 0); //Down
+                break;
+            case 5:
+                break; //5th lane
         }
 
         rhythmController.noteGameObjects.Add(newNote);
         Note n = new Note(lane, new Vector3(newNote.transform.localPosition.x, newNote.transform.localPosition.y, newNote.transform.localPosition.z));
         rhythmController.currentRecording.notes.Add(n);
         newNote.GetComponent<NoteController>().noteCodeObject = n;
+        rhythmController.UpdateNoteCount(1);
     }
 
     public GameObject SpawnSlider(int lane)
     {
         GameObject newSlider = null;
 
-        newSlider = Instantiate(sliderPrefab, selectors[lane].transform.position, transform.rotation, slidersParent.transform);
+        newSlider = Instantiate(sliderPrefab, selectors[lane - 1].transform.position, transform.rotation, slidersParent.transform);
 
         rhythmController.sliderGameObjects.Add(newSlider);
         SliderObj s = new SliderObj(lane, new Vector3(newSlider.transform.localPosition.x, newSlider.transform.localPosition.y, newSlider.transform.localPosition.z));
         rhythmController.currentRecording.sliders.Add(s);
         newSlider.GetComponent<SliderController>().sliderCodeObject = s;
+        rhythmController.UpdateSliderCount(1);
 
         return newSlider;
     }
@@ -121,18 +128,23 @@ public class ScrollerController : MonoBehaviour
         GameObject newNote = Instantiate(notePrefab, new Vector3(0, 0, 0), transform.rotation, notesParent.transform);
         newNote.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
 
-        //Rotate Arrow
+        //Rotate note
         switch (lane)
         {
-            case 0:
-                newNote.transform.localEulerAngles = new Vector3(0, 0, -90);
-                break;
             case 1:
-                newNote.transform.localEulerAngles = new Vector3(0, 0, 180);
+                newNote.transform.eulerAngles = new Vector3(0, 0, 90); //Right
                 break;
             case 2:
-                newNote.transform.localEulerAngles = new Vector3(0, 0, 90);
+                newNote.transform.eulerAngles = new Vector3(0, 0, 180); //Up
                 break;
+            case 3:
+                newNote.transform.eulerAngles = new Vector3(0, 0, -90); //Left
+                break;
+            case 4:
+                newNote.transform.eulerAngles = new Vector3(0, 0, 0); //Down
+                break;
+            case 5:
+                break; //5th lane
         }
 
         rhythmController.noteGameObjects.Add(newNote);

@@ -15,6 +15,8 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
     public SliderObj sliderCodeObject; //This slider's code object counterpart in the noteObjects list in ScrollController; Used for serialization
 
     public bool mouseDown;
+    public float mouseDownPos;
+    public float mouseDownSliderPos;
 
     private void Start()
     {
@@ -78,19 +80,32 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
 
     public void Die()
     {
+        if (FindObjectOfType<RhythmController>() != null)
+        {
+            FindObjectOfType<RhythmController>().currentRecording.sliders.Remove(sliderCodeObject);
+            FindObjectOfType<RhythmController>().sliderGameObjects.Remove(gameObject);
+            FindObjectOfType<RhythmController>().UpdateSliderCount(-1);
+        }
         Destroy(gameObject);
     }
 
     private void Update()
     {
         if (mouseDown) //Note dragging for RhythmMaker
-            transform.position = new Vector3(transform.position.x, Input.mousePosition.y, transform.position.z);
-        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, 0.1f); //Prevents note from swaying slowly toward negative z (idk why) which would cause it to eventually clip behind the canvas / dissapear
+            transform.position = new Vector3(transform.position.x, mouseDownSliderPos + -(mouseDownPos - Input.mousePosition.y), transform.position.z);
     }
 
     public void MouseDown()
     {
-        mouseDown = true;
+        if (Input.GetMouseButton(0)) //Left click
+        {
+            mouseDown = true;
+            mouseDownPos = Input.mousePosition.y;
+            mouseDownSliderPos = transform.position.y;
+        }
+        else if (Input.GetMouseButton(1)) //Right click
+            HitDeath();
+
     }
 
     public void MouseUp()

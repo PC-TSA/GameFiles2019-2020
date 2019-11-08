@@ -9,6 +9,8 @@ public class NoteController : MonoBehaviour
     public Note noteCodeObject; //This note's code object counterpart in the noteObjects list in ScrollController; Used for serialization
 
     public bool mouseDown;
+    public float mouseDownPos;
+    public float mouseDownNotePos;
 
     //Waits until after the note has faded out, then deletes
     IEnumerator DeathFade()
@@ -53,6 +55,7 @@ public class NoteController : MonoBehaviour
         {
             FindObjectOfType<RhythmController>().currentRecording.notes.Remove(noteCodeObject);
             FindObjectOfType<RhythmController>().noteGameObjects.Remove(gameObject);
+            FindObjectOfType<RhythmController>().UpdateNoteCount(-1);
         }
         Destroy(gameObject);
     }
@@ -60,12 +63,19 @@ public class NoteController : MonoBehaviour
     private void Update()
     {
         if (mouseDown) //Note dragging for RhythmMaker; BROKEN, may not be fixable. Replacement with note 'select' and adjust using keys to move up / down a bit?
-            transform.position = new Vector3(transform.position.x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, transform.position.z);
+            transform.position = new Vector3(transform.position.x, mouseDownNotePos + -(mouseDownPos - Input.mousePosition.y), transform.position.z);
     }
 
     public void MouseDown()
     {
-        mouseDown = true;
+        if (Input.GetMouseButton(0)) //Left click
+        {
+            mouseDown = true;
+            mouseDownPos = Input.mousePosition.y;
+            mouseDownNotePos = transform.position.y;
+        }
+        else if (Input.GetMouseButton(1)) //Right click
+            Hit();
     }
 
     public void MouseUp()

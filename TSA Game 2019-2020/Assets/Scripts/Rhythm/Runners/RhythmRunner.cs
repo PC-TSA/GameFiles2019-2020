@@ -37,6 +37,8 @@ public class RhythmRunner : MonoBehaviour
     public bool isRunning; //If the rhythm portion is currently running, meaning a song is playing and notes are scrolling
 
     public List<KeyCode> laneKeycodes = new List<KeyCode>(); //index 0 = left lane, 1 = middle lane, 2 == right lane; values gotten by SelectorComponent.cs
+    public List<GameObject> lanes; //The parent objs for each lane; Are disabled/enabled in SetLaneCount when loading the recording
+    public int laneCount; //How many lanes to have (1-5)
 
     public Recording currentRecording;
 
@@ -146,12 +148,8 @@ public class RhythmRunner : MonoBehaviour
         //Update scroll speed
         scrollSpeed = currentRecording.scrollSpeed;
 
-        /*Adjusts for tracks made in low speed being off slightly (OLD, LIKELY DOESNT SERVE A PURPOSE AND MIGHT MAKE THE DELAY WORSE)
-        if (scrollSpeed <= 10)
-        {
-            float newY = (scrollSpeed * 0.66f) * scrollSpeed;
-            scrollerObj.transform.localPosition = new Vector3(scrollerObj.transform.localPosition.x, newY, scrollerObj.transform.localPosition.z);
-        }*/
+        //Enable lanes used in this recording
+        LoadLaneCount();
 
         //Generate notes
         if (scrollSpeed == customSpeed || customSpeed == 0)
@@ -182,18 +180,23 @@ public class RhythmRunner : MonoBehaviour
         GameObject newNote = Instantiate(notePrefab, new Vector3(0, 0, 0), transform.rotation, notesParent.transform);
         newNote.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
 
-        //Rotate Arrow
+        //Rotate note
         switch (lane)
         {
-            case 0:
-                newNote.transform.localEulerAngles = new Vector3(0, 0, -90);
-                break;
             case 1:
-                newNote.transform.localEulerAngles = new Vector3(0, 0, 180);
+                newNote.transform.eulerAngles = new Vector3(0, 0, 90); //Right
                 break;
             case 2:
-                newNote.transform.localEulerAngles = new Vector3(0, 0, 90);
+                newNote.transform.eulerAngles = new Vector3(0, 0, 180); //Up
                 break;
+            case 3:
+                newNote.transform.eulerAngles = new Vector3(0, 0, -90); //Left
+                break;
+            case 4:
+                newNote.transform.eulerAngles = new Vector3(0, 0, 0); //Down
+                break;
+            case 5:
+                break; //5th lane
         }
     }
 
@@ -316,5 +319,19 @@ public class RhythmRunner : MonoBehaviour
     {
         float speedMultiplier = customSpeed / scrollSpeed;
         return new Vector3(s.pos.x, s.pos.y * speedMultiplier, s.pos.z);
+    }
+
+    void LoadLaneCount()
+    {
+        laneCount = currentRecording.laneCount;
+        int index = 0;
+        foreach (GameObject obj in lanes)
+        {
+            if (index <= laneCount - 1)
+                lanes[index].SetActive(true);
+            else
+                lanes[index].SetActive(false);
+            index++;
+        }
     }
 }
