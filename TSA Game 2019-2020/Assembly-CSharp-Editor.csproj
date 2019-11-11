@@ -364,6 +364,9 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>D:/Game Stuff/Game Making/TSA Game 2019-2020/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/System.Windows.Forms.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor.Advertisements">
       <HintPath>D:/Game Stuff/Game Making/TSA Game 2019-2020/GameFiles 2019-2020/TSA Game 2019-2020/Library/PackageCache/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll</HintPath>
     </Reference>
@@ -381,9 +384,6 @@
     </Reference>
     <Reference Include="ICSharpCode.NRefactory">
       <HintPath>D:/Game Stuff/Game Making/TSA Game 2019-2020/GameFiles 2019-2020/TSA Game 2019-2020/Library/PackageCache/com.unity.render-pipelines.high-definition@4.10.0-preview/Editor/Core/ShaderGenerator/ICSharpCode.NRefactory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows.Forms">
-      <HintPath>D:/Game Stuff/Game Making/TSA Game 2019-2020/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/System.Windows.Forms.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>E:/Unity/2018.4.12f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
