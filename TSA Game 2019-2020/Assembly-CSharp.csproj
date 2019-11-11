@@ -65,15 +65,19 @@
     <Compile Include="Assets\Scripts\FPSDisplay.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Object Controllers\NoteController.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Object Controllers\SliderController.cs" />
+    <Compile Include="Assets\Scripts\Rhythm\Object Controllers\SpaceController.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Objects\Note.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Objects\Recording.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Objects\SliderObj.cs" />
+    <Compile Include="Assets\Scripts\Rhythm\Objects\SpaceObj.cs" />
     <Compile Include="Assets\Scripts\Rhythm\RhythmController.cs" />
     <Compile Include="Assets\Scripts\Rhythm\RhythmSliderController.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Runners\RhythmRunner.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Runners\SelectorRunner.cs" />
+    <Compile Include="Assets\Scripts\Rhythm\Runners\SpaceSelectorRunner.cs" />
     <Compile Include="Assets\Scripts\Rhythm\ScrollerController.cs" />
     <Compile Include="Assets\Scripts\Rhythm\SelectorController.cs" />
+    <Compile Include="Assets\Scripts\Rhythm\SpaceSelectorController.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Visualization\AudioPeer.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Visualization\AudioVisualizer.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Visualization\WaveformVisualizer.cs" />
@@ -122,6 +126,7 @@
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\Resources\Greatest.xml" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Anton OFL.txt" />
     <None Include="Assets\Resources\Demo.xml" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Bangers - OFL.txt" />
@@ -404,6 +409,9 @@
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>D:/Game Stuff/Game Making/TSA Game 2019-2020/GameFiles 2019-2020/TSA Game 2019-2020/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>D:/Game Stuff/Game Making/TSA Game 2019-2020/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/System.Windows.Forms.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>E:/Unity/2018.4.12f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>

@@ -15,8 +15,5 @@ public class SliderObj
         pos = posVector;
     }
 
-    public SliderObj()
-    {
-
-    }
+    public SliderObj() { }
 }

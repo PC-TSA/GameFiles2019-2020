@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class SelectorController : MonoBehaviour
@@ -16,10 +17,13 @@ public class SelectorController : MonoBehaviour
 
     public List<GameObject> selectableNotes = new List<GameObject>();
 
-    public bool shouldKillNotes = true; //If false, notes are hit by this selector wont die; For map making/testing purposes 
+    public bool shouldKillNotes; //If false, notes are hit by this selector wont die; For map making/testing purposes 
 
     public RhythmController rhythmController;
     public ScrollerController scrollerController;
+
+    public Color color;
+    public Color pressColor;
 
     private void Start()
     {
@@ -27,6 +31,9 @@ public class SelectorController : MonoBehaviour
         //key = rhythmController.laneKeycodes[laneNumber]; //Gets this selector's keycode from it's lane index & the keycode list in RhythmController.cs
         //manualGenKey = rhythmController.manualGenKeycodes[laneNumber];
         sliderGenKey = rhythmController.placeSliderKeycode;
+
+        color = rhythmController.selectorColor;
+        pressColor = rhythmController.selectorPressColor;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -68,6 +75,8 @@ public class SelectorController : MonoBehaviour
 
         if (Input.GetKeyDown(key))
         {
+            GetComponent<Image>().color = pressColor;
+
             if (selectableNotes.Count != 0)
             {
                 if (shouldKillNotes)
@@ -90,6 +99,9 @@ public class SelectorController : MonoBehaviour
                 FindObjectOfType<RhythmController>().UpdateMissclicks(1);*/
             }
         }
+
+        if(Input.GetKeyUp(key))
+            GetComponent<Image>().color = color;
 
         if (Input.GetKeyDown(manualGenKey)) //If in manual gen edit mode
         {

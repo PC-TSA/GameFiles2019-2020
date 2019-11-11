@@ -382,6 +382,9 @@
     <Reference Include="ICSharpCode.NRefactory">
       <HintPath>D:/Game Stuff/Game Making/TSA Game 2019-2020/GameFiles 2019-2020/TSA Game 2019-2020/Library/PackageCache/com.unity.render-pipelines.high-definition@4.10.0-preview/Editor/Core/ShaderGenerator/ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>D:/Game Stuff/Game Making/TSA Game 2019-2020/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/System.Windows.Forms.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>E:/Unity/2018.4.12f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
     </Reference>

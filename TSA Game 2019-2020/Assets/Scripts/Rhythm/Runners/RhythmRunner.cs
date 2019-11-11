@@ -44,9 +44,12 @@ public class RhythmRunner : MonoBehaviour
 
     public GameObject notePrefab;
     public GameObject sliderPrefab;
+    public GameObject sliderMaskPrefab;
+    public GameObject spacePrefab;
+
     public GameObject notesParent;
     public GameObject slidersParent;
-    public GameObject sliderMaskPrefab;
+    public GameObject spacesParent;
 
     public AudioSource audioSource;
 
@@ -65,6 +68,13 @@ public class RhythmRunner : MonoBehaviour
     public float vignetteNewVal;
 
     public float customSpeed;
+
+    public Color selectorColor;
+    public Color selectorPressColor;
+
+    public GameObject spaceSelector;
+    public float backgroundWidth;
+    public float dividerWidth;
 
     private void Start()
     {
@@ -151,13 +161,15 @@ public class RhythmRunner : MonoBehaviour
         //Enable lanes used in this recording
         LoadLaneCount();
 
-        //Generate notes
+        //Generate track
         if (scrollSpeed == customSpeed || customSpeed == 0)
         {
-            foreach (Note n in currentRecording.notes)
+            foreach (Note n in currentRecording.notes) //Deserialize notes
                 DeserializeNote(n.lane, n.pos);
-            foreach (SliderObj s in currentRecording.sliders)
+            foreach (SliderObj s in currentRecording.sliders) //Deserialize sliders
                 DeserializeSlider(s.lane, s.pos, s.height);
+            foreach (SpaceObj s in currentRecording.spaces) //Deserialize spaces
+                DeserializeSpace(s.width, s.pos);
         }
         else
         {
@@ -211,6 +223,14 @@ public class RhythmRunner : MonoBehaviour
         newSlider.GetComponent<BoxCollider2D>().size = new Vector2(newSlider.GetComponent<BoxCollider2D>().size.x, height);
     }
 
+    public void DeserializeSpace(float width, Vector3 pos)
+    {
+        GameObject newSpace = Instantiate(spacePrefab, new Vector3(0, 0, 0), transform.rotation, spacesParent.transform);
+        newSpace.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
+        newSpace.GetComponent<RectTransform>().sizeDelta = new Vector2(width, newSpace.GetComponent<RectTransform>().sizeDelta.y);
+        newSpace.GetComponent<BoxCollider2D>().size = new Vector2(width, newSpace.GetComponent<BoxCollider2D>().size.y);
+    }
+
     IEnumerator DelayedStart()
     {
         yield return new WaitForSeconds(1);
@@ -233,7 +253,7 @@ public class RhythmRunner : MonoBehaviour
             {
                 //Update audio low pass filter, aka 'distorted/muffled effect'
                 GetComponent<AudioLowPassFilter>().enabled = true;
-                int freq = 6000 - (deathCount * 6000 / health); //Proportion of the deathCount / health = new frequency / 6000 (6000 = arbitrary max frequency I chose)
+                int freq = 9000 - (deathCount * 9000 / health); //Proportion of the deathCount / health = new frequency / 6000 (6000 = arbitrary max frequency I chose)
                 if (freq < 1000)
                     freq = 1000;
                 GetComponent<AudioLowPassFilter>().cutoffFrequency = freq;
@@ -274,8 +294,9 @@ public class RhythmRunner : MonoBehaviour
             //Enable trails & set their color
             foreach (TrailRenderer tr in trailRenderers)
             {
-                tr.enabled = true;
+                tr.emitting = true;
                 tr.colorGradient = comboTrailGradients[comboLvl - 1];
+                //tr.material.SetColor("_EmissionColor", comboTrailGradients[comboLvl - 1].colorKeys[0].color); SETTING MAT COLOR IS BROKEN DUE TO IT BEING OVERRIDEN BY MATERIAL EMISSION, POSSIBLE FIX WITH A LINE LIKE THIS ONE
             }
         }
     }
@@ -285,7 +306,7 @@ public class RhythmRunner : MonoBehaviour
         combo = 1;
         comboLvl = 0;
         foreach (TrailRenderer tr in trailRenderers)
-            tr.enabled = false;
+            tr.emitting = false;
         comboTxt.GetComponent<TextMeshProUGUI>().text = "Combo: " + combo;
     }
 
@@ -333,5 +354,18 @@ public class RhythmRunner : MonoBehaviour
                 lanes[index].SetActive(false);
             index++;
         }
+
+        UpdateSpaceSelector();
+    }
+
+    void UpdateSpaceSelector()
+    {
+        float w = (laneCount * backgroundWidth) + ((laneCount - 1) * dividerWidth);
+        spaceSelector.GetComponent<RectTransform>().sizeDelta = new Vector2(w, spaceSelector.GetComponent<RectTransform>().sizeDelta.y); //Sets space selector width
+
+        spaceSelector.transform.GetComponent<BoxCollider2D>().size = new Vector2(w, spaceSelector.transform.GetComponent<BoxCollider2D>().size.y); //Sets space selector collider width
+
+        float x = (lanes[0].transform.localPosition.x + lanes[laneCount - 1].transform.localPosition.x) / 2;
+        spaceSelector.transform.localPosition = new Vector3(x, spaceSelector.transform.localPosition.y, spaceSelector.transform.localPosition.z); //Sets space selector localPos.x
     }
 }

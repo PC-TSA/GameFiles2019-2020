@@ -91,7 +91,7 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
 
     private void Update()
     {
-        if (mouseDown) //Note dragging for RhythmMaker
+        if (mouseDown) //Note dragging/clicking, Only works if camera is in screen overlay
             transform.position = new Vector3(transform.position.x, mouseDownSliderPos + -(mouseDownPos - Input.mousePosition.y), transform.position.z);
     }
 

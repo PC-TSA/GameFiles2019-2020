@@ -62,7 +62,7 @@ public class NoteController : MonoBehaviour
 
     private void Update()
     {
-        if (mouseDown) //Note dragging for RhythmMaker; BROKEN, may not be fixable. Replacement with note 'select' and adjust using keys to move up / down a bit?
+        if (mouseDown) //Note dragging/clicking, Only works if camera is in screen overlay
             transform.position = new Vector3(transform.position.x, mouseDownNotePos + -(mouseDownPos - Input.mousePosition.y), transform.position.z);
     }
 

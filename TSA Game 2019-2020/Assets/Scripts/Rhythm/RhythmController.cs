@@ -7,6 +7,7 @@ using TMPro;
 using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
+using System.Windows.Forms;
 
 //Main variable class
 public class RhythmController : MonoBehaviour
@@ -16,12 +17,14 @@ public class RhythmController : MonoBehaviour
     public List<AudioClip> songs;
     public List<int> songBPMs;
 
+    public int laneCount;
     public int noteCount;
     public int sliderCount;
-    public int laneCount;
+    public int spaceCount;
 
     public GameObject noteCountTxt;
     public GameObject sliderCountTxt;
+    public GameObject spaceCountTxt;
 
     public List<GameObject> lanes;
     public GameObject laneCountPicker;
@@ -42,6 +45,7 @@ public class RhythmController : MonoBehaviour
     public List<KeyCode> laneKeycodes = new List<KeyCode>(); //index 0 = left lane, 1 = middle lane, 2 == right lane; values gotten by SelectorComponent.cs
     public List<KeyCode> manualGenKeycodes = new List<KeyCode>(); //^; alternate keys used for placing notes in manual gen mode
     public KeyCode placeSliderKeycode; //This key + a key from manualKeycode will place a slider of that type in manual gen mode
+    public KeyCode placeSpaceKeycode; //This key will place a space note in manual gen mode
 
     public GameObject waveformObj;
 
@@ -52,12 +56,16 @@ public class RhythmController : MonoBehaviour
 
     public List<GameObject> noteGameObjects;
     public List<GameObject> sliderGameObjects;
+    public List<GameObject> spaceGameObjects;
+
+    public Color selectorColor;
+    public Color selectorPressColor;
 
     private void Start()
     {
         //Populates song picker dropdown with songs from the songs list
-        for(int i = 0; i < songs.Count; i++)
-            songPickerDropdown.GetComponent<TMP_Dropdown>().options.Add(new TMP_Dropdown.OptionData() { text = songs[i].name + " | " +  songBPMs[i]});
+        for (int i = 0; i < songs.Count; i++)
+            songPickerDropdown.GetComponent<TMP_Dropdown>().options.Add(new TMP_Dropdown.OptionData() { text = songs[i].name + " | " + songBPMs[i] });
 
         currentRecording = new Recording();
     }
@@ -98,6 +106,12 @@ public class RhythmController : MonoBehaviour
         sliderCountTxt.GetComponent<TextMeshProUGUI>().text = "Slider Count: " + sliderCount;
     }
 
+    public void UpdateSpaceCount(int i)
+    {
+        spaceCount += i;
+        spaceCountTxt.GetComponent<TextMeshProUGUI>().text = "Space Count: " + spaceCount;
+    }
+
     void StartLevel()
     {
         audioSource.Play();
@@ -113,7 +127,7 @@ public class RhythmController : MonoBehaviour
 
     void StartPause()
     {
-        if(audioSource.clip != null)
+        if (audioSource.clip != null)
         {
             isPlaying = !isPlaying;
             if (isPlaying)
@@ -151,7 +165,7 @@ public class RhythmController : MonoBehaviour
 
     void CreateWaveform()
     {
-        Texture2D tex = GetComponent<WaveformVisualizer>().PaintWaveformSpectrum(audioSource.clip, 1, (int) waveformObj.GetComponent<RectTransform>().sizeDelta.x, (int) waveformObj.GetComponent<RectTransform>().sizeDelta.y, Color.yellow);
+        Texture2D tex = GetComponent<WaveformVisualizer>().PaintWaveformSpectrum(audioSource.clip, 1, (int)waveformObj.GetComponent<RectTransform>().sizeDelta.x, (int)waveformObj.GetComponent<RectTransform>().sizeDelta.y, Color.yellow);
         waveformObj.GetComponent<Image>().sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
         waveformObj.GetComponent<Image>().color = Color.white;
     }
@@ -179,7 +193,13 @@ public class RhythmController : MonoBehaviour
         currentRecording.scrollSpeed = scrollerController.scrollSpeed;
 
         var serializer = new XmlSerializer(typeof(Recording));
-        string path = EditorUtility.SaveFilePanel("Save Recording", "", "new_recording", "xml");
+        string path = null;
+#if UNITY_EDITOR
+        path = EditorUtility.SaveFilePanel("Save Recording", "", "new_recording", "xml");
+#endif
+#if UNITY_STANDALONE
+        path = LoadFileDialog();
+#endif
         if (path != null && path != "")
         {
             var stream = new FileStream(path, FileMode.Create);
@@ -191,8 +211,14 @@ public class RhythmController : MonoBehaviour
     public void LoadRecording() //Deserializes chosen xml file and sets it as current recording
     {
         var serializer = new XmlSerializer(typeof(Recording));
-        string path = EditorUtility.OpenFilePanel("Pick Recording", "", "xml");
-        if(path != null && path != "")
+        string path = null;
+#if UNITY_EDITOR
+        path = EditorUtility.OpenFilePanel("Pick Recording", "", "xml");
+#endif
+        #if UNITY_STANDALONE
+        path = LoadFileDialog();
+#endif
+        if (path != null && path != "")
         {
             var stream = new FileStream(path, FileMode.Open);
             currentRecording = serializer.Deserialize(stream) as Recording;
@@ -241,12 +267,20 @@ public class RhythmController : MonoBehaviour
             }
             UpdateSliderCount(0);
 
+            //Generate spaces
+            foreach (SpaceObj s in currentRecording.spaces)
+            {
+                scrollerController.DeserializeSpace(s.width, s.pos);
+                spaceCount += 1;
+            }
+            UpdateSpaceCount(0);
+
             //Set start button to 'Start'
             isPlaying = false;
             PauseLevel();
 
             songPickerDropdown.GetComponent<TMP_Dropdown>().value = selectedSongID;
-        }      
+        }
     }
 
     public void ClearRhythmInScene() //Clears all sliders and notes
@@ -263,7 +297,7 @@ public class RhythmController : MonoBehaviour
             currentRecording.notes.Remove(n.GetComponent<NoteController>().noteCodeObject);
             Destroy(n);
         }
-        noteGameObjects.Clear();    
+        noteGameObjects.Clear();
 
         UpdateNoteCount(-noteCount);
     }
@@ -285,7 +319,7 @@ public class RhythmController : MonoBehaviour
     {
         int canParse = 0;
         int.TryParse(laneCountPicker.GetComponent<TMP_InputField>().text, out canParse); //Prevents parse error
-        if(canParse != 0)
+        if (canParse != 0)
         {
             int count = int.Parse(laneCountPicker.GetComponent<TMP_InputField>().text);
             if (count > 0 && count < 6)
@@ -338,7 +372,21 @@ public class RhythmController : MonoBehaviour
 
     public void TestModeToggle()
     {
-        foreach(SelectorController sc in FindObjectsOfType<SelectorController>())
+        foreach (SelectorController sc in FindObjectsOfType<SelectorController>())
             sc.shouldKillNotes = !sc.shouldKillNotes;
+    }
+
+    public string SaveFileDialog()
+    {
+        SaveFileDialog sfd = new SaveFileDialog();
+        sfd.ShowDialog();
+        return Path.GetFullPath(sfd.FileName);
+    }
+
+    public string LoadFileDialog()
+    {
+        OpenFileDialog ofd = new OpenFileDialog();
+        ofd.ShowDialog();
+        return Path.GetFullPath(ofd.FileName);
     }
 }

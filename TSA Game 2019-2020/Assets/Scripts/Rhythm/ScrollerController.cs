@@ -7,13 +7,17 @@ public class ScrollerController : MonoBehaviour
 {
     public GameObject notePrefab;
     public GameObject sliderPrefab;
+    public GameObject spacePrefab;
+
     public GameObject notesParent;
     public GameObject slidersParent;
+    public GameObject spacesParent;
 
     public RhythmController rhythmController;
 
     public GameObject[] lanes;
     public GameObject[] selectors;
+    public GameObject spaceSelector;
 
     public AudioSource audioSource;
 
@@ -102,7 +106,7 @@ public class ScrollerController : MonoBehaviour
         }
 
         rhythmController.noteGameObjects.Add(newNote);
-        Note n = new Note(lane, new Vector3(newNote.transform.localPosition.x, newNote.transform.localPosition.y, newNote.transform.localPosition.z));
+        Note n = new Note(lane, newNote.transform.localPosition);
         rhythmController.currentRecording.notes.Add(n);
         newNote.GetComponent<NoteController>().noteCodeObject = n;
         rhythmController.UpdateNoteCount(1);
@@ -115,12 +119,33 @@ public class ScrollerController : MonoBehaviour
         newSlider = Instantiate(sliderPrefab, selectors[lane - 1].transform.position, transform.rotation, slidersParent.transform);
 
         rhythmController.sliderGameObjects.Add(newSlider);
-        SliderObj s = new SliderObj(lane, new Vector3(newSlider.transform.localPosition.x, newSlider.transform.localPosition.y, newSlider.transform.localPosition.z));
+        SliderObj s = new SliderObj(lane, newSlider.transform.localPosition);
         rhythmController.currentRecording.sliders.Add(s);
         newSlider.GetComponent<SliderController>().sliderCodeObject = s;
         rhythmController.UpdateSliderCount(1);
 
         return newSlider;
+    }
+
+    public GameObject SpawnSpace()
+    {
+        GameObject newSpace = null;
+
+        newSpace = Instantiate(spacePrefab, spaceSelector.transform.position, transform.rotation, spacesParent.transform);
+
+        float width = (rhythmController.laneCount * rhythmController.backgroundWidth) + ((rhythmController.laneCount - 1) * rhythmController.dividerWidth);
+        float newX = ((rhythmController.lanes[0].transform.localPosition.x + rhythmController.lanes[rhythmController.laneCount - 1].transform.localPosition.x) / 2) - transform.localPosition.x;
+        newSpace.GetComponent<RectTransform>().sizeDelta = new Vector2(width, newSpace.GetComponent<RectTransform>().sizeDelta.y);
+        newSpace.GetComponent<BoxCollider2D>().size = new Vector2(width, newSpace.GetComponent<BoxCollider2D>().size.y);
+        newSpace.transform.localPosition = new Vector3(newX, newSpace.transform.localPosition.y, newSpace.transform.localPosition.z);
+
+        rhythmController.spaceGameObjects.Add(newSpace);
+        SpaceObj s = new SpaceObj(width, newSpace.transform.localPosition);
+        rhythmController.currentRecording.spaces.Add(s);
+        newSpace.GetComponent<SpaceController>().spaceCodeObject = s;
+        rhythmController.UpdateSpaceCount(1);
+
+        return newSpace;
     }
 
     public void DeserializeNote(int lane, Vector3 pos)
@@ -157,6 +182,15 @@ public class ScrollerController : MonoBehaviour
         newSlider.GetComponent<RectTransform>().sizeDelta = new Vector2(newSlider.GetComponent<RectTransform>().sizeDelta.x, height);
         newSlider.GetComponent<BoxCollider2D>().size = new Vector2(newSlider.GetComponent<BoxCollider2D>().size.x, height);
         rhythmController.sliderGameObjects.Add(newSlider);
+    }
+
+    public void DeserializeSpace(float width, Vector3 pos)
+    {
+        GameObject newSpace = Instantiate(spacePrefab, new Vector3(0, 0, 0), transform.rotation, spacesParent.transform);
+        newSpace.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
+        newSpace.GetComponent<RectTransform>().sizeDelta = new Vector2(width, newSpace.GetComponent<RectTransform>().sizeDelta.y);
+        newSpace.GetComponent<BoxCollider2D>().size = new Vector2(width, newSpace.GetComponent<BoxCollider2D>().size.y);
+        rhythmController.spaceGameObjects.Add(newSpace);
     }
 
     public void ChangeScrollSpeed()
