@@ -3,11 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Selector
-  - Note
-  - Slider
-  - Space
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -44,10 +40,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: UI
-    uniqueID: 3946670903
-    locked: 0
-  - name: Particles
-    uniqueID: 485869613
     locked: 0

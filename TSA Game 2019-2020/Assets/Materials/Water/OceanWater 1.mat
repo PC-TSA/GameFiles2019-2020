@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: OceanWater 1
-  m_Shader: {fileID: 4800000, guid: 1b0610818e2426049bb94270705e0b91, type: 3}
+  m_Shader: {fileID: 4800000, guid: 1001940a59378b54d802fe2c6b3c9933, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -20,11 +20,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - Texture2D_10052D29:
-        m_Texture: {fileID: 2800000, guid: e67e0921aa46c794fbda918065e0d537, type: 3}
+        m_Texture: {fileID: 2800000, guid: eb82736553559e14aa47b653106c32cc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_61B8FB96:
-        m_Texture: {fileID: 2800000, guid: 288e61d7e23048c44bc705af08723c1e, type: 3}
+        m_Texture: {fileID: 2800000, guid: bd85b0a109bd2db44a2684721c4a883a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _AnisotropyMap:
@@ -119,7 +119,7 @@ Material:
     - Vector1_52EAB924: 1
     - Vector1_7BFE543E: 0.005
     - Vector1_81E9B60F: 5.8
-    - Vector1_9175E529: 0.26
+    - Vector1_9175E529: 0.06
     - Vector1_B3153DD4: 0.8
     - Vector1_CD95B304: 50
     - Vector1_D8D58DD: 0.15
