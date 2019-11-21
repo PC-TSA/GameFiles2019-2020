@@ -16,58 +16,9 @@ MonoBehaviour:
   - {fileID: 114101987035881290}
   - {fileID: 114270742033084580}
   - {fileID: 114777297677408378}
-  - {fileID: 114097952459623096}
   - {fileID: 114384459318699650}
   - {fileID: 114896311120047314}
---- !u!114 &114097952459623096
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1cb7e9e120078f43bce4f0b1be547a7, type: 3}
-  m_Name: AmbientOcclusion
-  m_EditorClassIdentifier: 
-  active: 1
-  enabled:
-    overrideState: 1
-    value: 1
-  mode:
-    overrideState: 1
-    value: 1
-  intensity:
-    overrideState: 1
-    value: 0.5
-  color:
-    overrideState: 1
-    value: {r: 0, g: 0, b: 0, a: 1}
-  ambientOnly:
-    overrideState: 0
-    value: 1
-  noiseFilterTolerance:
-    overrideState: 0
-    value: 0
-  blurTolerance:
-    overrideState: 0
-    value: -4.6
-  upsampleTolerance:
-    overrideState: 0
-    value: -12
-  thicknessModifier:
-    overrideState: 1
-    value: 1
-  directLightingStrength:
-    overrideState: 1
-    value: 0
-  radius:
-    overrideState: 0
-    value: 0.25
-  quality:
-    overrideState: 0
-    value: 2
+  - {fileID: 114280056768249466}
 --- !u!114 &114101987035881290
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1397,10 +1348,10 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 0.4
+    value: 1.5
   threshold:
     overrideState: 1
-    value: 0.7
+    value: 0.9
   softKnee:
     overrideState: 0
     value: 0.5
@@ -1426,6 +1377,51 @@ MonoBehaviour:
   dirtIntensity:
     overrideState: 0
     value: 0
+--- !u!114 &114280056768249466
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b14251571769e7f48b2512a534f6cac2, type: 3}
+  m_Name: SunShaftsHDRP
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  blend:
+    overrideState: 0
+    value: 0.5
+  resolution: 1
+  screenBlendMode: 0
+  sunTransform:
+    overrideState: 1
+    value: {x: 0, y: 12, z: 0}
+  radialBlurIterations:
+    overrideState: 1
+    value: 2
+  sunColor:
+    overrideState: 1
+    value: {r: 0.9811321, g: 0.9515525, b: 0.80989677, a: 1}
+  sunThreshold:
+    overrideState: 0
+    value: {r: 0.87, g: 0.74, b: 0.65, a: 1}
+  sunShaftBlurRadius:
+    overrideState: 1
+    value: 2.71
+  sunShaftIntensity:
+    overrideState: 1
+    value: 4.48
+  maxRadius:
+    overrideState: 1
+    value: 0.77
+  useDepthTexture:
+    overrideState: 0
+    value: 1
 --- !u!114 &114384459318699650
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1475,7 +1471,7 @@ MonoBehaviour:
     value: {x: 0.5, y: 0.5}
   intensity:
     overrideState: 1
-    value: 0.25
+    value: 0.184
   smoothness:
     overrideState: 1
     value: 0.25

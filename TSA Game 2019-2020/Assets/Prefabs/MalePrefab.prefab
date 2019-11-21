@@ -567,7 +567,7 @@ GameObject:
   - component: {fileID: 5510139991115704391}
   - component: {fileID: 5510139991125575591}
   m_Layer: 0
-  m_Name: Male
+  m_Name: MalePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -581,8 +581,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5510139991116199015}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.934856, y: 7.706, z: -14.433429}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -8.9373, y: 8.8779, z: -14.414}
+  m_LocalScale: {x: 0.17237493, y: 0.17237493, z: 0.17237493}
   m_Children:
   - {fileID: 5510139991115704411}
   - {fileID: 5510139991115704341}

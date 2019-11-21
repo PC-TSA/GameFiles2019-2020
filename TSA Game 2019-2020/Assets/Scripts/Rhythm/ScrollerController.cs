@@ -67,7 +67,7 @@ public class ScrollerController : MonoBehaviour
 
             //Scroller
             if(!slideScrollOverride)
-                transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y - scrollSpeed, transform.localPosition.z);
+                transform.position = new Vector3(transform.localPosition.x, transform.localPosition.y - scrollSpeed, transform.localPosition.z);
         }
     }
      

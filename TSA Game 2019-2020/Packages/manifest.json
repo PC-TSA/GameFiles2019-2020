@@ -2,6 +2,7 @@
   "dependencies": {
     "com.unity.analytics": "3.2.2",
     "com.unity.package-manager-ui": "2.0.8",
+    "com.unity.postprocessing": "2.2.1",
     "com.unity.render-pipelines.lightweight": "4.10.0-preview",
     "com.unity.textmeshpro": "1.4.1",
     "com.unity.visualeffectgraph": "4.10.0-preview",
