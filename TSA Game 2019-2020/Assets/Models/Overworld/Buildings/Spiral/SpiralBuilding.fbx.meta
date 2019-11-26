@@ -31,8 +31,11 @@ ModelImporter:
     400024: transform16
     2100000: lambert1
     2100002: WindowBlue
+    2100004: lambert2
     2300000: SpiralBuilding2
+    2300002: //RootNode
     3300000: SpiralBuilding2
+    3300002: //RootNode
     4300000: SpiralBuilding2
   externalObjects:
   - first:
@@ -44,6 +47,11 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: lambert1
+    second: {fileID: 2100000, guid: c1d701399758e3449a825e2f2e66ea60, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert2
     second: {fileID: 2100000, guid: c1d701399758e3449a825e2f2e66ea60, type: 2}
   materials:
     importMaterials: 1
@@ -84,7 +92,7 @@ ModelImporter:
     importCameras: 1
     importLights: 1
     swapUVChannels: 0
-    generateSecondaryUV: 0
+    generateSecondaryUV: 1
     useFileUnits: 1
     optimizeMeshForGPU: 1
     keepQuads: 0

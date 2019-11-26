@@ -43,8 +43,11 @@ ModelImporter:
     400036: transform19
     2100000: lambert1
     2100002: WindowBlue
+    2100004: lambert2
     2300000: DumbellBuilding2
+    2300002: //RootNode
     3300000: DumbellBuilding2
+    3300002: //RootNode
     4300000: DumbellBuilding2
   externalObjects:
   - first:

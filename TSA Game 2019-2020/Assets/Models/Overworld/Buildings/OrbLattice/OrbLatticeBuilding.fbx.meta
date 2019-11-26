@@ -147,8 +147,11 @@ ModelImporter:
     400140: transform44
     2100000: lambert1
     2100002: WindowBlue
+    2100004: lambert2
     2300000: SpecialBuilding2
+    2300002: //RootNode
     3300000: SpecialBuilding2
+    3300002: //RootNode
     4300000: SpecialBuilding2
   externalObjects:
   - first:
