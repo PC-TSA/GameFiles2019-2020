@@ -36,20 +36,21 @@ public class RhythmRunner : MonoBehaviour
 
     public bool isRunning; //If the rhythm portion is currently running, meaning a song is playing and notes are scrolling
 
-    public List<KeyCode> laneKeycodes = new List<KeyCode>(); //index 0 = left lane, 1 = middle lane, 2 == right lane; values gotten by SelectorComponent.cs
     public List<GameObject> lanes; //The parent objs for each lane; Are disabled/enabled in SetLaneCount when loading the recording
     public int laneCount; //How many lanes to have (1-5)
 
     public Recording currentRecording;
 
-    public GameObject notePrefab;
-    public GameObject sliderPrefab;
+    public List<GameObject> arrowPrefabs;
+    public List<GameObject> sliderPrefabs;
     public GameObject sliderMaskPrefab;
     public GameObject spacePrefab;
 
     public GameObject notesParent;
     public GameObject slidersParent;
     public GameObject spacesParent;
+
+    public List<Sprite> arrowSprites; //0 = right, 1 = up, 2 = left, 3 = down
 
     public AudioSource audioSource;
 
@@ -167,7 +168,7 @@ public class RhythmRunner : MonoBehaviour
             foreach (Note n in currentRecording.notes) //Deserialize notes
                 DeserializeNote(n.lane, n.pos);
             foreach (SliderObj s in currentRecording.sliders) //Deserialize sliders
-                DeserializeSlider(s.lane, s.pos, s.height);
+                DeserializeSlider(s.lane, s.pos, s.height, s.childY);
             foreach (SpaceObj s in currentRecording.spaces) //Deserialize spaces
                 DeserializeSpace(s.width, s.pos);
         }
@@ -177,7 +178,7 @@ public class RhythmRunner : MonoBehaviour
             foreach (Note n in currentRecording.notes)
                 DeserializeNote(n.lane, OverrideSpeedPos(n));
             foreach (SliderObj s in currentRecording.sliders)
-                DeserializeSlider(s.lane, OverrideSpeedPos(s), s.height);
+                DeserializeSlider(s.lane, OverrideSpeedPos(s), s.height, s.childY);
         }
 
         foreach(SelectorRunner selector in FindObjectsOfType<SelectorRunner>())
@@ -189,44 +190,24 @@ public class RhythmRunner : MonoBehaviour
 
     public void DeserializeNote(int lane, Vector3 pos)
     {
-        GameObject newNote = Instantiate(notePrefab, new Vector3(0, 0, 0), transform.rotation, notesParent.transform);
-        newNote.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
-
-        //Rotate note
-        switch (lane)
-        {
-            case 1:
-                newNote.transform.eulerAngles = new Vector3(0, 0, 90); //Right
-                break;
-            case 2:
-                newNote.transform.eulerAngles = new Vector3(0, 0, 180); //Up
-                break;
-            case 3:
-                newNote.transform.eulerAngles = new Vector3(0, 0, -90); //Left
-                break;
-            case 4:
-                newNote.transform.eulerAngles = new Vector3(0, 0, 0); //Down
-                break;
-            case 5:
-                break; //5th lane
-        }
+        GameObject newNote = Instantiate(arrowPrefabs[lane], new Vector3(0, 0, 0), transform.rotation, notesParent.transform);
+        newNote.transform.localPosition = pos;
     }
 
-    public void DeserializeSlider(int lane, Vector3 pos, float height)
+    public void DeserializeSlider(int lane, Vector3 pos, float height, float childY)
     {
-        GameObject newSliderMask = Instantiate(sliderMaskPrefab, new Vector3(0, 0, 0), transform.rotation, slidersParent.transform);
-        newSliderMask.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
-        GameObject newSlider = Instantiate(sliderPrefab, new Vector3(0, 0, 0), newSliderMask.transform.rotation, newSliderMask.transform);
-        newSlider.transform.localPosition = new Vector3(0, 0, 0);
-        newSlider.GetComponent<RectTransform>().sizeDelta = new Vector2(newSlider.GetComponent<RectTransform>().sizeDelta.x, height);
-        newSliderMask.GetComponent<RectTransform>().sizeDelta = new Vector2(newSlider.GetComponent<RectTransform>().sizeDelta.x, height);
+        GameObject newSlider = Instantiate(sliderPrefabs[lane], new Vector3(0, 0, 0), transform.rotation, slidersParent.transform);
+        newSlider.transform.localPosition = pos;
+        Transform newSliderChild = newSlider.transform.GetChild(0);
+        newSliderChild.GetComponent<RectTransform>().sizeDelta = new Vector2(newSliderChild.GetComponent<RectTransform>().sizeDelta.x, height);
+        newSliderChild.localPosition = new Vector3(newSliderChild.localPosition.x, childY, newSliderChild.localPosition.z);
         newSlider.GetComponent<BoxCollider2D>().size = new Vector2(newSlider.GetComponent<BoxCollider2D>().size.x, height);
     }
 
     public void DeserializeSpace(float width, Vector3 pos)
     {
         GameObject newSpace = Instantiate(spacePrefab, new Vector3(0, 0, 0), transform.rotation, spacesParent.transform);
-        newSpace.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
+        newSpace.transform.localPosition = pos;
         newSpace.GetComponent<RectTransform>().sizeDelta = new Vector2(width, newSpace.GetComponent<RectTransform>().sizeDelta.y);
         newSpace.GetComponent<BoxCollider2D>().size = new Vector2(width, newSpace.GetComponent<BoxCollider2D>().size.y);
     }
@@ -360,7 +341,7 @@ public class RhythmRunner : MonoBehaviour
 
     void UpdateSpaceSelector()
     {
-        float w = (laneCount * backgroundWidth) + ((laneCount - 1) * dividerWidth);
+        float w = (laneCount * backgroundWidth) + ((laneCount) * dividerWidth);
         spaceSelector.GetComponent<RectTransform>().sizeDelta = new Vector2(w, spaceSelector.GetComponent<RectTransform>().sizeDelta.y); //Sets space selector width
 
         spaceSelector.transform.GetComponent<BoxCollider2D>().size = new Vector2(w, spaceSelector.transform.GetComponent<BoxCollider2D>().size.y); //Sets space selector collider width

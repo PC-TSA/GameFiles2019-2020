@@ -15,15 +15,12 @@ public class SpaceSelectorController : MonoBehaviour
     public RhythmController rhythmController;
     public ScrollerController scrollerController;
 
-    public Color color;
-    public Color pressColor;
+    public Sprite normalSprite;
+    public Sprite pressSprite;
 
     private void Start()
     {
         spaceGenKey = rhythmController.placeSpaceKeycode;
-
-        color = new Color(rhythmController.selectorColor.r, rhythmController.selectorColor.g, rhythmController.selectorColor.b, 0.5f);
-        pressColor = new Color(rhythmController.selectorPressColor.r, rhythmController.selectorPressColor.g, rhythmController.selectorPressColor.b, 0.4f);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -42,7 +39,7 @@ public class SpaceSelectorController : MonoBehaviour
     {
         if (Input.GetKeyDown(key))
         {
-            GetComponent<Image>().color = pressColor;
+            GetComponent<Image>().sprite = pressSprite;
 
             if (selectableSpaces.Count != 0)
             {
@@ -55,7 +52,7 @@ public class SpaceSelectorController : MonoBehaviour
         }
 
         if(Input.GetKeyUp(key))
-            GetComponent<Image>().color = color;
+            GetComponent<Image>().sprite = normalSprite;
 
         if (Input.GetKeyDown(spaceGenKey)) //If in manual gen edit mode
         {

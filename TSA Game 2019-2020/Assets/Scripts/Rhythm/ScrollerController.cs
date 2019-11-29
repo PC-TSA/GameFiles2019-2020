@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class ScrollerController : MonoBehaviour
 {
-    public GameObject notePrefab;
-    public GameObject sliderPrefab;
+    public List<GameObject> arrowPrefabs;
+    public List<GameObject> sliderPrefabs;
     public GameObject spacePrefab;
 
     public GameObject notesParent;
@@ -15,7 +16,6 @@ public class ScrollerController : MonoBehaviour
 
     public RhythmController rhythmController;
 
-    public GameObject[] lanes;
     public GameObject[] selectors;
     public GameObject spaceSelector;
 
@@ -58,7 +58,7 @@ public class ScrollerController : MonoBehaviour
                 if (timer >= (delay / bpm))
                 {
                     //Create the note in a random lane
-                    SpawnNote(Random.Range(0, lanes.Length), false);
+                    SpawnNote(Random.Range(0, selectors.Length));
                     timer -= (delay / bpm);
                 }
             }
@@ -67,7 +67,7 @@ public class ScrollerController : MonoBehaviour
 
             //Scroller
             if(!slideScrollOverride)
-                transform.position = new Vector3(transform.localPosition.x, transform.localPosition.y - scrollSpeed, transform.localPosition.z);
+                transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y - scrollSpeed, transform.localPosition.z);
         }
     }
      
@@ -77,33 +77,11 @@ public class ScrollerController : MonoBehaviour
             timer -= (delay / bpm);
     }
 
-    public void SpawnNote(int lane, bool manualDevMode)
+    public void SpawnNote(int lane)
     {
         GameObject newNote = null;
 
-        if(manualDevMode)
-            newNote = Instantiate(notePrefab, selectors[lane - 1].transform.position, transform.rotation, notesParent.transform);
-        else
-            newNote = Instantiate(notePrefab, lanes[lane].transform.position, transform.rotation, notesParent.transform);
-
-        //Rotate note
-        switch (lane)
-        {
-            case 1:
-                newNote.transform.eulerAngles = new Vector3(0, 0, 90); //Right
-                break;
-            case 2:
-                newNote.transform.eulerAngles = new Vector3(0, 0, 180); //Up
-                break;
-            case 3:
-                newNote.transform.eulerAngles = new Vector3(0, 0, -90); //Left
-                break;
-            case 4:
-                newNote.transform.eulerAngles = new Vector3(0, 0, 0); //Down
-                break;
-            case 5:
-                break; //5th lane
-        }
+        newNote = Instantiate(arrowPrefabs[lane], selectors[lane].transform.position, transform.rotation, notesParent.transform);
 
         rhythmController.noteGameObjects.Add(newNote);
         Note n = new Note(lane, newNote.transform.localPosition);
@@ -116,7 +94,7 @@ public class ScrollerController : MonoBehaviour
     {
         GameObject newSlider = null;
 
-        newSlider = Instantiate(sliderPrefab, selectors[lane - 1].transform.position, transform.rotation, slidersParent.transform);
+        newSlider = Instantiate(sliderPrefabs[lane], selectors[lane].transform.position, transform.rotation, slidersParent.transform);
 
         rhythmController.sliderGameObjects.Add(newSlider);
         SliderObj s = new SliderObj(lane, newSlider.transform.localPosition);
@@ -133,7 +111,7 @@ public class ScrollerController : MonoBehaviour
 
         newSpace = Instantiate(spacePrefab, spaceSelector.transform.position, transform.rotation, spacesParent.transform);
 
-        float width = (rhythmController.laneCount * rhythmController.backgroundWidth) + ((rhythmController.laneCount - 1) * rhythmController.dividerWidth);
+        float width = rhythmController.spaceSelector.GetComponent<RectTransform>().sizeDelta.x;
         float newX = ((rhythmController.lanes[0].transform.localPosition.x + rhythmController.lanes[rhythmController.laneCount - 1].transform.localPosition.x) / 2) - transform.localPosition.x;
         newSpace.GetComponent<RectTransform>().sizeDelta = new Vector2(width, newSpace.GetComponent<RectTransform>().sizeDelta.y);
         newSpace.GetComponent<BoxCollider2D>().size = new Vector2(width, newSpace.GetComponent<BoxCollider2D>().size.y);
@@ -150,46 +128,31 @@ public class ScrollerController : MonoBehaviour
 
     public void DeserializeNote(int lane, Vector3 pos)
     {
-        GameObject newNote = Instantiate(notePrefab, new Vector3(0, 0, 0), transform.rotation, notesParent.transform);
-        newNote.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
-
-        //Rotate note
-        switch (lane)
-        {
-            case 1:
-                newNote.transform.eulerAngles = new Vector3(0, 0, 90); //Right
-                break;
-            case 2:
-                newNote.transform.eulerAngles = new Vector3(0, 0, 180); //Up
-                break;
-            case 3:
-                newNote.transform.eulerAngles = new Vector3(0, 0, -90); //Left
-                break;
-            case 4:
-                newNote.transform.eulerAngles = new Vector3(0, 0, 0); //Down
-                break;
-            case 5:
-                break; //5th lane
-        }
+        GameObject newNote = Instantiate(arrowPrefabs[lane], new Vector3(0, 0, 0), transform.rotation, notesParent.transform);
+        newNote.transform.localPosition = pos;
 
         rhythmController.noteGameObjects.Add(newNote);
     }
 
-    public void DeserializeSlider(int lane, Vector3 pos, float height)
+    public void DeserializeSlider(int lane, Vector3 pos, float height, float childY)
     {
-        GameObject newSlider = Instantiate(sliderPrefab, new Vector3(0, 0, 0), transform.rotation, slidersParent.transform);
-        newSlider.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
-        newSlider.GetComponent<RectTransform>().sizeDelta = new Vector2(newSlider.GetComponent<RectTransform>().sizeDelta.x, height);
+        GameObject newSlider = Instantiate(sliderPrefabs[lane], new Vector3(0, 0, 0), transform.rotation, slidersParent.transform);
+        newSlider.transform.localPosition = pos;
+        Transform newSliderChild = newSlider.transform.GetChild(0);
+        newSliderChild.GetComponent<RectTransform>().sizeDelta = new Vector2(newSliderChild.GetComponent<RectTransform>().sizeDelta.x, height);
+        newSliderChild.localPosition = new Vector3(newSliderChild.localPosition.x, childY, newSliderChild.localPosition.z);
         newSlider.GetComponent<BoxCollider2D>().size = new Vector2(newSlider.GetComponent<BoxCollider2D>().size.x, height);
+
         rhythmController.sliderGameObjects.Add(newSlider);
     }
 
     public void DeserializeSpace(float width, Vector3 pos)
     {
         GameObject newSpace = Instantiate(spacePrefab, new Vector3(0, 0, 0), transform.rotation, spacesParent.transform);
-        newSpace.transform.localPosition = new Vector3(pos.x, pos.y, pos.z);
+        newSpace.transform.localPosition = pos;
         newSpace.GetComponent<RectTransform>().sizeDelta = new Vector2(width, newSpace.GetComponent<RectTransform>().sizeDelta.y);
         newSpace.GetComponent<BoxCollider2D>().size = new Vector2(width, newSpace.GetComponent<BoxCollider2D>().size.y);
+
         rhythmController.spaceGameObjects.Add(newSpace);
     }
 

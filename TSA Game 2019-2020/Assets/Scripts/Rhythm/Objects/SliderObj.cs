@@ -6,6 +6,7 @@ public class SliderObj
 {
     //public float timestamp;
     public Vector3 pos;
+    public float childY;
     public float height;
     public int lane;
 

@@ -238,8 +238,11 @@ ModelImporter:
     400230: transform67
     400232: transform68
     2100000: lambert1
+    2100002: lambert2
     2300000: RoadGrid2
+    2300002: //RootNode
     3300000: RoadGrid2
+    3300002: //RootNode
     4300000: RoadGrid2
   externalObjects: {}
   materials:

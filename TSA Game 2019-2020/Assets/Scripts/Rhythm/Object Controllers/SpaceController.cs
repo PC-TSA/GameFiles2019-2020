@@ -9,8 +9,8 @@ public class SpaceController : MonoBehaviour
     public SpaceObj spaceCodeObject; //This space's code object counterpart in the spaceObjects list in ScrollController; Used for serialization
 
     public bool mouseDown;
-    public float mouseDownPos;
-    public float mouseDownSpacePos;
+    public Vector3 screenPoint;
+    public Vector3 offset;
 
     //Waits until after the note has faded out, then deletes
     IEnumerator DeathFade()
@@ -61,8 +61,12 @@ public class SpaceController : MonoBehaviour
 
     private void Update()
     {
-        if (mouseDown) //Note dragging/clicking, Only works if camera is in screen overlay
-            transform.position = new Vector3(transform.position.x, mouseDownSpacePos + -(mouseDownPos - Input.mousePosition.y), transform.position.z);
+        if (mouseDown)
+        {
+            Vector3 cursorPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
+            Vector3 cursorPosition = Camera.main.ScreenToWorldPoint(cursorPoint) + offset;
+            transform.position = new Vector3(transform.position.x, cursorPosition.y, transform.position.z);
+        }
     }
 
     public void MouseDown()
@@ -70,8 +74,8 @@ public class SpaceController : MonoBehaviour
         if (Input.GetMouseButton(0)) //Left click
         {
             mouseDown = true;
-            mouseDownPos = Input.mousePosition.y;
-            mouseDownSpacePos = transform.position.y;
+            screenPoint = Camera.main.WorldToScreenPoint(transform.position);
+            offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
         }
         else if (Input.GetMouseButton(1)) //Right click
             Hit();

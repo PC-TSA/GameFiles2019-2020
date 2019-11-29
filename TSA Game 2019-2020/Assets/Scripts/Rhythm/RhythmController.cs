@@ -7,7 +7,7 @@ using TMPro;
 using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
-using System.Windows.Forms;
+using SFB;
 
 //Main variable class
 public class RhythmController : MonoBehaviour
@@ -58,15 +58,24 @@ public class RhythmController : MonoBehaviour
     public List<GameObject> sliderGameObjects;
     public List<GameObject> spaceGameObjects;
 
-    public Color selectorColor;
-    public Color selectorPressColor;
-
     private void Start()
     {
+        Object[] temp = Resources.LoadAll("Songs", typeof(AudioClip)); //Read all audioclips in the Resources/Songs folder and add them to the 'Songs' list
+        foreach (Object o in temp)
+            songs.Add((AudioClip) o);
+
+        for(int i = 0; i < songs.Count; i++) //Generate song BPMs, populate song picker dropdown
+        {
+            int bpm = UniBpmAnalyzer.AnalyzeBpm(songs[i]);
+            songBPMs[i] = bpm / 2;
+            songPickerDropdown.GetComponent<TMP_Dropdown>().options.Add(new TMP_Dropdown.OptionData() { text = songs[i].name + " | " + songBPMs[i] });
+        }
+
+        /* OLD SONG PICKER POPULATOR:
         //Populates song picker dropdown with songs from the songs list
         for (int i = 0; i < songs.Count; i++)
-            songPickerDropdown.GetComponent<TMP_Dropdown>().options.Add(new TMP_Dropdown.OptionData() { text = songs[i].name + " | " + songBPMs[i] });
-
+            songPickerDropdown.GetComponent<TMP_Dropdown>().options.Add(new TMP_Dropdown.OptionData() { text = songs[i].name + " | " + songBPMs[i] });*/
+     
         currentRecording = new Recording();
     }
 
@@ -194,12 +203,9 @@ public class RhythmController : MonoBehaviour
 
         var serializer = new XmlSerializer(typeof(Recording));
         string path = null;
-#if UNITY_EDITOR
-        path = EditorUtility.SaveFilePanel("Save Recording", "", "new_recording", "xml");
-#endif
-#if UNITY_STANDALONE
-        path = LoadFileDialog();
-#endif
+
+        path = StandaloneFileBrowser.SaveFilePanel("Save File", "", "", "");
+
         if (path != null && path != "")
         {
             var stream = new FileStream(path, FileMode.Create);
@@ -212,12 +218,9 @@ public class RhythmController : MonoBehaviour
     {
         var serializer = new XmlSerializer(typeof(Recording));
         string path = null;
-#if UNITY_EDITOR
-        path = EditorUtility.OpenFilePanel("Pick Recording", "", "xml");
-#endif
-        #if UNITY_STANDALONE
-        path = LoadFileDialog();
-#endif
+
+        path = StandaloneFileBrowser.OpenFilePanel("Open File", "", "", false)[0];
+
         if (path != null && path != "")
         {
             var stream = new FileStream(path, FileMode.Open);
@@ -262,7 +265,7 @@ public class RhythmController : MonoBehaviour
             //Generate sliders
             foreach (SliderObj s in currentRecording.sliders)
             {
-                scrollerController.DeserializeSlider(s.lane, s.pos, s.height);
+                scrollerController.DeserializeSlider(s.lane, s.pos, s.height, s.childY);
                 sliderCount += 1;
             }
             UpdateSliderCount(0);
@@ -322,7 +325,7 @@ public class RhythmController : MonoBehaviour
         if (canParse != 0)
         {
             int count = int.Parse(laneCountPicker.GetComponent<TMP_InputField>().text);
-            if (count > 0 && count < 6)
+            if (count > 0 && count < 5)
             {
                 laneCount = count;
                 currentRecording.laneCount = laneCount;
@@ -361,7 +364,7 @@ public class RhythmController : MonoBehaviour
 
     void UpdateSpaceSelector()
     {
-        float w = (laneCount * backgroundWidth) + ((laneCount - 1) * dividerWidth);
+        float w = (laneCount * backgroundWidth) + ((laneCount) * dividerWidth);
         spaceSelector.GetComponent<RectTransform>().sizeDelta = new Vector2(w, spaceSelector.GetComponent<RectTransform>().sizeDelta.y); //Sets space selector width
 
         spaceSelector.transform.GetComponent<BoxCollider2D>().size = new Vector2(w, spaceSelector.transform.GetComponent<BoxCollider2D>().size.y); //Sets space selector collider width
@@ -374,19 +377,5 @@ public class RhythmController : MonoBehaviour
     {
         foreach (SelectorController sc in FindObjectsOfType<SelectorController>())
             sc.shouldKillNotes = !sc.shouldKillNotes;
-    }
-
-    public string SaveFileDialog()
-    {
-        SaveFileDialog sfd = new SaveFileDialog();
-        sfd.ShowDialog();
-        return Path.GetFullPath(sfd.FileName);
-    }
-
-    public string LoadFileDialog()
-    {
-        OpenFileDialog ofd = new OpenFileDialog();
-        ofd.ShowDialog();
-        return Path.GetFullPath(ofd.FileName);
     }
 }

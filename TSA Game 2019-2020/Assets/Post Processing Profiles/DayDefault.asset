@@ -73,7 +73,7 @@ MonoBehaviour:
     value: 1
   temperature:
     overrideState: 1
-    value: -1
+    value: 15
   tint:
     overrideState: 0
     value: 0
@@ -85,7 +85,7 @@ MonoBehaviour:
     value: 0
   saturation:
     overrideState: 1
-    value: 3
+    value: 5
   brightness:
     overrideState: 0
     value: 0
@@ -1453,16 +1453,16 @@ MonoBehaviour:
     value: 2
   sunColor:
     overrideState: 1
-    value: {r: 0.9811321, g: 0.9515525, b: 0.80989677, a: 1}
+    value: {r: 0.990566, g: 0.8414597, b: 0.60275006, a: 1}
   sunThreshold:
     overrideState: 0
-    value: {r: 0.87, g: 0.74, b: 0.65, a: 1}
+    value: {r: 1, g: 0.93050873, b: 0.8820755, a: 1}
   sunShaftBlurRadius:
     overrideState: 1
-    value: 1.5
+    value: 2.5
   sunShaftIntensity:
     overrideState: 1
-    value: 4
+    value: 5.5
   maxRadius:
     overrideState: 1
     value: 0.5

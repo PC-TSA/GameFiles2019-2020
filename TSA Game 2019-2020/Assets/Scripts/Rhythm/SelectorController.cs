@@ -22,8 +22,8 @@ public class SelectorController : MonoBehaviour
     public RhythmController rhythmController;
     public ScrollerController scrollerController;
 
-    public Color color;
-    public Color pressColor;
+    public Sprite normalSprite;
+    public Sprite pressSprite;
 
     private void Start()
     {
@@ -31,9 +31,6 @@ public class SelectorController : MonoBehaviour
         //key = rhythmController.laneKeycodes[laneNumber]; //Gets this selector's keycode from it's lane index & the keycode list in RhythmController.cs
         //manualGenKey = rhythmController.manualGenKeycodes[laneNumber];
         sliderGenKey = rhythmController.placeSliderKeycode;
-
-        color = rhythmController.selectorColor;
-        pressColor = rhythmController.selectorPressColor;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -52,9 +49,10 @@ public class SelectorController : MonoBehaviour
     {
         if (spawnedSlider != null && isHoldingSliderKeycode)
         {
-            spawnedSlider.GetComponent<RectTransform>().sizeDelta = new Vector2(spawnedSlider.GetComponent<RectTransform>().sizeDelta.x, spawnedSlider.GetComponent<RectTransform>().sizeDelta.y + sliderHeightChange);
-            spawnedSlider.GetComponent<BoxCollider2D>().size = new Vector2(spawnedSlider.GetComponent<BoxCollider2D>().size.x, spawnedSlider.GetComponent<RectTransform>().sizeDelta.y);
-            spawnedSlider.transform.localPosition = new Vector3(spawnedSlider.transform.localPosition.x, spawnedSlider.transform.localPosition.y + sliderHeightChange / 2, spawnedSlider.transform.localPosition.z);
+            Transform spawnedSliderChild = spawnedSlider.transform.GetChild(0);
+            spawnedSlider.GetComponent<BoxCollider2D>().size = new Vector2(spawnedSlider.GetComponent<BoxCollider2D>().size.x, spawnedSlider.GetComponent<RectTransform>().sizeDelta.y + sliderHeightChange);
+            spawnedSliderChild.GetComponent<RectTransform>().sizeDelta = new Vector2(spawnedSliderChild.GetComponent<RectTransform>().sizeDelta.x, spawnedSliderChild.GetComponent<RectTransform>().sizeDelta.y + sliderHeightChange);
+            spawnedSliderChild.localPosition = new Vector3(spawnedSliderChild.localPosition.x, spawnedSliderChild.localPosition.y + sliderHeightChange / 2, spawnedSliderChild.localPosition.z);
         }
     }
 
@@ -67,7 +65,8 @@ public class SelectorController : MonoBehaviour
             isHoldingSliderKeycode = false;
             if(spawnedSlider != null)
             {
-                spawnedSlider.GetComponent<SliderController>().sliderCodeObject.height = spawnedSlider.GetComponent<RectTransform>().sizeDelta.y;
+                spawnedSlider.GetComponent<SliderController>().sliderCodeObject.height = spawnedSlider.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.y;
+                spawnedSlider.GetComponent<SliderController>().sliderCodeObject.childY = spawnedSlider.transform.GetChild(0).localPosition.y;
                 spawnedSlider.GetComponent<SliderController>().sliderCodeObject.pos = spawnedSlider.transform.localPosition;
                 spawnedSlider = null;
             }
@@ -75,7 +74,7 @@ public class SelectorController : MonoBehaviour
 
         if (Input.GetKeyDown(key))
         {
-            GetComponent<Image>().color = pressColor;
+            GetComponent<Image>().sprite = pressSprite;
 
             if (selectableNotes.Count != 0)
             {
@@ -100,8 +99,8 @@ public class SelectorController : MonoBehaviour
             }
         }
 
-        if(Input.GetKeyUp(key))
-            GetComponent<Image>().color = color;
+        if (Input.GetKeyUp(key))
+            GetComponent<Image>().sprite = normalSprite;
 
         if (Input.GetKeyDown(manualGenKey)) //If in manual gen edit mode
         {
@@ -113,7 +112,7 @@ public class SelectorController : MonoBehaviour
                     spawnedSlider = scrollerController.SpawnSlider(laneNumber);
                 }
                 else
-                    scrollerController.SpawnNote(laneNumber, true);
+                    scrollerController.SpawnNote(laneNumber);
             }
         }
     }

@@ -17,16 +17,13 @@ public class SelectorRunner : MonoBehaviour
 
     public ParticleSystem noteHitParticle;
 
-    public Color color;
-    public Color pressColor;
+    public Sprite normalSprite;
+    public Sprite pressSprite;
 
     private void Start()
     {
         //KEY HARD CODED IN INSPECTOR ON SELECTOR IN NEW MULTI-LANE SYSTEM
         //key = rhythmRunner.laneKeycodes[laneNumber]; //Gets this selector's keycode from it's lane index & the keycode list in RhythmController.cs
-
-        color = rhythmRunner.selectorColor;
-        pressColor = rhythmRunner.selectorPressColor;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -68,7 +65,7 @@ public class SelectorRunner : MonoBehaviour
     {
         if (Input.GetKeyDown(key))
         {
-            GetComponent<Image>().color = pressColor;
+            GetComponent<Image>().sprite = pressSprite;
 
             bool somethingClicked = false; //If false by the end of this if, this click counts as a misclick
             if (selectableNotes.Count != 0)
@@ -107,7 +104,7 @@ public class SelectorRunner : MonoBehaviour
 
         if (Input.GetKeyUp(key))
         {
-            GetComponent<Image>().color = color;
+            GetComponent<Image>().sprite = normalSprite;
 
             //If you stop hitting a slider mid way
             if (selectableSlider != null && selectableSlider.GetComponent<SliderController>().hasBeenHit)
