@@ -15,6 +15,7 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
     public SliderObj sliderCodeObject; //This slider's code object counterpart in the noteObjects list in ScrollController; Used for serialization
 
     public bool mouseDown;
+    public bool mouseOver;
     public Vector3 screenPoint;
     public Vector3 offset;
 
@@ -114,6 +115,17 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
             Vector3 cursorPosition = Camera.main.ScreenToWorldPoint(cursorPoint) + offset;
             transform.position = new Vector3(transform.position.x, cursorPosition.y, transform.position.z);
         }
+
+        if (mouseOver)
+        {
+            if (Input.GetAxis("Mouse ScrollWheel") != 0f) //If scrolling
+            {
+                transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.x, transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.y + (Input.GetAxis("Mouse ScrollWheel") * 30));
+                transform.GetChild(0).localPosition = new Vector3(transform.GetChild(0).localPosition.x, transform.GetChild(0).localPosition.y + (Input.GetAxis("Mouse ScrollWheel") * 15), transform.GetChild(0).localPosition.z);
+                GetComponent<BoxCollider2D>().size = new Vector2(GetComponent<BoxCollider2D>().size.x, GetComponent<BoxCollider2D>().size.y + (Input.GetAxis("Mouse ScrollWheel") * 30));
+                GetComponent<BoxCollider2D>().offset = new Vector2(GetComponent<BoxCollider2D>().offset.x, GetComponent<BoxCollider2D>().offset.y + (Input.GetAxis("Mouse ScrollWheel") * 15));
+            }
+        }
     }
 
     public void MouseDown()
@@ -131,5 +143,22 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
     public void MouseUp()
     {
         mouseDown = false;
+        sliderCodeObject.height = transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.y;
+        sliderCodeObject.colliderSizeY = GetComponent<BoxCollider2D>().size.y;
+        sliderCodeObject.childY = transform.GetChild(0).localPosition.y;
+        sliderCodeObject.pos = transform.localPosition;
+    }
+
+    void OnMouseEnter()
+    {
+        mouseOver = true;
+    }
+
+    void OnMouseExit()
+    {
+        mouseOver = false;
+        sliderCodeObject.height = transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.y;
+        sliderCodeObject.childY = transform.GetChild(0).localPosition.y;
+        sliderCodeObject.pos = transform.localPosition;
     }
 }

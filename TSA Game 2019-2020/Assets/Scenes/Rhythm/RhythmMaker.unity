@@ -5575,7 +5575,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -1.0880432, y: -0.049186707}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -5586,7 +5586,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 98.98529, y: 101.25328}
+  m_Size: {x: 70, y: 60}
   m_EdgeRadius: 0
 --- !u!114 &306168395
 MonoBehaviour:
@@ -5953,7 +5953,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -1.0880432, y: -0.049186707}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -5964,7 +5964,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 98.98529, y: 101.25328}
+  m_Size: {x: 70, y: 60}
   m_EdgeRadius: 0
 --- !u!114 &422318539
 MonoBehaviour:
@@ -6100,7 +6100,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -1.0880432, y: -0.049186707}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -6111,7 +6111,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 98.98529, y: 101.25328}
+  m_Size: {x: 70, y: 60}
   m_EdgeRadius: 0
 --- !u!114 &429841477
 MonoBehaviour:
@@ -7063,7 +7063,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -1.0880432, y: -0.049186707}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -7074,7 +7074,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 98.98529, y: 101.25328}
+  m_Size: {x: 70, y: 60}
   m_EdgeRadius: 0
 --- !u!114 &637560532
 MonoBehaviour:
@@ -20228,6 +20228,105 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1559432823}
   m_CullTransparentMesh: 0
+--- !u!1001 &1597547981
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 8260509777116394981, guid: f799d4093d7b04240b45910272ef4bf8,
+        type: 3}
+      propertyPath: m_Name
+      value: InstancedCubes
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260509777116394987, guid: f799d4093d7b04240b45910272ef4bf8,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.033
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260509777116394987, guid: f799d4093d7b04240b45910272ef4bf8,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.753
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260509777116394987, guid: f799d4093d7b04240b45910272ef4bf8,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.8784754
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260509777116394987, guid: f799d4093d7b04240b45910272ef4bf8,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.25511155
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260509777116394987, guid: f799d4093d7b04240b45910272ef4bf8,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.053962402
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260509777116394987, guid: f799d4093d7b04240b45910272ef4bf8,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.007986671
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260509777116394987, guid: f799d4093d7b04240b45910272ef4bf8,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.96537167
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260509777116394987, guid: f799d4093d7b04240b45910272ef4bf8,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260509777116394987, guid: f799d4093d7b04240b45910272ef4bf8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -29.565
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260509777116394987, guid: f799d4093d7b04240b45910272ef4bf8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 6.609
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260509777116394987, guid: f799d4093d7b04240b45910272ef4bf8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -0.79800004
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260509777116394987, guid: f799d4093d7b04240b45910272ef4bf8,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.002450012
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260509777116394987, guid: f799d4093d7b04240b45910272ef4bf8,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.005697702
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260509777116394987, guid: f799d4093d7b04240b45910272ef4bf8,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.002450012
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260509777116394986, guid: f799d4093d7b04240b45910272ef4bf8,
+        type: 3}
+      propertyPath: scaleMultiplier
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260509777116394986, guid: f799d4093d7b04240b45910272ef4bf8,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8260509777116394986, guid: f799d4093d7b04240b45910272ef4bf8,
+        type: 3}
+      propertyPath: lerpSpeed
+      value: 0.7
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f799d4093d7b04240b45910272ef4bf8, type: 3}
 --- !u!1 &1612080027
 GameObject:
   m_ObjectHideFlags: 0
@@ -20561,7 +20660,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 100, y: 130}
+  m_Size: {x: 261.98, y: 100}
   m_EdgeRadius: 0
 --- !u!114 &1723109413
 MonoBehaviour:

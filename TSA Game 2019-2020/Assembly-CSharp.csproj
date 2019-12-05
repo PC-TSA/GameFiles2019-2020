@@ -414,6 +414,12 @@
     <Reference Include="UnityEngine.SpatialTracking">
       <HintPath>E:/Unity/2018.4.12f1/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
+    <Reference Include="Ookii.Dialogs">
+      <HintPath>D:/Game Stuff/Game Making/TSA Game 2019-2020/GameFiles 2019-2020/TSA Game 2019-2020/Assets/StandaloneFileBrowser/Plugins/Ookii.Dialogs.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>D:/Game Stuff/Game Making/TSA Game 2019-2020/GameFiles 2019-2020/TSA Game 2019-2020/Assets/StandaloneFileBrowser/Plugins/System.Windows.Forms.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Analytics.Editor">
       <HintPath>D:/Game Stuff/Game Making/TSA Game 2019-2020/GameFiles 2019-2020/TSA Game 2019-2020/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
     </Reference>
@@ -422,12 +428,6 @@
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>D:/Game Stuff/Game Making/TSA Game 2019-2020/GameFiles 2019-2020/TSA Game 2019-2020/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
-    </Reference>
-    <Reference Include="Ookii.Dialogs">
-      <HintPath>D:/Game Stuff/Game Making/TSA Game 2019-2020/GameFiles 2019-2020/TSA Game 2019-2020/Assets/StandaloneFileBrowser/Plugins/Ookii.Dialogs.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows.Forms">
-      <HintPath>D:/Game Stuff/Game Making/TSA Game 2019-2020/GameFiles 2019-2020/TSA Game 2019-2020/Assets/StandaloneFileBrowser/Plugins/System.Windows.Forms.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>E:/Unity/2018.4.12f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

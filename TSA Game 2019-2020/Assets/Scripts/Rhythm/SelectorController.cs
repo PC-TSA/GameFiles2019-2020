@@ -13,6 +13,7 @@ public class SelectorController : MonoBehaviour
 
     public bool isHoldingSliderKeycode;
     public GameObject spawnedSlider;
+    public float sliderOriginalColliderY;
     public float sliderHeightChange; //How much the height (not scale) is increased by each FixedUpdate call on the spawned slider
 
     public List<GameObject> selectableNotes = new List<GameObject>();
@@ -50,9 +51,12 @@ public class SelectorController : MonoBehaviour
         if (spawnedSlider != null && isHoldingSliderKeycode)
         {
             Transform spawnedSliderChild = spawnedSlider.transform.GetChild(0);
-            spawnedSlider.GetComponent<BoxCollider2D>().size = new Vector2(spawnedSlider.GetComponent<BoxCollider2D>().size.x, spawnedSlider.GetComponent<RectTransform>().sizeDelta.y + sliderHeightChange);
             spawnedSliderChild.GetComponent<RectTransform>().sizeDelta = new Vector2(spawnedSliderChild.GetComponent<RectTransform>().sizeDelta.x, spawnedSliderChild.GetComponent<RectTransform>().sizeDelta.y + sliderHeightChange);
             spawnedSliderChild.localPosition = new Vector3(spawnedSliderChild.localPosition.x, spawnedSliderChild.localPosition.y + sliderHeightChange / 2, spawnedSliderChild.localPosition.z);
+            spawnedSlider.GetComponent<BoxCollider2D>().size = new Vector2(spawnedSlider.GetComponent<BoxCollider2D>().size.x, spawnedSliderChild.GetComponent<RectTransform>().sizeDelta.y);
+            //If line below used instead of line above, slider collider includes small tip of slider, encompasing the entire note
+            //spawnedSlider.GetComponent<BoxCollider2D>().size = new Vector2(spawnedSlider.GetComponent<BoxCollider2D>().size.x, sliderOriginalColliderY / 2 + spawnedSliderChild.GetComponent<RectTransform>().sizeDelta.y);
+            spawnedSlider.GetComponent<BoxCollider2D>().offset = new Vector2(spawnedSlider.GetComponent<BoxCollider2D>().offset.x, spawnedSlider.GetComponent<BoxCollider2D>().size.y / 2 - sliderOriginalColliderY / 2);
         }
     }
 
@@ -66,6 +70,7 @@ public class SelectorController : MonoBehaviour
             if(spawnedSlider != null)
             {
                 spawnedSlider.GetComponent<SliderController>().sliderCodeObject.height = spawnedSlider.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.y;
+                spawnedSlider.GetComponent<SliderController>().sliderCodeObject.colliderSizeY = spawnedSlider.GetComponent<BoxCollider2D>().size.y;
                 spawnedSlider.GetComponent<SliderController>().sliderCodeObject.childY = spawnedSlider.transform.GetChild(0).localPosition.y;
                 spawnedSlider.GetComponent<SliderController>().sliderCodeObject.pos = spawnedSlider.transform.localPosition;
                 spawnedSlider = null;
@@ -110,6 +115,7 @@ public class SelectorController : MonoBehaviour
                 {
                     sliderHeightChange = scrollerController.scrollSpeed;
                     spawnedSlider = scrollerController.SpawnSlider(laneNumber);
+                    sliderOriginalColliderY = spawnedSlider.GetComponent<BoxCollider2D>().size.y;
                 }
                 else
                     scrollerController.SpawnNote(laneNumber);

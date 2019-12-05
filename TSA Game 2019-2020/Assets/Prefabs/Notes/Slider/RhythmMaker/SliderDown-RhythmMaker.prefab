@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 40.6}
-  m_SizeDelta: {x: 60, y: 100}
+  m_AnchoredPosition: {x: 0, y: 18.7}
+  m_SizeDelta: {x: 60, y: 49.30001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4321101695325807971
 CanvasRenderer:
@@ -161,14 +161,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bf5202f4159a5f4fa0d965ed1c1b8c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasBeenHit: 0
+  hasBeenHit: 1
   canBeHit: 1
   incompleteHit: 0
   sliderHeightChange: 0
   canBeHitTime: 0
   mouseDown: 0
-  mouseDownPos: 0
-  mouseDownSliderPos: 0
+  mouseOver: 0
+  screenPoint: {x: 0, y: 0, z: 0}
+  offset: {x: 0, y: 0, z: 0}
 --- !u!50 &3096851811985096317
 Rigidbody2D:
   serializedVersion: 4
