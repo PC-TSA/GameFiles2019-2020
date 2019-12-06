@@ -161,6 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bf5202f4159a5f4fa0d965ed1c1b8c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isInGame: 0
   hasBeenHit: 1
   canBeHit: 1
   incompleteHit: 0

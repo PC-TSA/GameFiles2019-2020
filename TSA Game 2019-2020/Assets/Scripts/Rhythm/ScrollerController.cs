@@ -120,39 +120,40 @@ public class ScrollerController : MonoBehaviour
         rhythmController.spaceGameObjects.Add(newSpace);
         SpaceObj s = new SpaceObj(width, newSpace.transform.localPosition);
         rhythmController.currentRecording.spaces.Add(s);
-        newSpace.GetComponent<SpaceController>().spaceCodeObject = s;
+        newSpace.GetComponent<SpaceController>().spaceCodeObject = s;   
         rhythmController.UpdateSpaceCount(1);
 
         return newSpace;
     }
 
-    public void DeserializeNote(int lane, Vector3 pos)
+    public void DeserializeNote(Note n)
     {
-        GameObject newNote = Instantiate(arrowPrefabs[lane], new Vector3(0, 0, 0), transform.rotation, notesParent.transform);
-        newNote.transform.localPosition = pos;
-
+        GameObject newNote = Instantiate(arrowPrefabs[n.lane], new Vector3(0, 0, 0), transform.rotation, notesParent.transform);
+        newNote.transform.localPosition = n.pos;
+        newNote.GetComponent<NoteController>().noteCodeObject = n;
         rhythmController.noteGameObjects.Add(newNote);
     }
 
-    public void DeserializeSlider(int lane, Vector3 pos, float height, float childY)
+    public void DeserializeSlider(SliderObj s)
     {
-        GameObject newSlider = Instantiate(sliderPrefabs[lane], new Vector3(0, 0, 0), transform.rotation, slidersParent.transform);
-        newSlider.transform.localPosition = pos;
+        GameObject newSlider = Instantiate(sliderPrefabs[s.lane], new Vector3(0, 0, 0), transform.rotation, slidersParent.transform);
+        newSlider.transform.localPosition = s.pos;
         Transform newSliderChild = newSlider.transform.GetChild(0);
-        newSliderChild.GetComponent<RectTransform>().sizeDelta = new Vector2(newSliderChild.GetComponent<RectTransform>().sizeDelta.x, height);
-        newSliderChild.localPosition = new Vector3(newSliderChild.localPosition.x, childY, newSliderChild.localPosition.z);
-        newSlider.GetComponent<BoxCollider2D>().size = new Vector2(newSlider.GetComponent<BoxCollider2D>().size.x, height);
-
+        newSliderChild.GetComponent<RectTransform>().sizeDelta = new Vector2(newSliderChild.GetComponent<RectTransform>().sizeDelta.x, s.height);
+        newSliderChild.localPosition = new Vector3(newSliderChild.localPosition.x, s.childY, newSliderChild.localPosition.z);
+        newSlider.GetComponent<BoxCollider2D>().size = new Vector2(newSlider.GetComponent<BoxCollider2D>().size.x, s.height);
+        newSlider.GetComponent<BoxCollider2D>().offset = new Vector2(newSlider.GetComponent<BoxCollider2D>().offset.x, s.colliderCenterY);
+        newSlider.GetComponent<SliderController>().sliderCodeObject = s;
         rhythmController.sliderGameObjects.Add(newSlider);
     }
 
-    public void DeserializeSpace(float width, Vector3 pos)
+    public void DeserializeSpace(SpaceObj s)
     {
         GameObject newSpace = Instantiate(spacePrefab, new Vector3(0, 0, 0), transform.rotation, spacesParent.transform);
-        newSpace.transform.localPosition = pos;
-        newSpace.GetComponent<RectTransform>().sizeDelta = new Vector2(width, newSpace.GetComponent<RectTransform>().sizeDelta.y);
-        newSpace.GetComponent<BoxCollider2D>().size = new Vector2(width, newSpace.GetComponent<BoxCollider2D>().size.y);
-
+        newSpace.transform.localPosition = s.pos;
+        newSpace.GetComponent<RectTransform>().sizeDelta = new Vector2(s.width, newSpace.GetComponent<RectTransform>().sizeDelta.y);
+        newSpace.GetComponent<BoxCollider2D>().size = new Vector2(s.width, newSpace.GetComponent<BoxCollider2D>().size.y);
+        newSpace.GetComponent<SpaceController>().spaceCodeObject = s;
         rhythmController.spaceGameObjects.Add(newSpace);
     }
 

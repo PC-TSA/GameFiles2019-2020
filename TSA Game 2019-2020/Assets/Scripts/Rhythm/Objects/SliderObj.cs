@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class SliderObj
 {
-    //public float timestamp;
+    public int lane;
     public Vector3 pos;
     public float childY;
     public float height;
     public float colliderSizeY;
-    public int lane;
+    public float colliderCenterY;
 
     public SliderObj(int laneInt, Vector3 posVector)
     {
@@ -17,13 +17,14 @@ public class SliderObj
         pos = posVector;
     }
 
-    public SliderObj(int laneInt, Vector3 posVector, float childYFloat, float heightFloat, float colliderSizeYFloat)
+    public SliderObj(int laneInt, Vector3 posVector, float childYFloat, float heightFloat, float colliderSizeYFloat, float colliderCenterYFloat)
     {
         lane = laneInt;
         pos = posVector;
         childY = childYFloat;
         height = heightFloat;
         colliderSizeY = colliderSizeYFloat;
+        colliderCenterY = colliderCenterYFloat;
     }
 
     public SliderObj() { }

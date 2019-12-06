@@ -182,7 +182,7 @@ public class RhythmRunner : MonoBehaviour
             foreach (Note n in currentRecording.notes)
                 DeserializeNote(new Note(n.lane, OverrideSpeedPos(n)));
             foreach (SliderObj s in currentRecording.sliders)
-                DeserializeSlider(new SliderObj(s.lane, OverrideSpeedPos(s), s.childY, s.height, s.colliderSizeY));
+                DeserializeSlider(new SliderObj(s.lane, OverrideSpeedPos(s), s.childY, s.height, s.colliderSizeY, s.colliderCenterY));
             foreach (SpaceObj s in currentRecording.spaces) //Deserialize spaces
                 DeserializeSpace(new SpaceObj(s.width, OverrideSpeedPos(s)));
         }
@@ -196,8 +196,9 @@ public class RhythmRunner : MonoBehaviour
 
     public void DeserializeNote(Note n)
     {
-        GameObject newNote = Instantiate(arrowPrefabs[n.lane], new Vector3(0, 0, 0), transform.rotation, notesParent.transform);
+        GameObject newNote = Instantiate(arrowPrefabs[n.lane], new Vector3(0, 0, 0), transform.rotation, notesParent.transform);    
         newNote.transform.localPosition = n.pos;
+        newNote.transform.localRotation = transform.rotation;
     }
 
     public void DeserializeSlider(SliderObj s)
@@ -207,15 +208,18 @@ public class RhythmRunner : MonoBehaviour
         Transform newSliderChild = newSlider.transform.GetChild(0);
         newSliderChild.GetComponent<RectTransform>().sizeDelta = new Vector2(newSliderChild.GetComponent<RectTransform>().sizeDelta.x, s.height);
         newSliderChild.localPosition = new Vector3(newSliderChild.localPosition.x, s.childY, newSliderChild.localPosition.z);
-        newSlider.GetComponent<BoxCollider2D>().size = new Vector2(newSlider.GetComponent<BoxCollider2D>().size.x, s.colliderSizeY);
+        newSlider.transform.localRotation = transform.rotation;
+        newSlider.GetComponent<BoxCollider>().size = new Vector3(newSlider.GetComponent<BoxCollider>().size.x, s.colliderSizeY, newSlider.GetComponent<BoxCollider>().size.z);
+        newSlider.GetComponent<BoxCollider>().center = new Vector3(newSlider.GetComponent<BoxCollider>().center.x, s.colliderCenterY, newSlider.GetComponent<BoxCollider>().center.z);
     }
 
     public void DeserializeSpace(SpaceObj s)
     {
         GameObject newSpace = Instantiate(spacePrefab, new Vector3(0, 0, 0), transform.rotation, spacesParent.transform);
         newSpace.transform.localPosition = s.pos;
+        newSpace.transform.localRotation = transform.rotation;
         newSpace.GetComponent<RectTransform>().sizeDelta = new Vector2(s.width, newSpace.GetComponent<RectTransform>().sizeDelta.y);
-        newSpace.GetComponent<BoxCollider2D>().size = new Vector2(s.width, newSpace.GetComponent<BoxCollider2D>().size.y);
+        newSpace.GetComponent<BoxCollider>().size = new Vector3(s.width, newSpace.GetComponent<BoxCollider>().size.y, newSpace.GetComponent<BoxCollider>().size.z);
     }
 
     IEnumerator DelayedStart()
@@ -356,7 +360,7 @@ public class RhythmRunner : MonoBehaviour
         float w = (laneCount * backgroundWidth) + ((laneCount - 1) * dividerWidth);
         spaceSelector.GetComponent<RectTransform>().sizeDelta = new Vector2(w, spaceSelector.GetComponent<RectTransform>().sizeDelta.y); //Sets space selector width
 
-        spaceSelector.transform.GetComponent<BoxCollider2D>().size = new Vector2(w, spaceSelector.transform.GetComponent<BoxCollider2D>().size.y); //Sets space selector collider width
+        spaceSelector.transform.GetComponent<BoxCollider>().size = new Vector3(w, spaceSelector.transform.GetComponent<BoxCollider>().size.y, spaceSelector.transform.GetComponent<BoxCollider>().size.z); //Sets space selector collider width
 
         float x = (lanes[0].transform.localPosition.x + lanes[laneCount - 1].transform.localPosition.x) / 2;
         spaceSelector.transform.localPosition = new Vector3(x, spaceSelector.transform.localPosition.y, spaceSelector.transform.localPosition.z); //Sets space selector localPos.x

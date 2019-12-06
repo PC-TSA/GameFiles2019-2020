@@ -14,13 +14,13 @@ public class SpaceSelectorRunner : MonoBehaviour
     public Sprite normalSprite;
     public Sprite pressSprite;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter(Collider collision)
     {
         if (collision.tag == "Space")
             selectableSpaces.Add(collision.gameObject);
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnTriggerExit(Collider collision)
     {
         if (collision.tag == "Space")
             selectableSpaces.Remove(collision.gameObject);

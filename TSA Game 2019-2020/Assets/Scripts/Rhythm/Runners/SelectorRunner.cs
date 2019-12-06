@@ -35,7 +35,7 @@ public class SelectorRunner : MonoBehaviour
         else if (collision.tag == "Slider" && selectableSlider == null)
         {
             selectableSlider = collision.gameObject;
-            collision.gameObject.GetComponent<SliderController>().StartCanBeHitTimer();
+            collision.GetComponent<SliderController>().StartCanBeHitTimer();
         }
     }
 

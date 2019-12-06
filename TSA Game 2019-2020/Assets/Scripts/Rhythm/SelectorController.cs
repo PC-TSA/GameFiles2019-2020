@@ -71,6 +71,7 @@ public class SelectorController : MonoBehaviour
             {
                 spawnedSlider.GetComponent<SliderController>().sliderCodeObject.height = spawnedSlider.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.y;
                 spawnedSlider.GetComponent<SliderController>().sliderCodeObject.colliderSizeY = spawnedSlider.GetComponent<BoxCollider2D>().size.y;
+                spawnedSlider.GetComponent<SliderController>().sliderCodeObject.colliderCenterY = spawnedSlider.GetComponent<BoxCollider2D>().offset.y;
                 spawnedSlider.GetComponent<SliderController>().sliderCodeObject.childY = spawnedSlider.transform.GetChild(0).localPosition.y;
                 spawnedSlider.GetComponent<SliderController>().sliderCodeObject.pos = spawnedSlider.transform.localPosition;
                 spawnedSlider = null;

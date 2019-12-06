@@ -85,24 +85,6 @@ public class RhythmController : MonoBehaviour
             waveformObj.transform.GetChild(0).transform.localPosition = new Vector3(((audioSource.time * waveformObj.GetComponent<RectTransform>().sizeDelta.x) / audioSource.clip.length) - (waveformObj.GetComponent<RectTransform>().sizeDelta.x / 2), 0, 0);
     }
 
-    /*public void UpdateNotesHit(int i)
-    {
-        notesHit += i;
-        notesHitTxt.GetComponent<TextMeshProUGUI>().text = "Notes Hit: " + notesHit;
-    }
-
-    public void UpdateNotesMissed(int i)
-    {
-        notesMissed += i;
-        notesMissedTxt.GetComponent<TextMeshProUGUI>().text = "Notes Missed: " + notesMissed;
-    }
-
-    public void UpdateMissclicks(int i)
-    {
-        missClicks += i;
-        missClicksTxt.GetComponent<TextMeshProUGUI>().text = "Misclicks: " + missClicks;
-    }*/
-
     public void UpdateNoteCount(int i)
     {
         noteCount += i;
@@ -144,9 +126,6 @@ public class RhythmController : MonoBehaviour
             else
                 PauseLevel();
         }
-
-        //Reset scroller
-        //sliderController.UpdateVals();
     }
 
     //Auto generates notes that scroll down in random lanes at the bpm of the song
@@ -190,9 +169,6 @@ public class RhythmController : MonoBehaviour
 
         //Update recording song name
         currentRecording.clipName = songs[selectedSongID].name;
-
-        //Reset scroller
-        //sliderController.UpdateVals();
     }
 
     public void SaveRecording() //Serializes recording to xml file
@@ -208,7 +184,9 @@ public class RhythmController : MonoBehaviour
 
         if (path != null && path != "")
         {
-            var stream = new FileStream(path + ".xml", FileMode.Create);
+            if (!path.Contains(".xml"))
+                path += ".xml";
+            var stream = new FileStream(path, FileMode.Create);
             serializer.Serialize(stream, currentRecording);
             stream.Close();
         }
@@ -257,7 +235,7 @@ public class RhythmController : MonoBehaviour
             //Generate notes
             foreach (Note n in currentRecording.notes)
             {
-                scrollerController.DeserializeNote(n.lane, n.pos);
+                scrollerController.DeserializeNote(n);
                 noteCount += 1;
             }
             UpdateNoteCount(0);
@@ -265,7 +243,7 @@ public class RhythmController : MonoBehaviour
             //Generate sliders
             foreach (SliderObj s in currentRecording.sliders)
             {
-                scrollerController.DeserializeSlider(s.lane, s.pos, s.height, s.childY);
+                scrollerController.DeserializeSlider(s);
                 sliderCount += 1;
             }
             UpdateSliderCount(0);
@@ -273,7 +251,7 @@ public class RhythmController : MonoBehaviour
             //Generate spaces
             foreach (SpaceObj s in currentRecording.spaces)
             {
-                scrollerController.DeserializeSpace(s.width, s.pos);
+                scrollerController.DeserializeSpace(s);
                 spaceCount += 1;
             }
             UpdateSpaceCount(0);
@@ -377,5 +355,54 @@ public class RhythmController : MonoBehaviour
     {
         foreach (SelectorController sc in FindObjectsOfType<SelectorController>())
             sc.shouldKillNotes = !sc.shouldKillNotes;
+    }
+    
+    public void ReGenerate() //Remakes all code objects based on existing notes, sliders, and spaces; Good for transfering recordings from old versions to new versions
+    {
+        Debug.Log("Beginning ReGeneration...");
+
+        //Make new recording with proper scene settings
+        currentRecording = new Recording();
+        currentRecording.clipName = songs[selectedSongID].name;
+        currentRecording.scrollSpeed = scrollerController.scrollSpeed;
+        currentRecording.laneCount = laneCount;
+
+        Debug.Log("New Recording generated!");
+
+        //Regenerate notes
+        foreach (GameObject note in noteGameObjects)
+        {
+            Note n = new Note(note.GetComponent<NoteController>().noteCodeObject.lane, note.transform.localPosition);
+            currentRecording.notes.Add(n);
+            note.GetComponent<NoteController>().noteCodeObject = n;
+        }
+
+        Debug.Log("Notes generated!");
+
+        //Regenerate sliders
+        foreach (GameObject slider in sliderGameObjects)
+        {
+            slider.GetComponent<BoxCollider2D>().offset = new Vector2(slider.GetComponent<BoxCollider2D>().offset.x, slider.GetComponent<BoxCollider2D>().size.y / 2 - slider.transform.GetChild(1).GetComponent<RectTransform>().sizeDelta.y / 2);
+            SliderObj s = new SliderObj(slider.GetComponent<SliderController>().sliderCodeObject.lane, slider.transform.localPosition);
+            currentRecording.sliders.Add(s);
+            slider.GetComponent<SliderController>().sliderCodeObject = s;
+            slider.GetComponent<SliderController>().sliderCodeObject.height = slider.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.y;
+            slider.GetComponent<SliderController>().sliderCodeObject.colliderSizeY = slider.GetComponent<BoxCollider2D>().size.y;
+            slider.GetComponent<SliderController>().sliderCodeObject.colliderCenterY = slider.GetComponent<BoxCollider2D>().offset.y;
+            slider.GetComponent<SliderController>().sliderCodeObject.childY = slider.transform.GetChild(0).localPosition.y;
+        }
+
+        Debug.Log("Sliders generated!");
+
+        //Regenerate spaces
+        foreach (GameObject space in spaceGameObjects)
+        {
+            SpaceObj s = new SpaceObj(space.GetComponent<RectTransform>().sizeDelta.x, space.transform.localPosition);
+            currentRecording.spaces.Add(s);
+            space.GetComponent<SpaceController>().spaceCodeObject = s;
+        }
+
+        Debug.Log("Spaces generated!");
+        Debug.Log("ReGeneration Complete");
     }
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SliderController : MonoBehaviour //When scaling in RhythmMaker, RectTransform.height += offset, pos = offset / 2, collider.size.y = RectTransform.height; INVERT FOR NOTE SELECTION
 {
+    public bool isInGame; //True in game, false in rhythm maker
+
     public bool hasBeenHit;
     public bool canBeHit = true; //If false, this slider has existed for too long to be hit
     public bool incompleteHit; //If true, this hit was stopped half way
@@ -142,23 +144,31 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
 
     public void MouseUp()
     {
-        mouseDown = false;
-        sliderCodeObject.height = transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.y;
-        sliderCodeObject.colliderSizeY = GetComponent<BoxCollider2D>().size.y;
-        sliderCodeObject.childY = transform.GetChild(0).localPosition.y;
-        sliderCodeObject.pos = transform.localPosition;
+        if(!isInGame)
+        {
+            mouseDown = false;
+            sliderCodeObject.height = transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.y;
+            sliderCodeObject.colliderSizeY = GetComponent<BoxCollider2D>().size.y;
+            sliderCodeObject.childY = transform.GetChild(0).localPosition.y;
+            sliderCodeObject.pos = transform.localPosition;
+        }
     }
 
     void OnMouseEnter()
     {
-        mouseOver = true;
+        if(!isInGame)
+            mouseOver = true;
     }
 
     void OnMouseExit()
     {
-        mouseOver = false;
-        sliderCodeObject.height = transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.y;
-        sliderCodeObject.childY = transform.GetChild(0).localPosition.y;
-        sliderCodeObject.pos = transform.localPosition;
+        if(!isInGame)
+        {
+            mouseOver = false;
+            sliderCodeObject.height = transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.y;
+            sliderCodeObject.childY = transform.GetChild(0).localPosition.y;
+            sliderCodeObject.colliderCenterY = GetComponent<BoxCollider2D>().offset.y;
+            sliderCodeObject.pos = transform.localPosition;
+        }
     }
 }
