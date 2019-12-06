@@ -5534,6 +5534,7 @@ MonoBehaviour:
   sliderGenKey: 304
   isHoldingSliderKeycode: 0
   spawnedSlider: {fileID: 0}
+  sliderOriginalColliderY: 0
   sliderHeightChange: 0
   selectableNotes: []
   shouldKillNotes: 0
@@ -5912,6 +5913,7 @@ MonoBehaviour:
   sliderGenKey: 304
   isHoldingSliderKeycode: 0
   spawnedSlider: {fileID: 0}
+  sliderOriginalColliderY: 0
   sliderHeightChange: 0
   selectableNotes: []
   shouldKillNotes: 0
@@ -6059,6 +6061,7 @@ MonoBehaviour:
   sliderGenKey: 304
   isHoldingSliderKeycode: 0
   spawnedSlider: {fileID: 0}
+  sliderOriginalColliderY: 0
   sliderHeightChange: 0
   selectableNotes: []
   shouldKillNotes: 0
@@ -7022,6 +7025,7 @@ MonoBehaviour:
   sliderGenKey: 304
   isHoldingSliderKeycode: 0
   spawnedSlider: {fileID: 0}
+  sliderOriginalColliderY: 0
   sliderHeightChange: 0
   selectableNotes: []
   shouldKillNotes: 0
@@ -7146,7 +7150,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0.15, y: -210}
-  m_SizeDelta: {x: 78, y: 240.6}
+  m_SizeDelta: {x: 78, y: 275}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &652976538
 MonoBehaviour:
@@ -19002,7 +19006,7 @@ MonoBehaviour:
   - {fileID: 2027684311}
   laneCountPicker: {fileID: 1316720374}
   spaceSelector: {fileID: 1723109408}
-  backgroundWidth: 78
+  backgroundWidth: 80
   dividerWidth: 12
   songPickerDropdown: {fileID: 1189848164}
   selectedSongID: 0
@@ -21156,7 +21160,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 1, y: -210}
-  m_SizeDelta: {x: 80, y: 240.6}
+  m_SizeDelta: {x: 80, y: 275}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1897328500
 MonoBehaviour:
@@ -26402,7 +26406,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 1, y: -210}
-  m_SizeDelta: {x: 80, y: 240.6}
+  m_SizeDelta: {x: 80, y: 275}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2102711590
 MonoBehaviour:
@@ -26543,7 +26547,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 1, y: -210}
-  m_SizeDelta: {x: 80, y: 240.6}
+  m_SizeDelta: {x: 80, y: 275}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2127884964
 MonoBehaviour:

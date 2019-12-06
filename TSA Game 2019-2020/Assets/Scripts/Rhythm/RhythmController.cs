@@ -67,7 +67,7 @@ public class RhythmController : MonoBehaviour
         for(int i = 0; i < songs.Count; i++) //Generate song BPMs, populate song picker dropdown
         {
             int bpm = UniBpmAnalyzer.AnalyzeBpm(songs[i]);
-            songBPMs[i] = bpm / 2;
+            songBPMs.Add(bpm / 2);
             songPickerDropdown.GetComponent<TMP_Dropdown>().options.Add(new TMP_Dropdown.OptionData() { text = songs[i].name + " | " + songBPMs[i] });
         }
 
@@ -208,7 +208,7 @@ public class RhythmController : MonoBehaviour
 
         if (path != null && path != "")
         {
-            var stream = new FileStream(path, FileMode.Create);
+            var stream = new FileStream(path + ".xml", FileMode.Create);
             serializer.Serialize(stream, currentRecording);
             stream.Close();
         }
@@ -364,7 +364,7 @@ public class RhythmController : MonoBehaviour
 
     void UpdateSpaceSelector()
     {
-        float w = (laneCount * backgroundWidth) + ((laneCount) * dividerWidth);
+        float w = (laneCount * backgroundWidth) + ((laneCount - 1) * dividerWidth);
         spaceSelector.GetComponent<RectTransform>().sizeDelta = new Vector2(w, spaceSelector.GetComponent<RectTransform>().sizeDelta.y); //Sets space selector width
 
         spaceSelector.transform.GetComponent<BoxCollider2D>().size = new Vector2(w, spaceSelector.transform.GetComponent<BoxCollider2D>().size.y); //Sets space selector collider width

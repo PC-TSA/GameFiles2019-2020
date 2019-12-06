@@ -72,14 +72,14 @@ public class NoteController : MonoBehaviour
 
     public void MouseDown()
     {
+        if (Input.GetMouseButton(1)) //Right click
+            Hit();
         if (Input.GetMouseButton(0)) //Left click
         {
             mouseDown = true;
             screenPoint = Camera.main.WorldToScreenPoint(transform.position);
             offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
         }
-        else if (Input.GetMouseButton(1)) //Right click
-            Hit();
     }
 
     public void MouseUp()

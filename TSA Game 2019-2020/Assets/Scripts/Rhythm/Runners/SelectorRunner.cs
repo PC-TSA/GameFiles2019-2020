@@ -26,10 +26,12 @@ public class SelectorRunner : MonoBehaviour
         //key = rhythmRunner.laneKeycodes[laneNumber]; //Gets this selector's keycode from it's lane index & the keycode list in RhythmController.cs
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter(Collider collision)
     {
         if (collision.tag == "Note")
+        {
             selectableNotes.Add(collision.gameObject);
+        }
         else if (collision.tag == "Slider" && selectableSlider == null)
         {
             selectableSlider = collision.gameObject;
@@ -37,7 +39,7 @@ public class SelectorRunner : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnTriggerExit(Collider collision)
     {
         if (collision.tag == "Note" && !collision.GetComponent<NoteController>().hasBeenHit)
         {

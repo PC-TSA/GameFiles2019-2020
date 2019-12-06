@@ -11,14 +11,8 @@ public class SpaceSelectorRunner : MonoBehaviour
 
     public RhythmRunner rhythmRunner;
 
-    public Color color;
-    public Color pressColor;
-
-    private void Start()
-    {
-        color = new Color(rhythmRunner.selectorColor.r, rhythmRunner.selectorColor.g, rhythmRunner.selectorColor.b, 0.5f);
-        pressColor = new Color(rhythmRunner.selectorPressColor.r, rhythmRunner.selectorPressColor.g, rhythmRunner.selectorPressColor.b, 0.4f);
-    }
+    public Sprite normalSprite;
+    public Sprite pressSprite;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -36,7 +30,7 @@ public class SpaceSelectorRunner : MonoBehaviour
     {
         if (Input.GetKeyDown(key))
         {
-            GetComponent<Image>().color = pressColor;
+            GetComponent<Image>().sprite = pressSprite;
 
             if (selectableSpaces.Count != 0)
             {
@@ -52,6 +46,6 @@ public class SpaceSelectorRunner : MonoBehaviour
         }
 
         if(Input.GetKeyUp(key))
-            GetComponent<Image>().color = color;
+            GetComponent<Image>().sprite = normalSprite;
     }
 }

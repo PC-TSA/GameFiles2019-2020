@@ -79,13 +79,17 @@ public class RhythmRunner : MonoBehaviour
 
     private void Start()
     {
+        Object[] temp = Resources.LoadAll("Songs", typeof(AudioClip)); //Read all audioclips in the Resources/Songs folder and add them to the 'Songs' list
+        foreach (Object o in temp)
+            songs.Add((AudioClip)o);
+
         originalPos = scrollerObj.transform.localPosition;
 
         //Get vignette from post processing profile
         postProcessingVolume.profile.TryGetSettings(out vignette);
 
         //Load xml asset
-        xmlRecordingAsset = Resources.Load<TextAsset>(XMLRecordingName);
+        xmlRecordingAsset = Resources.Load<TextAsset>("Recordings/" + XMLRecordingName);
 
         StartCoroutine(DelayedStart());
     }
@@ -349,7 +353,7 @@ public class RhythmRunner : MonoBehaviour
 
     void UpdateSpaceSelector()
     {
-        float w = (laneCount * backgroundWidth) + ((laneCount) * dividerWidth);
+        float w = (laneCount * backgroundWidth) + ((laneCount - 1) * dividerWidth);
         spaceSelector.GetComponent<RectTransform>().sizeDelta = new Vector2(w, spaceSelector.GetComponent<RectTransform>().sizeDelta.y); //Sets space selector width
 
         spaceSelector.transform.GetComponent<BoxCollider2D>().size = new Vector2(w, spaceSelector.transform.GetComponent<BoxCollider2D>().size.y); //Sets space selector collider width
