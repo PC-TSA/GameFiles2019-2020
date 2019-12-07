@@ -203,12 +203,19 @@ public class RhythmRunner : MonoBehaviour
 
     public void DeserializeSlider(SliderObj s)
     {
-        GameObject newSlider = Instantiate(sliderPrefabs[s.lane], new Vector3(0, 0, 0), transform.rotation, slidersParent.transform);
-        newSlider.transform.localPosition = s.pos;
+        GameObject newSliderParent = Instantiate(new GameObject(), new Vector3(0, 0, 0), transform.rotation, slidersParent.transform);
+        GameObject newSliderMask = Instantiate(sliderMaskPrefab, new Vector3(0, 0, 0), transform.rotation, newSliderParent.transform);
+        GameObject newSlider = Instantiate(sliderPrefabs[s.lane], new Vector3(0, 0, 0), transform.rotation, newSliderMask.transform);
         Transform newSliderChild = newSlider.transform.GetChild(0);
+
+        newSliderParent.transform.localPosition = s.pos;
+        newSliderParent.transform.localRotation = transform.rotation;
+        newSliderMask.GetComponent<RectTransform>().sizeDelta = new Vector2(newSliderChild.GetComponent<RectTransform>().sizeDelta.x, s.height);
+        newSliderMask.transform.localPosition = new Vector3(newSlider.transform.localPosition.x, s.colliderCenterY, newSlider.transform.localPosition.z);
+        newSlider.transform.localPosition = new Vector3(0, -s.colliderCenterY, 0);
+
         newSliderChild.GetComponent<RectTransform>().sizeDelta = new Vector2(newSliderChild.GetComponent<RectTransform>().sizeDelta.x, s.height);
         newSliderChild.localPosition = new Vector3(newSliderChild.localPosition.x, s.childY, newSliderChild.localPosition.z);
-        newSlider.transform.localRotation = transform.rotation;
         newSlider.GetComponent<BoxCollider>().size = new Vector3(newSlider.GetComponent<BoxCollider>().size.x, s.colliderSizeY, newSlider.GetComponent<BoxCollider>().size.z);
         newSlider.GetComponent<BoxCollider>().center = new Vector3(newSlider.GetComponent<BoxCollider>().center.x, s.colliderCenterY, newSlider.GetComponent<BoxCollider>().center.z);
     }

@@ -7,7 +7,7 @@
     <Note>
       <pos>
         <x>49.00003</x>
-        <y>2254.40063</y>
+        <y>2254.40039</y>
         <z>0</z>
       </pos>
       <lane>1</lane>
@@ -23,7 +23,7 @@
     <Note>
       <pos>
         <x>-43.00003</x>
-        <y>2550.39966</y>
+        <y>2550.39941</y>
         <z>0</z>
       </pos>
       <lane>2</lane>
@@ -79,7 +79,7 @@
     <Note>
       <pos>
         <x>49.00003</x>
-        <y>5926.4</y>
+        <y>5926.39941</y>
         <z>0</z>
       </pos>
       <lane>1</lane>
@@ -87,7 +87,7 @@
     <Note>
       <pos>
         <x>-43.00003</x>
-        <y>5998.4</y>
+        <y>5998.39941</y>
         <z>0</z>
       </pos>
       <lane>2</lane>
@@ -103,7 +103,7 @@
     <Note>
       <pos>
         <x>140.999939</x>
-        <y>6230.4</y>
+        <y>6230.399</y>
         <z>0</z>
       </pos>
       <lane>0</lane>
@@ -127,7 +127,7 @@
     <Note>
       <pos>
         <x>-43.00003</x>
-        <y>6522.4</y>
+        <y>6522.39941</y>
         <z>0</z>
       </pos>
       <lane>2</lane>
@@ -135,7 +135,7 @@
     <Note>
       <pos>
         <x>49.00003</x>
-        <y>6606.4</y>
+        <y>6606.39941</y>
         <z>0</z>
       </pos>
       <lane>1</lane>
@@ -143,7 +143,7 @@
     <Note>
       <pos>
         <x>140.999939</x>
-        <y>6754.4</y>
+        <y>6754.39941</y>
         <z>0</z>
       </pos>
       <lane>0</lane>
@@ -151,7 +151,7 @@
     <Note>
       <pos>
         <x>140.999939</x>
-        <y>6826.4</y>
+        <y>6826.39941</y>
         <z>0</z>
       </pos>
       <lane>0</lane>
@@ -207,7 +207,7 @@
     <Note>
       <pos>
         <x>-43.00003</x>
-        <y>9430.4</y>
+        <y>9430.399</y>
         <z>0</z>
       </pos>
       <lane>2</lane>
@@ -231,7 +231,7 @@
     <Note>
       <pos>
         <x>140.999939</x>
-        <y>9982.4</y>
+        <y>9982.399</y>
         <z>0</z>
       </pos>
       <lane>0</lane>
@@ -272,7 +272,7 @@
       <childY>240.9</childY>
       <height>476</height>
       <colliderSizeY>476</colliderSizeY>
-      <colliderCenterY>0</colliderCenterY>
+      <colliderCenterY>203</colliderCenterY>
     </SliderObj>
     <SliderObj>
       <lane>0</lane>
@@ -284,7 +284,7 @@
       <childY>238.5</childY>
       <height>488</height>
       <colliderSizeY>488</colliderSizeY>
-      <colliderCenterY>0</colliderCenterY>
+      <colliderCenterY>214</colliderCenterY>
     </SliderObj>
     <SliderObj>
       <lane>2</lane>
@@ -296,33 +296,33 @@
       <childY>236.5</childY>
       <height>484</height>
       <colliderSizeY>484</colliderSizeY>
-      <colliderCenterY>0</colliderCenterY>
+      <colliderCenterY>212</colliderCenterY>
     </SliderObj>
     <SliderObj>
       <lane>1</lane>
       <pos>
         <x>49.00003</x>
-        <y>11246.3994</y>
+        <y>11246.3984</y>
         <z>0</z>
       </pos>
       <childY>296.9</childY>
       <height>588</height>
       <colliderSizeY>588</colliderSizeY>
-      <colliderCenterY>0</colliderCenterY>
+      <colliderCenterY>259</colliderCenterY>
     </SliderObj>
   </sliders>
   <spaces>
     <SpaceObj>
       <pos>
-        <x>47.00009</x>
-        <y>5402.4</y>
+        <x>47.00006</x>
+        <y>5402.39941</y>
         <z>0</z>
       </pos>
       <width>261.98</width>
     </SpaceObj>
     <SpaceObj>
       <pos>
-        <x>47.00009</x>
+        <x>47.00006</x>
         <y>5702.40039</y>
         <z>0</z>
       </pos>
@@ -330,7 +330,7 @@
     </SpaceObj>
     <SpaceObj>
       <pos>
-        <x>47.00009</x>
+        <x>47.00006</x>
         <y>6970.4</y>
         <z>0</z>
       </pos>
@@ -338,7 +338,7 @@
     </SpaceObj>
     <SpaceObj>
       <pos>
-        <x>47.00009</x>
+        <x>47.00006</x>
         <y>7050.401</y>
         <z>0</z>
       </pos>
@@ -346,23 +346,23 @@
     </SpaceObj>
     <SpaceObj>
       <pos>
-        <x>47.00009</x>
-        <y>7330.39941</y>
+        <x>47.00006</x>
+        <y>7330.399</y>
         <z>0</z>
       </pos>
       <width>261.98</width>
     </SpaceObj>
     <SpaceObj>
       <pos>
-        <x>47.00009</x>
-        <y>7498.4</y>
+        <x>47.00006</x>
+        <y>7498.39941</y>
         <z>0</z>
       </pos>
       <width>261.98</width>
     </SpaceObj>
     <SpaceObj>
       <pos>
-        <x>47.00009</x>
+        <x>47.00006</x>
         <y>7646.401</y>
         <z>0</z>
       </pos>
@@ -370,7 +370,7 @@
     </SpaceObj>
     <SpaceObj>
       <pos>
-        <x>47.00009</x>
+        <x>47.00006</x>
         <y>7938.40137</y>
         <z>0</z>
       </pos>
@@ -378,7 +378,7 @@
     </SpaceObj>
     <SpaceObj>
       <pos>
-        <x>47.00009</x>
+        <x>47.00006</x>
         <y>8238.402</y>
         <z>0</z>
       </pos>
@@ -386,7 +386,7 @@
     </SpaceObj>
     <SpaceObj>
       <pos>
-        <x>47.00009</x>
+        <x>47.00006</x>
         <y>10646.4014</y>
         <z>0</z>
       </pos>
