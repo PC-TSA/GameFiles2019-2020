@@ -64,7 +64,7 @@ public class SelectorController : MonoBehaviour
     {
         if (Input.GetKeyDown(sliderGenKey))
             isHoldingSliderKeycode = true;
-        if (Input.GetKeyUp(sliderGenKey) || Input.GetKeyUp(key))
+        if (Input.GetKeyUp(sliderGenKey) || Input.GetKeyUp(manualGenKey))
         {
             isHoldingSliderKeycode = false;
             if(spawnedSlider != null)

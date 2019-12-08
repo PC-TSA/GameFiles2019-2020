@@ -8,6 +8,8 @@ TagManager:
   - Note
   - Space
   - Slider
+  - SliderArrow
+  - SliderSprite
   layers:
   - Default
   - TransparentFX

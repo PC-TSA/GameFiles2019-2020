@@ -32,11 +32,8 @@ public class SelectorRunner : MonoBehaviour
         {
             selectableNotes.Add(collision.gameObject);
         }
-        else if (collision.tag == "Slider" && selectableSlider == null)
-        {
-            selectableSlider = collision.gameObject;
-            collision.GetComponent<SliderController>().StartCanBeHitTimer();
-        }
+        else if (collision.tag == "SliderArrow" && selectableSlider == null)
+            selectableSlider = collision.transform.parent.gameObject;
     }
 
     private void OnTriggerExit(Collider collision)
@@ -47,19 +44,30 @@ public class SelectorRunner : MonoBehaviour
             collision.GetComponent<NoteController>().StartDeathFade();
             rhythmRunner.UpdateNotesMissed(1);
         }
-        else if (collision.tag == "Slider")
+        else if (collision.tag == "SliderArrow")
         {
-            if (!collision.GetComponent<SliderController>().hasBeenHit)
+            if (!collision.transform.parent.GetComponent<SliderController>().hasBeenHit)
             {
-                collision.GetComponent<SliderController>().StartDeathFade();
+                collision.transform.parent.GetComponent<SliderController>().canBeHit = false;
                 rhythmRunner.UpdateNotesMissed(1);
                 selectableSlider = null;
             }
-            else if(collision.GetComponent<SliderController>().incompleteHit) //Separate from top if b/c notesMissed is called when the slider stops being hit half way instead of doing it here when it is dissapearing
+        }
+        else if (collision.tag == "SliderSprite")
+        {
+            if (collision.transform.parent.parent.GetComponent<SliderController>().incompleteHit) //Separate from top if b/c notesMissed is called when the slider stops being hit half way instead of doing it here when it is dissapearing
             {
                 collision.GetComponent<SliderController>().StartDeathFade();
-                selectableSlider = null;
             }
+            else
+            {
+                rhythmRunner.UpdateNotesHit(1);
+                rhythmRunner.UpdateScore(1);
+                selectableSlider.GetComponent<SliderController>().HitDeath();
+                selectableSliderBeingHit = false;
+                noteHitParticle.Stop();
+            }
+            selectableSlider = null;
         }
     }
 
@@ -125,22 +133,15 @@ public class SelectorRunner : MonoBehaviour
         {
             rhythmRunner.UpdateScore(0.1f);
 
-            //Move slider's mask parent up, counteracting scroller
-            selectableSlider.transform.parent.localPosition = new Vector3(selectableSlider.transform.parent.localPosition.x, selectableSlider.transform.parent.localPosition.y + rhythmRunner.scrollSpeed, selectableSlider.transform.parent.localPosition.z);
-            selectableSlider.transform.localPosition = new Vector3(selectableSlider.transform.localPosition.x, selectableSlider.transform.localPosition.y - rhythmRunner.scrollSpeed, selectableSlider.transform.localPosition.z);
+            GameObject maskChild = selectableSlider.GetComponent<SliderController>().maskChild;
+            GameObject sliderSpriteChild = selectableSlider.GetComponent<SliderController>().sliderSpriteChild;
+            GameObject arrowSpriteChild = selectableSlider.GetComponent<SliderController>().arrowSpriteChild;
 
-            if (-selectableSlider.transform.localPosition.y > selectableSlider.GetComponent<RectTransform>().sizeDelta.y)
-            {
-                if(!selectableSlider.GetComponent<SliderController>().incompleteHit) //If the slider was hit in it's entirity, give note score
-                {
-                    rhythmRunner.UpdateNotesHit(1);
-                    rhythmRunner.UpdateScore(1);
-                }
-                selectableSlider.GetComponent<SliderController>().HitDeath();
-                selectableSlider = null;
-                selectableSliderBeingHit = false;
-                noteHitParticle.Stop();
-            }
+            //Move slider's mask parent up, counteracting scroller
+            sliderSpriteChild.transform.localPosition = new Vector3(sliderSpriteChild.transform.localPosition.x, sliderSpriteChild.transform.localPosition.y - rhythmRunner.scrollSpeed, sliderSpriteChild.transform.localPosition.z);
+            arrowSpriteChild.transform.position = Vector3.Lerp(arrowSpriteChild.transform.position, transform.position, 30 * Time.deltaTime);
+            //maskChild.transform.localPosition = new Vector3(maskChild.transform.localPosition.x, maskChild.transform.localPosition.y + rhythmRunner.scrollSpeed, maskChild.transform.localPosition.z);
+            maskChild.transform.localPosition = Vector3.Lerp(maskChild.transform.localPosition, new Vector3(arrowSpriteChild.transform.localPosition.x, arrowSpriteChild.transform.localPosition.y + (sliderSpriteChild.GetComponent<RectTransform>().sizeDelta.y / 2), arrowSpriteChild.transform.localPosition.z), 30 * Time.deltaTime);
         }
     }
 }

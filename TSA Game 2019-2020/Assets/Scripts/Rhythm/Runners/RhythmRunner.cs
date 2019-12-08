@@ -88,10 +88,14 @@ public class RhythmRunner : MonoBehaviour
         //Get vignette from post processing profile
         postProcessingVolume.profile.TryGetSettings(out vignette);
 
-        //Load xml asset
-        xmlRecordingAsset = Resources.Load<TextAsset>("Recordings/" + XMLRecordingName);
+        if (CrossSceneController.recordingToLoad != "")
+        {
+            XMLRecordingName = CrossSceneController.recordingToLoad;
+            CrossSceneController.recordingToLoad = "";
+        }
 
-        StartCoroutine(DelayedStart());
+        SetRecording(XMLRecordingName);
+        StartCoroutine(DelayedStart(1));
     }
 
     private void Update()
@@ -203,21 +207,19 @@ public class RhythmRunner : MonoBehaviour
 
     public void DeserializeSlider(SliderObj s)
     {
-        GameObject newSliderParent = Instantiate(new GameObject(), new Vector3(0, 0, 0), transform.rotation, slidersParent.transform);
-        GameObject newSliderMask = Instantiate(sliderMaskPrefab, new Vector3(0, 0, 0), transform.rotation, newSliderParent.transform);
-        GameObject newSlider = Instantiate(sliderPrefabs[s.lane], new Vector3(0, 0, 0), transform.rotation, newSliderMask.transform);
-        Transform newSliderChild = newSlider.transform.GetChild(0);
+        GameObject newSlider = Instantiate(sliderPrefabs[s.lane], new Vector3(0, 0, 0), transform.rotation, slidersParent.transform);
+        Transform sliderMaskChild = newSlider.GetComponent<SliderController>().maskChild.transform;
+        Transform sliderSpriteChild = newSlider.GetComponent<SliderController>().sliderSpriteChild.transform;
+        Transform arrowSpriteChild = newSlider.GetComponent<SliderController>().arrowSpriteChild.transform;
 
-        newSliderParent.transform.localPosition = s.pos;
-        newSliderParent.transform.localRotation = transform.rotation;
-        newSliderMask.GetComponent<RectTransform>().sizeDelta = new Vector2(newSliderChild.GetComponent<RectTransform>().sizeDelta.x, s.height);
-        newSliderMask.transform.localPosition = new Vector3(newSlider.transform.localPosition.x, s.colliderCenterY, newSlider.transform.localPosition.z);
-        newSlider.transform.localPosition = new Vector3(0, -s.colliderCenterY, 0);
+        newSlider.transform.localPosition = s.pos;
+        newSlider.transform.localRotation = transform.rotation;
 
-        newSliderChild.GetComponent<RectTransform>().sizeDelta = new Vector2(newSliderChild.GetComponent<RectTransform>().sizeDelta.x, s.height);
-        newSliderChild.localPosition = new Vector3(newSliderChild.localPosition.x, s.childY, newSliderChild.localPosition.z);
-        newSlider.GetComponent<BoxCollider>().size = new Vector3(newSlider.GetComponent<BoxCollider>().size.x, s.colliderSizeY, newSlider.GetComponent<BoxCollider>().size.z);
-        newSlider.GetComponent<BoxCollider>().center = new Vector3(newSlider.GetComponent<BoxCollider>().center.x, s.colliderCenterY, newSlider.GetComponent<BoxCollider>().center.z);
+        sliderMaskChild.GetComponent<RectTransform>().sizeDelta = new Vector2(arrowSpriteChild.GetComponent<RectTransform>().sizeDelta.x, s.height);
+        sliderSpriteChild.GetComponent<RectTransform>().sizeDelta = new Vector2(sliderSpriteChild.GetComponent<RectTransform>().sizeDelta.x, s.height);
+
+        sliderMaskChild.transform.localPosition = new Vector3(sliderMaskChild.transform.localPosition.x, s.height / 2, newSlider.transform.localPosition.z);
+        sliderSpriteChild.GetComponent<BoxCollider>().size = new Vector3(sliderSpriteChild.GetComponent<BoxCollider>().size.x, s.height, sliderSpriteChild.GetComponent<BoxCollider>().size.z);
     }
 
     public void DeserializeSpace(SpaceObj s)
@@ -229,9 +231,9 @@ public class RhythmRunner : MonoBehaviour
         newSpace.GetComponent<BoxCollider>().size = new Vector3(s.width, newSpace.GetComponent<BoxCollider>().size.y, newSpace.GetComponent<BoxCollider>().size.z);
     }
 
-    IEnumerator DelayedStart()
+    IEnumerator DelayedStart(int seconds)
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(seconds);
         LoadRecording();
         FindObjectOfType<SelectorRunner>().sliderHeightChange = scrollSpeed;
     }
@@ -371,5 +373,16 @@ public class RhythmRunner : MonoBehaviour
 
         float x = (lanes[0].transform.localPosition.x + lanes[laneCount - 1].transform.localPosition.x) / 2;
         spaceSelector.transform.localPosition = new Vector3(x, spaceSelector.transform.localPosition.y, spaceSelector.transform.localPosition.z); //Sets space selector localPos.x
+    }
+
+    public void SetRecording(string fileName)
+    {
+        XMLRecordingName = fileName;
+        xmlRecordingAsset = Resources.Load<TextAsset>("Recordings/" + XMLRecordingName);
+    }
+
+    public void ToRhythmMaker()
+    {
+        CrossSceneController.GameToMaker(XMLRecordingName);
     }
 }

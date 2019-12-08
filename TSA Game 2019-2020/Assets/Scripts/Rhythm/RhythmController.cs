@@ -50,7 +50,7 @@ public class RhythmController : MonoBehaviour
     public GameObject waveformObj;
 
     public bool isPlaying;
-    public int editMode; //0 = auto generated notes by bpm; 1 = when developer presses arrow keys
+    public int editMode; //0 = auto generated notes by bpm; 1 = when player presses arrow keys; 2 = random note when player presses space
 
     public Recording currentRecording; //Holds the track creations that can be saved
 
@@ -58,6 +58,7 @@ public class RhythmController : MonoBehaviour
     public List<GameObject> sliderGameObjects;
     public List<GameObject> spaceGameObjects;
 
+    public string savedRecordingName; //The name of the last saved recording
     private void Start()
     {
         Object[] temp = Resources.LoadAll("Songs", typeof(AudioClip)); //Read all audioclips in the Resources/Songs folder and add them to the 'Songs' list
@@ -71,12 +72,13 @@ public class RhythmController : MonoBehaviour
             songPickerDropdown.GetComponent<TMP_Dropdown>().options.Add(new TMP_Dropdown.OptionData() { text = songs[i].name + " | " + songBPMs[i] });
         }
 
-        /* OLD SONG PICKER POPULATOR:
-        //Populates song picker dropdown with songs from the songs list
-        for (int i = 0; i < songs.Count; i++)
-            songPickerDropdown.GetComponent<TMP_Dropdown>().options.Add(new TMP_Dropdown.OptionData() { text = songs[i].name + " | " + songBPMs[i] });*/
-     
-        currentRecording = new Recording();
+        if(CrossSceneController.recordingToLoad != "")
+        {
+            LoadRecording(CrossSceneController.recordingToLoad);
+            CrossSceneController.recordingToLoad = "";
+        }
+        else     
+            currentRecording = new Recording();
     }
 
     private void Update()
@@ -143,11 +145,20 @@ public class RhythmController : MonoBehaviour
         EditModeButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Manual Gen";
     }
 
+    //Manually generate notes by pressing the manual key codes from the manualKeyCodes list (likely 'A' = 'left arrow', 'W' = 'up arrow', 'D' = 'right arrow')
+    void BeatGenEditMode()
+    {
+        editMode = 2;
+        EditModeButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Beat Gen";
+    }
+
     public void EditModeSelect()
     {
         if (editMode == 0)
             ManualEditMode();
         else if (editMode == 1)
+            BeatGenEditMode();
+        else if (editMode == 2)
             AutoGenEditMode();
     }
 
@@ -184,6 +195,9 @@ public class RhythmController : MonoBehaviour
 
         if (path != null && path != "")
         {
+            savedRecordingName = path.Substring(path.LastIndexOf('\\') + 1);
+            savedRecordingName = savedRecordingName.Remove(savedRecordingName.Length - 4);
+
             if (!path.Contains(".xml"))
                 path += ".xml";
             var stream = new FileStream(path, FileMode.Create);
@@ -201,6 +215,9 @@ public class RhythmController : MonoBehaviour
 
         if (path != null && path != "")
         {
+            savedRecordingName = path.Substring(path.LastIndexOf('\\') + 1);
+            savedRecordingName = savedRecordingName.Remove(savedRecordingName.Length - 4);
+
             var stream = new FileStream(path, FileMode.Open);
             currentRecording = serializer.Deserialize(stream) as Recording;
             stream.Close();
@@ -264,10 +281,79 @@ public class RhythmController : MonoBehaviour
         }
     }
 
-    public void ClearRhythmInScene() //Clears all sliders and notes
+    public void LoadRecording(string recordingName) //Deserializes xml file from resources folder
+    {
+        var serializer = new XmlSerializer(typeof(Recording));
+        TextAsset asset = Resources.Load<TextAsset>("Recordings/" + recordingName);
+        var reader = new System.IO.StringReader(asset.text);
+        currentRecording = serializer.Deserialize(reader) as Recording;
+        reader.Close();
+
+        savedRecordingName = recordingName;
+
+        ClearRhythmInScene();
+
+        //Update currently selected song
+        foreach (AudioClip clip in songs)
+            if (clip.name == currentRecording.clipName)
+                selectedSongID = songs.IndexOf(clip);
+
+        scrollerController.bpm = songBPMs[selectedSongID];
+        audioSource.clip = songs[selectedSongID];
+        audioSource.time = 0;
+
+        //Update scroll speed
+        scrollerController.scrollSpeed = currentRecording.scrollSpeed;
+
+        //Reset scroller to start
+        scrollerController.transform.localPosition = scrollerController.originalPos;
+
+        //Update waveform
+        CreateWaveform();
+
+        //Load lane count
+        LoadLaneCount();
+
+        //Reset note/slider counts
+        noteCount = 0;
+        sliderCount = 0;
+
+        //Generate notes
+        foreach (Note n in currentRecording.notes)
+        {
+            scrollerController.DeserializeNote(n);
+            noteCount += 1;
+        }
+        UpdateNoteCount(0);
+
+        //Generate sliders
+        foreach (SliderObj s in currentRecording.sliders)
+        {
+            scrollerController.DeserializeSlider(s);
+            sliderCount += 1;
+        }
+        UpdateSliderCount(0);
+
+        //Generate spaces
+        foreach (SpaceObj s in currentRecording.spaces)
+        {
+            scrollerController.DeserializeSpace(s);
+            spaceCount += 1;
+        }
+        UpdateSpaceCount(0);
+
+        //Set start button to 'Start'
+        isPlaying = false;
+        PauseLevel();
+
+        songPickerDropdown.GetComponent<TMP_Dropdown>().value = selectedSongID;
+    }
+
+    public void ClearRhythmInScene() //Clears all notes, sliders, and spaces
     {
         ClearNotes();
         ClearSliders();
+        ClearSpaces();
     }
 
     void ClearNotes()
@@ -279,7 +365,6 @@ public class RhythmController : MonoBehaviour
             Destroy(n);
         }
         noteGameObjects.Clear();
-
         UpdateNoteCount(-noteCount);
     }
 
@@ -294,6 +379,19 @@ public class RhythmController : MonoBehaviour
         sliderGameObjects.Clear();
 
         UpdateSliderCount(-sliderCount);
+    }
+
+    void ClearSpaces()
+    {
+        //Clear existing spaces
+        foreach (GameObject s in spaceGameObjects)
+        {
+            currentRecording.spaces.Remove(s.GetComponent<SpaceController>().spaceCodeObject);
+            Destroy(s);
+        }
+        spaceGameObjects.Clear();
+
+        UpdateSpaceCount(-spaceCount);
     }
 
     public void SetLaneCount()
@@ -404,5 +502,10 @@ public class RhythmController : MonoBehaviour
 
         Debug.Log("Spaces generated!");
         Debug.Log("ReGeneration Complete");
+    }
+
+    public void TestTrack()
+    {
+        CrossSceneController.MakerToGame(savedRecordingName);
     }
 }

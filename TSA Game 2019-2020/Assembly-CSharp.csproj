@@ -67,7 +67,9 @@
     <Compile Include="Assets\ARTnGAME\SunShaftsSRP\Shaders - Scripts\SunShaftsHDRP.cs" />
     <Compile Include="Assets\ARTnGAME\VolumeFogSRP\Scripts - Shaders\controlVolumeFogSRPPOSTFX.cs" />
     <Compile Include="Assets\ARTnGAME\VolumeFogSRP\Scripts - Shaders\VolumeFogSM_SRP.cs" />
+    <Compile Include="Assets\Scripts\CrossSceneController.cs" />
     <Compile Include="Assets\Scripts\FPSDisplay.cs" />
+    <Compile Include="Assets\Scripts\Rhythm\BeatGenController.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Object Controllers\NoteController.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Object Controllers\SliderController.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Object Controllers\SpaceController.cs" />
@@ -135,6 +137,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <None Include="Assets\Resources\Recordings\OLD\11pmfast.xml" />
+    <None Include="Assets\Resources\Recordings\TestTrackTest.xml" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\Resources\Recordings\OLD\Spencer.xml" />
@@ -143,6 +146,7 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
     <None Include="Assets\ARTnGAME\VolumeFogSRP\Install Instructions and Documentation\Install Instructions and documentation.txt" />
     <None Include="Assets\Resources\Recordings\OLD\TestSlider.xml" />
+    <None Include="Assets\Resources\Recordings\BeatGenTest.xml" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Oswald-Bold - OFL.txt" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />

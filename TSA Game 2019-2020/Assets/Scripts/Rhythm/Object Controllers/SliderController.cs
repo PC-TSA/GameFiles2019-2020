@@ -6,13 +6,17 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
 {
     public bool isInGame; //True in game, false in rhythm maker
 
+    public GameObject maskChild;
+    public GameObject sliderSpriteChild;
+    public GameObject arrowSpriteChild;
+
+    public float initialSliderOffset;
+
     public bool hasBeenHit;
     public bool canBeHit = true; //If false, this slider has existed for too long to be hit
     public bool incompleteHit; //If true, this hit was stopped half way
 
     public float sliderHeightChange; //How much the height (not scale) is changed by each FixedUpdate call
-
-    public float canBeHitTime; //How long the player has from the start of the slider to hit it
         
     public SliderObj sliderCodeObject; //This slider's code object counterpart in the noteObjects list in ScrollController; Used for serialization
 
@@ -23,17 +27,11 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
 
     private void Start()
     {
-        //Generates canBeHitTime, adjusting for faster tracks
+        //Generates sliderHeightChange, adjusting for track scroll speed
         if (FindObjectOfType<RhythmRunner>() != null)
-        {
-            canBeHitTime = FindObjectOfType<RhythmRunner>().scrollSpeed * 0.05f;
             sliderHeightChange = FindObjectOfType<RhythmRunner>().scrollSpeed;
-        }
         else if (FindObjectOfType<ScrollerController>() != null)
-        {
-            canBeHitTime = FindObjectOfType<ScrollerController>().scrollSpeed * 0.05f;
             sliderHeightChange = FindObjectOfType<ScrollerController>().scrollSpeed;
-        }
     }
 
     //Waits until after the note has faded out, then deletes
@@ -53,8 +51,8 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
     //When the note is done being hit, play note hit anim and then kill note
     IEnumerator NoteHitDeath()
     {
-        //GetComponent<Animation>().Play("NoteHit"); No death anim for sliders currently since they shrink into nothingness
-        yield return new WaitForSeconds(0.15f); 
+        arrowSpriteChild.GetComponent<Animation>().Play("NoteHit");
+        yield return new WaitForSeconds(0.08f); 
         Die();
     }
 
@@ -75,19 +73,6 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
         }
     }
 
-    public void StartCanBeHitTimer()
-    {
-        StartCoroutine(CanBeHitTimer());
-    }
-
-    IEnumerator CanBeHitTimer()
-    {
-        yield return new WaitForSeconds(canBeHitTime);
-        canBeHit = false;
-        if(!hasBeenHit)
-            FindObjectOfType<RhythmRunner>().UpdateNotesMissed(1);
-    }
-
     public void HitDeath()
     {
         StartCoroutine(NoteHitDeath());
@@ -106,6 +91,7 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
             FindObjectOfType<RhythmController>().sliderGameObjects.Remove(gameObject);
             FindObjectOfType<RhythmController>().UpdateSliderCount(-1);
         }
+
         Destroy(gameObject);
     }
 

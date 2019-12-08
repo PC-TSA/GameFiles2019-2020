@@ -73,7 +73,7 @@ public class NoteController : MonoBehaviour
     public void MouseDown()
     {
         if (Input.GetMouseButton(1)) //Right click
-            Hit();
+            StartCoroutine(NoteHit());
         if (Input.GetMouseButton(0)) //Left click
         {
             mouseDown = true;
