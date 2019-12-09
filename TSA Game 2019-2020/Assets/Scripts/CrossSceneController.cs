@@ -7,11 +7,10 @@ public static class CrossSceneController
 {
     public static string recordingToLoad = "";
 
-    public static void MakerToGame(string recordingName) //Triggered from maker, sends current track to game
+    public static void MakerToGame(string recordingPath) //Triggered from maker, sends current track to game
     {
-        GameObject.FindObjectOfType<RhythmController>().SaveRecording();
-        recordingToLoad = recordingName;
-        SceneManager.LoadScene("TestTrack");
+        recordingToLoad = recordingPath;
+        SceneManager.LoadScene("Overworld");
     }
 
     public static void GameToMaker(string recordingName) //Triggered from game, sends current track to maker

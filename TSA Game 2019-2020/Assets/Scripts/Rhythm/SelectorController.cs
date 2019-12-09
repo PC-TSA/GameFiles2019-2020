@@ -116,10 +116,14 @@ public class SelectorController : MonoBehaviour
                 {
                     sliderHeightChange = scrollerController.scrollSpeed;
                     spawnedSlider = scrollerController.SpawnSlider(laneNumber);
+                    rhythmController.isSaved = false;
                     sliderOriginalColliderY = spawnedSlider.GetComponent<BoxCollider2D>().size.y;
                 }
                 else
+                {
                     scrollerController.SpawnNote(laneNumber);
+                    rhythmController.isSaved = false;
+                }
             }
         }
     }

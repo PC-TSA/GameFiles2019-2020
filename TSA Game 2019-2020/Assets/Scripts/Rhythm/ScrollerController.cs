@@ -58,7 +58,7 @@ public class ScrollerController : MonoBehaviour
                 if (timer >= (delay / bpm))
                 {
                     //Create the note in a random lane
-                    SpawnNote(Random.Range(0, selectors.Length));
+                    SpawnNote(Random.Range(0, rhythmController.laneCount));
                     timer -= (delay / bpm);
                 }
             }

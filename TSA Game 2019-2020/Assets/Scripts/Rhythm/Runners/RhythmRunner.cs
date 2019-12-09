@@ -12,7 +12,8 @@ using UnityEngine.Rendering.PostProcessing;
 public class RhythmRunner : MonoBehaviour
 {
     public string XMLRecordingName; //This is the note track recording that will be used in this scene; Searches for an XML file with this exact name in the 'Assets/Resources/' folder
-    public TextAsset xmlRecordingAsset;
+    public TextAsset XMLRecordingAsset;
+    public string XMLRecordingPath; //The path of the xml file being loaded
 
     public int notesHit = 0; //How many notes hit
     public int notesMissed = 0; //How many notes missed
@@ -22,6 +23,8 @@ public class RhythmRunner : MonoBehaviour
     public int deathCount = 0; //How many notes have been missed in a row. (ex. if you miss 5, but then get 1 right, your deathCount is 4. Doesnt go above 0 and works independently of combo)
     public int health = 20; //How much deathCount needs to reach to lose the game
     public float score; //Current score in a run; Every note hit += current combo, every FixedUpdate call a slider is hit + current combo * 0.01
+
+    public GameObject rhythmCanvasObj;
 
     public GameObject notesHitTxt;
     public GameObject notesMissedTxt;
@@ -77,6 +80,8 @@ public class RhythmRunner : MonoBehaviour
     public float backgroundWidth;
     public float dividerWidth;
 
+    public GameObject splashTitlePrefab;
+
     private void Start()
     {
         Object[] temp = Resources.LoadAll("Songs", typeof(AudioClip)); //Read all audioclips in the Resources/Songs folder and add them to the 'Songs' list
@@ -88,14 +93,16 @@ public class RhythmRunner : MonoBehaviour
         //Get vignette from post processing profile
         postProcessingVolume.profile.TryGetSettings(out vignette);
 
-        if (CrossSceneController.recordingToLoad != "")
+        if (CrossSceneController.recordingToLoad.Length != 0) //If transfering song from other scene, load from given path instead of predefined file name from build Resources
         {
-            XMLRecordingName = CrossSceneController.recordingToLoad;
+            XMLRecordingPath = CrossSceneController.recordingToLoad;
+            string name = XMLRecordingPath.Substring(XMLRecordingPath.LastIndexOf('\\') + 1);
+            XMLRecordingName = name.Remove(name.Length - 4);
+            StartCoroutine(DelayedStart(1, XMLRecordingPath));
             CrossSceneController.recordingToLoad = "";
         }
-
-        SetRecording(XMLRecordingName);
-        StartCoroutine(DelayedStart(1));
+        else
+            StartCoroutine(DelayedStart(1));
     }
 
     private void Update()
@@ -151,7 +158,7 @@ public class RhythmRunner : MonoBehaviour
     public void LoadRecording() //Deserializes chosen xml file and sets it as current recording
     {
         var serializer = new XmlSerializer(typeof(Recording));
-        var reader = new System.IO.StringReader(xmlRecordingAsset.text);
+        var reader = new System.IO.StringReader(XMLRecordingAsset.text);
         currentRecording = serializer.Deserialize(reader) as Recording;
         reader.Close();
 
@@ -166,6 +173,7 @@ public class RhythmRunner : MonoBehaviour
 
         //Update scroll speed
         scrollSpeed = currentRecording.scrollSpeed;
+        FindObjectOfType<SelectorRunner>().sliderHeightChange = scrollSpeed;
 
         //Enable lanes used in this recording
         LoadLaneCount();
@@ -196,6 +204,60 @@ public class RhythmRunner : MonoBehaviour
 
         audioSource.Play();
         isRunning = true;
+    }
+
+    public void LoadRecording(string path) //Deserializes xml file at path and sets it as current recording
+    {
+        var serializer = new XmlSerializer(typeof(Recording));
+        if (path.Length != 0)
+        {
+            var stream = new FileStream(path, FileMode.Open);
+            currentRecording = serializer.Deserialize(stream) as Recording;
+            stream.Close();
+
+            //Load song
+            foreach (AudioClip clip in songs)
+                if (clip.name == currentRecording.clipName)
+                    audioSource.clip = clip;
+            audioSource.time = 0;
+
+            //Reset scroller
+            scrollerObj.transform.localPosition = originalPos;
+
+            //Update scroll speed
+            scrollSpeed = currentRecording.scrollSpeed;
+            FindObjectOfType<SelectorRunner>().sliderHeightChange = scrollSpeed;
+
+            //Enable lanes used in this recording
+            LoadLaneCount();
+
+            //Generate track
+            if (scrollSpeed == customSpeed || customSpeed == 0)
+            {
+                foreach (Note n in currentRecording.notes) //Deserialize notes
+                    DeserializeNote(n);
+                foreach (SliderObj s in currentRecording.sliders) //Deserialize sliders
+                    DeserializeSlider(s);
+                foreach (SpaceObj s in currentRecording.spaces) //Deserialize spaces
+                    DeserializeSpace(s);
+            }
+            else
+            {
+                scrollSpeed = customSpeed;
+                foreach (Note n in currentRecording.notes)
+                    DeserializeNote(new Note(n.lane, OverrideSpeedPos(n)));
+                foreach (SliderObj s in currentRecording.sliders)
+                    DeserializeSlider(new SliderObj(s.lane, OverrideSpeedPos(s), s.childY, s.height, s.colliderSizeY, s.colliderCenterY));
+                foreach (SpaceObj s in currentRecording.spaces) //Deserialize spaces
+                    DeserializeSpace(new SpaceObj(s.width, OverrideSpeedPos(s)));
+            }
+
+            foreach (SelectorRunner selector in FindObjectsOfType<SelectorRunner>())
+                selector.sliderHeightChange = scrollSpeed;
+
+            audioSource.Play();
+            isRunning = true;
+        }
     }
 
     public void DeserializeNote(Note n)
@@ -235,7 +297,12 @@ public class RhythmRunner : MonoBehaviour
     {
         yield return new WaitForSeconds(seconds);
         LoadRecording();
-        FindObjectOfType<SelectorRunner>().sliderHeightChange = scrollSpeed;
+    }
+
+    IEnumerator DelayedStart(int seconds, string path)
+    {
+        yield return new WaitForSeconds(seconds);
+        LoadRecording(path);
     }
 
     void UpdateDeathCount(int i)
@@ -375,14 +442,22 @@ public class RhythmRunner : MonoBehaviour
         spaceSelector.transform.localPosition = new Vector3(x, spaceSelector.transform.localPosition.y, spaceSelector.transform.localPosition.z); //Sets space selector localPos.x
     }
 
-    public void SetRecording(string fileName)
-    {
-        XMLRecordingName = fileName;
-        xmlRecordingAsset = Resources.Load<TextAsset>("Recordings/" + XMLRecordingName);
-    }
-
     public void ToRhythmMaker()
     {
-        CrossSceneController.GameToMaker(XMLRecordingName);
+        CrossSceneController.GameToMaker(XMLRecordingPath);
+    }
+
+    public void SpawnSplashTitle(string titleText, Color titleColor)
+    {
+        GameObject newSplashTitle = Instantiate(splashTitlePrefab, rhythmCanvasObj.transform);
+        newSplashTitle.GetComponent<TMP_Text>().text = titleText;
+        newSplashTitle.GetComponent<TMP_Text>().color = titleColor;
+        StartCoroutine(KillSplashTitle(newSplashTitle));
+    }
+
+    IEnumerator KillSplashTitle(GameObject title)
+    {
+        yield return new WaitForSeconds(title.GetComponent<Animation>().clip.length);
+        Destroy(title);
     }
 }

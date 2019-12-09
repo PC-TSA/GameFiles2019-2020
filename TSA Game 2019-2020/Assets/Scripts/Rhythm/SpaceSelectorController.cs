@@ -57,7 +57,10 @@ public class SpaceSelectorController : MonoBehaviour
         if (Input.GetKeyDown(spaceGenKey)) //If in manual gen edit mode
         {
             if (rhythmController.editMode == 1)
+            {
                 scrollerController.SpawnSpace();
+                rhythmController.isSaved = false;
+            }
         }
     }
 }

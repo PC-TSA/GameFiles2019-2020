@@ -22,6 +22,8 @@ public class RhythmController : MonoBehaviour
     public int sliderCount;
     public int spaceCount;
 
+    public GameObject rhythmCanvasMiscObj;
+
     public GameObject noteCountTxt;
     public GameObject sliderCountTxt;
     public GameObject spaceCountTxt;
@@ -58,7 +60,12 @@ public class RhythmController : MonoBehaviour
     public List<GameObject> sliderGameObjects;
     public List<GameObject> spaceGameObjects;
 
-    public string savedRecordingName; //The name of the last saved recording
+    public string savedRecordingPath; //The path of the last saved recording
+
+    public bool isSaved; //Set to false any time something changes, set to true when the recording is saved. Used to decide whether to prompt the player to save when exiting scene and/or autosave if implemented later
+
+    public GameObject splashTitlePrefab;
+
     private void Start()
     {
         Object[] temp = Resources.LoadAll("Songs", typeof(AudioClip)); //Read all audioclips in the Resources/Songs folder and add them to the 'Songs' list
@@ -189,34 +196,37 @@ public class RhythmController : MonoBehaviour
         currentRecording.scrollSpeed = scrollerController.scrollSpeed;
 
         var serializer = new XmlSerializer(typeof(Recording));
-        string path = null;
+        string path = StandaloneFileBrowser.SaveFilePanel("Save File", "", "", "");
 
-        path = StandaloneFileBrowser.SaveFilePanel("Save File", "", "", "");
-
-        if (path != null && path != "")
+        if (path.Length != 0)
         {
-            savedRecordingName = path.Substring(path.LastIndexOf('\\') + 1);
-            savedRecordingName = savedRecordingName.Remove(savedRecordingName.Length - 4);
+            isSaved = true;
+            savedRecordingPath = path;
 
             if (!path.Contains(".xml"))
                 path += ".xml";
             var stream = new FileStream(path, FileMode.Create);
             serializer.Serialize(stream, currentRecording);
             stream.Close();
+
+            SpawnSplashTitle("Saved Successfully", Color.green);
         }
+        else
+            SpawnSplashTitle("Save failed, no path", Color.red);
     }
 
     public void LoadRecording() //Deserializes chosen xml file and sets it as current recording
     {
         var serializer = new XmlSerializer(typeof(Recording));
-        string path = null;
+        string path = "";
 
-        path = StandaloneFileBrowser.OpenFilePanel("Open File", "", "", false)[0];
+        string[] temp = StandaloneFileBrowser.OpenFilePanel("Open File", "", "", false);
+        if(temp.Length != 0)
+            path = temp[0];
 
-        if (path != null && path != "")
+        if (path.Length != 0)
         {
-            savedRecordingName = path.Substring(path.LastIndexOf('\\') + 1);
-            savedRecordingName = savedRecordingName.Remove(savedRecordingName.Length - 4);
+            savedRecordingPath = path;
 
             var stream = new FileStream(path, FileMode.Open);
             currentRecording = serializer.Deserialize(stream) as Recording;
@@ -278,75 +288,88 @@ public class RhythmController : MonoBehaviour
             PauseLevel();
 
             songPickerDropdown.GetComponent<TMP_Dropdown>().value = selectedSongID;
+
+            isSaved = true;
+
+            SpawnSplashTitle("Loaded Successfully", Color.green);
         }
+        else
+            SpawnSplashTitle("Load failed, no path", Color.red);
     }
 
-    public void LoadRecording(string recordingName) //Deserializes xml file from resources folder
+    public void LoadRecording(string path) //Deserializes xml file from resources folder
     {
         var serializer = new XmlSerializer(typeof(Recording));
-        TextAsset asset = Resources.Load<TextAsset>("Recordings/" + recordingName);
-        var reader = new System.IO.StringReader(asset.text);
-        currentRecording = serializer.Deserialize(reader) as Recording;
-        reader.Close();
 
-        savedRecordingName = recordingName;
-
-        ClearRhythmInScene();
-
-        //Update currently selected song
-        foreach (AudioClip clip in songs)
-            if (clip.name == currentRecording.clipName)
-                selectedSongID = songs.IndexOf(clip);
-
-        scrollerController.bpm = songBPMs[selectedSongID];
-        audioSource.clip = songs[selectedSongID];
-        audioSource.time = 0;
-
-        //Update scroll speed
-        scrollerController.scrollSpeed = currentRecording.scrollSpeed;
-
-        //Reset scroller to start
-        scrollerController.transform.localPosition = scrollerController.originalPos;
-
-        //Update waveform
-        CreateWaveform();
-
-        //Load lane count
-        LoadLaneCount();
-
-        //Reset note/slider counts
-        noteCount = 0;
-        sliderCount = 0;
-
-        //Generate notes
-        foreach (Note n in currentRecording.notes)
+        if (path.Length != 0)
         {
-            scrollerController.DeserializeNote(n);
-            noteCount += 1;
+            var stream = new FileStream(path, FileMode.Open);
+            currentRecording = serializer.Deserialize(stream) as Recording;
+            stream.Close();
+
+            ClearRhythmInScene();
+
+            //Update currently selected song
+            foreach (AudioClip clip in songs)
+                if (clip.name == currentRecording.clipName)
+                    selectedSongID = songs.IndexOf(clip);
+
+            scrollerController.bpm = songBPMs[selectedSongID];
+            audioSource.clip = songs[selectedSongID];
+            audioSource.time = 0;
+
+            //Update scroll speed
+            scrollerController.scrollSpeed = currentRecording.scrollSpeed;
+
+            //Reset scroller to start
+            scrollerController.transform.localPosition = scrollerController.originalPos;
+
+            //Update waveform
+            CreateWaveform();
+
+            //Load lane count
+            LoadLaneCount();
+
+            //Reset note/slider counts
+            noteCount = 0;
+            sliderCount = 0;
+
+            //Generate notes
+            foreach (Note n in currentRecording.notes)
+            {
+                scrollerController.DeserializeNote(n);
+                noteCount += 1;
+            }
+            UpdateNoteCount(0);
+
+            //Generate sliders
+            foreach (SliderObj s in currentRecording.sliders)
+            {
+                scrollerController.DeserializeSlider(s);
+                sliderCount += 1;
+            }
+            UpdateSliderCount(0);
+
+            //Generate spaces
+            foreach (SpaceObj s in currentRecording.spaces)
+            {
+                scrollerController.DeserializeSpace(s);
+                spaceCount += 1;
+            }
+            UpdateSpaceCount(0);
+
+            //Set start button to 'Start'
+            isPlaying = false;
+            PauseLevel();
+
+            songPickerDropdown.GetComponent<TMP_Dropdown>().value = selectedSongID;
+
+            isSaved = true;
+
+            SpawnSplashTitle("Loaded Successfully", Color.green);
         }
-        UpdateNoteCount(0);
-
-        //Generate sliders
-        foreach (SliderObj s in currentRecording.sliders)
-        {
-            scrollerController.DeserializeSlider(s);
-            sliderCount += 1;
-        }
-        UpdateSliderCount(0);
-
-        //Generate spaces
-        foreach (SpaceObj s in currentRecording.spaces)
-        {
-            scrollerController.DeserializeSpace(s);
-            spaceCount += 1;
-        }
-        UpdateSpaceCount(0);
-
-        //Set start button to 'Start'
-        isPlaying = false;
-        PauseLevel();
-
-        songPickerDropdown.GetComponent<TMP_Dropdown>().value = selectedSongID;
+        else
+            SpawnSplashTitle("Load failed, no path", Color.red);
     }
 
     public void ClearRhythmInScene() //Clears all notes, sliders, and spaces
@@ -506,6 +529,22 @@ public class RhythmController : MonoBehaviour
 
     public void TestTrack()
     {
-        CrossSceneController.MakerToGame(savedRecordingName);
+        if (!isSaved || savedRecordingPath == null)
+            SaveRecording();
+        CrossSceneController.MakerToGame(savedRecordingPath);
+    }
+
+    public void SpawnSplashTitle(string titleText, Color titleColor)
+    {
+        GameObject newSplashTitle = Instantiate(splashTitlePrefab, rhythmCanvasMiscObj.transform);
+        newSplashTitle.GetComponent<TMP_Text>().text = titleText;
+        newSplashTitle.GetComponent<TMP_Text>().color = titleColor;
+        StartCoroutine(KillSplashTitle(newSplashTitle));
+    }
+
+    IEnumerator KillSplashTitle(GameObject title)
+    {
+        yield return new WaitForSeconds(title.GetComponent<Animation>().clip.length);
+        Destroy(title);
     }
 }

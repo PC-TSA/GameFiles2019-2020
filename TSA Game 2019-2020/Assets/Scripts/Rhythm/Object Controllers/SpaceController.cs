@@ -79,10 +79,17 @@ public class SpaceController : MonoBehaviour
         }
         else if (Input.GetMouseButton(1)) //Right click
             Hit();
+
+        FindObjectOfType<RhythmController>().isSaved = false;
     }
 
     public void MouseUp()
     {
         mouseDown = false;
+        UpdateCodeObject();
+    }
+    public void UpdateCodeObject()
+    {
+        spaceCodeObject.pos = transform.localPosition;
     }
 }

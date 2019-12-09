@@ -7,14 +7,6 @@
     <Note>
       <pos>
         <x>49</x>
-        <y>242.4</y>
-        <z>0</z>
-      </pos>
-      <lane>1</lane>
-    </Note>
-    <Note>
-      <pos>
-        <x>49</x>
         <y>274.4</y>
         <z>0</z>
       </pos>
@@ -427,6 +419,14 @@
         <z>0</z>
       </pos>
       <lane>0</lane>
+    </Note>
+    <Note>
+      <pos>
+        <x>49</x>
+        <y>188.4</y>
+        <z>0</z>
+      </pos>
+      <lane>1</lane>
     </Note>
   </notes>
   <sliders>

@@ -126,6 +126,8 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
         }
         else if (Input.GetMouseButton(1)) //Right click
             Hit();
+
+        FindObjectOfType<RhythmController>().isSaved = false;
     }
 
     public void MouseUp()
@@ -151,10 +153,15 @@ public class SliderController : MonoBehaviour //When scaling in RhythmMaker, Rec
         if(!isInGame)
         {
             mouseOver = false;
-            sliderCodeObject.height = transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.y;
-            sliderCodeObject.childY = transform.GetChild(0).localPosition.y;
-            sliderCodeObject.colliderCenterY = GetComponent<BoxCollider2D>().offset.y;
-            sliderCodeObject.pos = transform.localPosition;
+            UpdateCodeObject();
         }
+    }
+
+    public void UpdateCodeObject()
+    {
+        sliderCodeObject.height = transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.y;
+        sliderCodeObject.childY = transform.GetChild(0).localPosition.y;
+        sliderCodeObject.colliderCenterY = GetComponent<BoxCollider2D>().offset.y;
+        sliderCodeObject.pos = transform.localPosition;
     }
 }

@@ -80,10 +80,18 @@ public class NoteController : MonoBehaviour
             screenPoint = Camera.main.WorldToScreenPoint(transform.position);
             offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
         }
+
+        FindObjectOfType<RhythmController>().isSaved = false;
     }
 
     public void MouseUp()
     {
         mouseDown = false;
+        UpdateCodeObject();
+    }
+
+    public void UpdateCodeObject()
+    {
+        noteCodeObject.pos = transform.localPosition;
     }
 }

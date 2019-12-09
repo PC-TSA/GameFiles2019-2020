@@ -9,9 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Rhythm/RhythmMaker.unity
     guid: 5f4bf76a776f21744bbd5d18ddf13649
   - enabled: 1
-    path: Assets/Scenes/Rhythm/TestTrack.unity
-    guid: 75b40c36164144f47a3f9821bca6606f
-  - enabled: 0
     path: Assets/Scenes/Overworld.unity
     guid: bf21205c68eaf7941a8119f73c6a1268
   m_configObjects: {}

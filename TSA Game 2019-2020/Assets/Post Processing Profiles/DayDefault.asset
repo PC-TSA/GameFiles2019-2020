@@ -1468,7 +1468,7 @@ MonoBehaviour:
     value: 0.5
   useDepthTexture:
     overrideState: 0
-    value: 1
+    value: 0
 --- !u!114 &114384459318699650
 MonoBehaviour:
   m_ObjectHideFlags: 3

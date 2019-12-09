@@ -11,6 +11,7 @@ public class SelectorRunner : MonoBehaviour
     public List<GameObject> selectableNotes = new List<GameObject>();
     public GameObject selectableSlider;
     public bool selectableSliderBeingHit;
+    public float sliderAccuracyMultiplier;
     public float sliderHeightChange; //How much the height (not scale) is increased by each FixedUpdate call on the spawned slider; Set to scroll speed by rhythmRunner
 
     public RhythmRunner rhythmRunner;
@@ -82,22 +83,11 @@ public class SelectorRunner : MonoBehaviour
             {
                 somethingClicked = true;
                 rhythmRunner.UpdateNotesHit(1);
-                rhythmRunner.UpdateScore(1);
+                NoteHitAccuracy(selectableNotes[0]); //Updates score based on accuracy of note hit
 
                 //Removes oldest note in the selectable notes list
                 selectableNotes[0].GetComponent<NoteController>().Hit();
                 selectableNotes.RemoveAt(0);
-
-                /*CODE TO KILL MULTIPLE NODES WITH SINGLE CLICK
-                List<GameObject> notesToRemove = new List<GameObject>();
-                foreach (GameObject note in selectableNotes)
-                {
-                    note.GetComponent<NoteController>().Hit();
-                    notesToRemove.Add(note);
-                }
-                foreach (GameObject note in notesToRemove)
-                    selectableNotes.Remove(note);
-                notesToRemove.Clear();*/
             }
             
             if(selectableSlider != null && selectableSlider.GetComponent<SliderController>().canBeHit && !selectableSlider.GetComponent<SliderController>().hasBeenHit) //If there is a selectableSlider that can be hit and hasnt been hit yet
@@ -106,6 +96,7 @@ public class SelectorRunner : MonoBehaviour
                 somethingClicked = true;
                 noteHitParticle.Play();
                 selectableSliderBeingHit = true;
+                SliderHitAccuracy(selectableSlider.GetComponent<SliderController>().arrowSpriteChild);
             }
 
             if (!somethingClicked)
@@ -131,7 +122,7 @@ public class SelectorRunner : MonoBehaviour
     {
         if (selectableSliderBeingHit)
         {
-            rhythmRunner.UpdateScore(0.1f);
+            rhythmRunner.UpdateScore(sliderAccuracyMultiplier);
 
             GameObject maskChild = selectableSlider.GetComponent<SliderController>().maskChild;
             GameObject sliderSpriteChild = selectableSlider.GetComponent<SliderController>().sliderSpriteChild;
@@ -142,6 +133,50 @@ public class SelectorRunner : MonoBehaviour
             arrowSpriteChild.transform.position = Vector3.Lerp(arrowSpriteChild.transform.position, transform.position, 30 * Time.deltaTime);
             //maskChild.transform.localPosition = new Vector3(maskChild.transform.localPosition.x, maskChild.transform.localPosition.y + rhythmRunner.scrollSpeed, maskChild.transform.localPosition.z);
             maskChild.transform.localPosition = Vector3.Lerp(maskChild.transform.localPosition, new Vector3(arrowSpriteChild.transform.localPosition.x, arrowSpriteChild.transform.localPosition.y + (sliderSpriteChild.GetComponent<RectTransform>().sizeDelta.y / 2), arrowSpriteChild.transform.localPosition.z), 30 * Time.deltaTime);
+        }
+    }
+
+    public void NoteHitAccuracy(GameObject note)
+    {
+        float hitAccuracy = ((Vector3.Distance(note.transform.position, transform.position) * 100) / transform.GetComponent<RectTransform>().sizeDelta.y) * 1000;
+        if (hitAccuracy >= 40) //Hit accuracy = 0-~90
+        {
+            rhythmRunner.UpdateScore(0.4f); //Bad hit
+            rhythmRunner.SpawnSplashTitle("Bad", Color.red);
+        }
+        else if (hitAccuracy < 40 && hitAccuracy >= 15)
+            rhythmRunner.UpdateScore(0.6f); //Moderate hit
+        else if (hitAccuracy < 15 && hitAccuracy >= 8)
+        {
+            rhythmRunner.UpdateScore(0.8f); //Good hit
+            rhythmRunner.SpawnSplashTitle("Good", Color.cyan);
+        }
+        else if (hitAccuracy < 8)
+        {
+            rhythmRunner.UpdateScore(1); //Perfect hit
+            rhythmRunner.SpawnSplashTitle("Perfect", Color.green);
+        }
+    }
+
+    public void SliderHitAccuracy(GameObject slider)
+    {
+        float hitAccuracy = ((Vector3.Distance(slider.transform.position, transform.position) * 100) / transform.GetComponent<RectTransform>().sizeDelta.y) * 1000;
+        if (hitAccuracy >= 40) //Hit accuracy = 0-~90
+        {
+            sliderAccuracyMultiplier = 0.04f; //Bad hit
+            rhythmRunner.SpawnSplashTitle("Bad", Color.red);
+        }
+        else if (hitAccuracy < 40 && hitAccuracy >= 15)
+            sliderAccuracyMultiplier = 0.06f; //Moderate hit
+        else if (hitAccuracy < 15 && hitAccuracy >= 8)
+        {
+            sliderAccuracyMultiplier = 0.08f; //Good hit
+            rhythmRunner.SpawnSplashTitle("Good", Color.cyan);
+        }
+        else if (hitAccuracy < 8)
+        {
+            sliderAccuracyMultiplier = 0.1f; //Perfect hit
+            rhythmRunner.SpawnSplashTitle("Perfect", Color.green);
         }
     }
 }
