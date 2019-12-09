@@ -374,6 +374,7 @@ MonoBehaviour:
   selectableNotes: []
   selectableSlider: {fileID: 0}
   selectableSliderBeingHit: 0
+  sliderAccuracyMultiplier: 0
   sliderHeightChange: 0
   rhythmRunner: {fileID: 90242893}
   noteHitParticle: {fileID: 2034629683}
@@ -495,6 +496,7 @@ GameObject:
   - component: {fileID: 90242894}
   - component: {fileID: 90242896}
   - component: {fileID: 90242895}
+  - component: {fileID: 90242897}
   m_Layer: 0
   m_Name: RhythmRunner
   m_TagString: Untagged
@@ -515,7 +517,7 @@ RectTransform:
   m_Children:
   - {fileID: 422952004}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -799,7 +801,7 @@ AudioLowPassFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 90242891}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_LowpassResonanceQ: 1
   lowpassLevelCustomCurve:
@@ -817,6 +819,18 @@ AudioLowPassFilter:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &90242897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90242891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9594af1daf3a772478ec5e2982fc0c20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &136277814
 GameObject:
   m_ObjectHideFlags: 0
@@ -6141,7 +6155,7 @@ Transform:
   - {fileID: 472209758}
   - {fileID: 1673954159}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &384472004
 GameObject:
@@ -17249,7 +17263,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &729690445
 GameObject:
@@ -17969,6 +17983,7 @@ MonoBehaviour:
   selectableNotes: []
   selectableSlider: {fileID: 0}
   selectableSliderBeingHit: 0
+  sliderAccuracyMultiplier: 0
   sliderHeightChange: 0
   rhythmRunner: {fileID: 90242893}
   noteHitParticle: {fileID: 612636246}
@@ -18448,6 +18463,7 @@ MonoBehaviour:
   selectableNotes: []
   selectableSlider: {fileID: 0}
   selectableSliderBeingHit: 0
+  sliderAccuracyMultiplier: 0
   sliderHeightChange: 0
   rhythmRunner: {fileID: 90242893}
   noteHitParticle: {fileID: 470052705}
@@ -18581,7 +18597,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1110337649
 GameObject:
@@ -19781,6 +19797,7 @@ MonoBehaviour:
   selectableNotes: []
   selectableSlider: {fileID: 0}
   selectableSliderBeingHit: 0
+  sliderAccuracyMultiplier: 0
   sliderHeightChange: 0
   rhythmRunner: {fileID: 90242893}
   noteHitParticle: {fileID: 317044690}
@@ -22239,7 +22256,7 @@ Transform:
   - {fileID: 1827202975}
   - {fileID: 1452334537}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1925777677
 GameObject:
@@ -22633,7 +22650,7 @@ PrefabInstance:
     - target: {fileID: 6566542389047745608, guid: 0d08a9261dfee1640baccb91e3841fcf,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6566542389047745608, guid: 0d08a9261dfee1640baccb91e3841fcf,
         type: 3}
