@@ -9,12 +9,13 @@ public class RhythmSliderController : MonoBehaviour
     public AudioSource audioSource;
     public ScrollerController scrollerController;
     public bool sliderInUse;
+    public RhythmController rhythmController;
     
     private void Update()
     {
         if (sliderInUse)
             UpdateVals();
-        else
+        else if(rhythmController.isPlaying)
             UpdateSlider();
     }
 

@@ -47,9 +47,9 @@ public class SelectorRunner : MonoBehaviour
         }
         else if (collision.tag == "SliderArrow")
         {
-            if (!collision.transform.parent.GetComponent<SliderController>().hasBeenHit)
+            if (!collision.GetComponent<SliderController>().hasBeenHit)
             {
-                collision.transform.parent.GetComponent<SliderController>().canBeHit = false;
+                collision.GetComponent<SliderController>().canBeHit = false;
                 rhythmRunner.UpdateNotesMissed(1);
                 selectableSlider = null;
             }
@@ -58,7 +58,7 @@ public class SelectorRunner : MonoBehaviour
         {
             if (collision.transform.parent.parent.GetComponent<SliderController>().incompleteHit) //Separate from top if b/c notesMissed is called when the slider stops being hit half way instead of doing it here when it is dissapearing
             {
-                collision.GetComponent<SliderController>().StartDeathFade();
+                collision.transform.parent.parent.GetComponent<SliderController>().StartDeathFade();
             }
             else
             {

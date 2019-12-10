@@ -116,12 +116,6 @@ public class RhythmRunner : MonoBehaviour
         //Scroller
         if (isRunning)
             scrollerObj.transform.localPosition = new Vector3(scrollerObj.transform.localPosition.x, scrollerObj.transform.localPosition.y - scrollSpeed, scrollerObj.transform.localPosition.z);
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            UpdateCombo(1);
-            AnimSpeedUp();
-        }
     }
 
     public void UpdateNotesHit(int i)
@@ -155,8 +149,11 @@ public class RhythmRunner : MonoBehaviour
         scoreCountTxt.GetComponent<TextMeshProUGUI>().text = "Score: " + score;
     }
 
-    public void LoadRecording() //Deserializes chosen xml file and sets it as current recording
+    public void LoadRecording() //Deserializes xml file and sets it as current recording
     {
+        if(XMLRecordingName.Substring(XMLRecordingName.Length - 4) != ".xml") //If xml file to load doesnt have .xml extension, meaning it is build in Resources instead of a full path, load from resources
+            XMLRecordingAsset = Resources.Load<TextAsset>("Recordings/" + XMLRecordingName);
+
         var serializer = new XmlSerializer(typeof(Recording));
         var reader = new System.IO.StringReader(XMLRecordingAsset.text);
         currentRecording = serializer.Deserialize(reader) as Recording;

@@ -91,7 +91,7 @@ public class RhythmController : MonoBehaviour
     private void Update()
     {
         if (isPlaying) //Update Waveform \/
-            waveformObj.transform.GetChild(0).transform.localPosition = new Vector3(((audioSource.time * waveformObj.GetComponent<RectTransform>().sizeDelta.x) / audioSource.clip.length) - (waveformObj.GetComponent<RectTransform>().sizeDelta.x / 2), 0, 0);
+            UpdateWaveform();
     }
 
     public void UpdateNoteCount(int i)
@@ -171,9 +171,14 @@ public class RhythmController : MonoBehaviour
 
     void CreateWaveform()
     {
-        Texture2D tex = GetComponent<WaveformVisualizer>().PaintWaveformSpectrum(audioSource.clip, 1, (int)waveformObj.GetComponent<RectTransform>().sizeDelta.x, (int)waveformObj.GetComponent<RectTransform>().sizeDelta.y, Color.yellow);
+        Texture2D tex = GetComponent<WaveformVisualizer>().PaintWaveformSpectrum(audioSource.clip, 1, (int) waveformObj.GetComponent<RectTransform>().sizeDelta.x, (int) waveformObj.GetComponent<RectTransform>().sizeDelta.y, Color.yellow);
         waveformObj.GetComponent<Image>().sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-        waveformObj.GetComponent<Image>().color = Color.white;
+        waveformObj.GetComponent<Image>().color = Color.white;  
+    }
+
+    public void UpdateWaveform()
+    {
+        waveformObj.transform.GetChild(0).transform.localPosition = new Vector3(((sliderController.GetComponent<Slider>().value * waveformObj.GetComponent<RectTransform>().sizeDelta.x) / audioSource.clip.length) - (waveformObj.GetComponent<RectTransform>().sizeDelta.x / 2), 0, 0);
     }
 
     public void SelectSong()
@@ -184,9 +189,17 @@ public class RhythmController : MonoBehaviour
 
         //Update Waveform
         CreateWaveform();
+        UpdateWaveform();
+
+        sliderController.SetSlider();
+        sliderController.GetComponent<Slider>().value = 0;
+        sliderController.UpdateVals();
 
         //Update recording song name
         currentRecording.clipName = songs[selectedSongID].name;
+
+        if (isPlaying)
+            StartPause();
     }
 
     public void SaveRecording() //Serializes recording to xml file
@@ -203,8 +216,9 @@ public class RhythmController : MonoBehaviour
             isSaved = true;
             savedRecordingPath = path;
 
-            if (!path.Contains(".xml"))
+            if (path.Substring(path.Length - 4) != ".xml")
                 path += ".xml";
+
             var stream = new FileStream(path, FileMode.Create);
             serializer.Serialize(stream, currentRecording);
             stream.Close();
@@ -251,6 +265,7 @@ public class RhythmController : MonoBehaviour
 
             //Update waveform
             CreateWaveform();
+            UpdateWaveform();
 
             //Load lane count
             LoadLaneCount();
@@ -290,6 +305,11 @@ public class RhythmController : MonoBehaviour
             songPickerDropdown.GetComponent<TMP_Dropdown>().value = selectedSongID;
 
             isSaved = true;
+            isPlaying = false;
+
+            sliderController.SetSlider();
+            sliderController.GetComponent<Slider>().value = 0;
+            sliderController.UpdateVals();
 
             SpawnSplashTitle("Loaded Successfully", Color.green);
         }
@@ -303,6 +323,8 @@ public class RhythmController : MonoBehaviour
 
         if (path.Length != 0)
         {
+            savedRecordingPath = path;
+
             var stream = new FileStream(path, FileMode.Open);
             currentRecording = serializer.Deserialize(stream) as Recording;
             stream.Close();
@@ -326,6 +348,7 @@ public class RhythmController : MonoBehaviour
 
             //Update waveform
             CreateWaveform();
+            UpdateWaveform();
 
             //Load lane count
             LoadLaneCount();
@@ -365,6 +388,11 @@ public class RhythmController : MonoBehaviour
             songPickerDropdown.GetComponent<TMP_Dropdown>().value = selectedSongID;
 
             isSaved = true;
+            isPlaying = false;
+
+            sliderController.SetSlider();
+            sliderController.GetComponent<Slider>().value = 0;
+            sliderController.UpdateVals();
 
             SpawnSplashTitle("Loaded Successfully", Color.green);
         }
@@ -529,9 +557,10 @@ public class RhythmController : MonoBehaviour
 
     public void TestTrack()
     {
-        if (!isSaved || savedRecordingPath == null)
+        if (!isSaved || savedRecordingPath.Length == 0)
             SaveRecording();
-        CrossSceneController.MakerToGame(savedRecordingPath);
+        if(savedRecordingPath.Length != 0)
+            CrossSceneController.MakerToGame(savedRecordingPath);
     }
 
     public void SpawnSplashTitle(string titleText, Color titleColor)

@@ -542,7 +542,7 @@ MonoBehaviour:
   notesHit: 0
   notesMissed: 0
   missClicks: 0
-  combo: 0
+  combo: 1
   comboLvl: 0
   deathCount: 0
   health: 20
@@ -6368,7 +6368,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Combo: 1
+  m_text: 'Combo: 0
 
 '
   m_isRightToLeft: 0
