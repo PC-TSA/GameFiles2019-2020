@@ -222,7 +222,7 @@ public class RhythmController : MonoBehaviour
             if (path.Substring(path.Length - 4) != ".xml")
                 path += ".xml";
 
-            savedRecordingName = savedRecordingPath.Substring(savedRecordingPath.LastIndexOf('\\'));
+            savedRecordingName = savedRecordingPath.Substring(savedRecordingPath.LastIndexOf('\\') + 1);
             savedRecordingName = savedRecordingName.Remove(savedRecordingName.Length - 4);
 
             var stream = new FileStream(path, FileMode.Create);
@@ -247,6 +247,12 @@ public class RhythmController : MonoBehaviour
         if (path.Length != 0)
         {
             savedRecordingPath = path;
+
+            if (path.Substring(path.Length - 4) != ".xml")
+                path += ".xml";
+
+            savedRecordingName = savedRecordingPath.Substring(savedRecordingPath.LastIndexOf('\\') + 1);
+            savedRecordingName = savedRecordingName.Remove(savedRecordingName.Length - 4);
 
             var stream = new FileStream(path, FileMode.Open);
             currentRecording = serializer.Deserialize(stream) as Recording;
@@ -330,6 +336,12 @@ public class RhythmController : MonoBehaviour
         if (path.Length != 0)
         {
             savedRecordingPath = path;
+
+            if (path.Substring(path.Length - 4) != ".xml")
+                path += ".xml";
+
+            savedRecordingName = savedRecordingPath.Substring(savedRecordingPath.LastIndexOf('\\') + 1);
+            savedRecordingName = savedRecordingName.Remove(savedRecordingName.Length - 4);
 
             var stream = new FileStream(path, FileMode.Open);
             currentRecording = serializer.Deserialize(stream) as Recording;
@@ -565,7 +577,8 @@ public class RhythmController : MonoBehaviour
     {
         if (!isSaved || savedRecordingPath.Length == 0)
             SaveRecording();
-        if(savedRecordingPath.Length != 0)
+
+        if (savedRecordingPath.Length != 0)
             CrossSceneController.MakerToGame(savedRecordingPath);
     }
 
@@ -585,6 +598,6 @@ public class RhythmController : MonoBehaviour
 
     public void UploadRecording()
     {
-        workshopController.UploadRecording("gabrieltm9", savedRecordingPath, savedRecordingName);
+        workshopController.UploadRecording("gabrieltm9", savedRecordingPath, savedRecordingName + ".xml");
     }
 }

@@ -47,9 +47,9 @@ public class SelectorRunner : MonoBehaviour
         }
         else if (collision.tag == "SliderArrow")
         {
-            if (!collision.GetComponent<SliderController>().hasBeenHit)
+            if (!collision.transform.parent.GetComponent<SliderController>().hasBeenHit)
             {
-                collision.GetComponent<SliderController>().canBeHit = false;
+                collision.transform.parent.GetComponent<SliderController>().canBeHit = false;
                 rhythmRunner.UpdateNotesMissed(1);
                 selectableSlider = null;
             }
