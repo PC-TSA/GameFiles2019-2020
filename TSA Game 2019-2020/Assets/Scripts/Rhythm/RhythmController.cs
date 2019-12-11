@@ -61,10 +61,13 @@ public class RhythmController : MonoBehaviour
     public List<GameObject> spaceGameObjects;
 
     public string savedRecordingPath; //The path of the last saved recording
+    public string savedRecordingName;
 
     public bool isSaved; //Set to false any time something changes, set to true when the recording is saved. Used to decide whether to prompt the player to save when exiting scene and/or autosave if implemented later
 
     public GameObject splashTitlePrefab;
+
+    public WorkshopController workshopController;
 
     private void Start()
     {
@@ -84,7 +87,7 @@ public class RhythmController : MonoBehaviour
             LoadRecording(CrossSceneController.recordingToLoad);
             CrossSceneController.recordingToLoad = "";
         }
-        else     
+        else
             currentRecording = new Recording();
     }
 
@@ -218,6 +221,9 @@ public class RhythmController : MonoBehaviour
 
             if (path.Substring(path.Length - 4) != ".xml")
                 path += ".xml";
+
+            savedRecordingName = savedRecordingPath.Substring(savedRecordingPath.LastIndexOf('\\'));
+            savedRecordingName = savedRecordingName.Remove(savedRecordingName.Length - 4);
 
             var stream = new FileStream(path, FileMode.Create);
             serializer.Serialize(stream, currentRecording);
@@ -575,5 +581,10 @@ public class RhythmController : MonoBehaviour
     {
         yield return new WaitForSeconds(title.GetComponent<Animation>().clip.length);
         Destroy(title);
+    }
+
+    public void UploadRecording()
+    {
+        workshopController.UploadRecording("gabrieltm9", savedRecordingPath, savedRecordingName);
     }
 }
