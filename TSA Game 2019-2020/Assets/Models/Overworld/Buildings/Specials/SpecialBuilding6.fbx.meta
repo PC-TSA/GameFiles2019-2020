@@ -1,35 +1,15 @@
 fileFormatVersion: 2
-guid: deca18718ad352b4095e16fbf96b90ed
+guid: 98ae692e260036d4aae42c96d6e8c337
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: pCube179
-    100002: pCube180
-    100004: pCube181
-    100006: pCube182
-    100008: SpecialBuilding11
-    100010: SpecialBuilding12
-    100012: //RootNode
-    100014: transform26
-    100016: transform27
-    100018: transform28
-    100020: transform29
-    400000: pCube179
-    400002: pCube180
-    400004: pCube181
-    400006: pCube182
-    400008: SpecialBuilding11
-    400010: SpecialBuilding12
-    400012: //RootNode
-    400014: transform26
-    400016: transform27
-    400018: transform28
-    400020: transform29
+    100000: //RootNode
+    400000: //RootNode
     2100000: lambert1
     2100002: WindowBlue
-    2300000: SpecialBuilding12
-    3300000: SpecialBuilding12
-    4300000: SpecialBuilding12
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: SpecialBuilding13
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -61,7 +41,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 100
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
