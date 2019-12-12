@@ -47,28 +47,37 @@ public class SelectorRunner : MonoBehaviour
         }
         else if (collision.tag == "SliderArrow")
         {
-            if (!collision.transform.parent.GetComponent<SliderController>().hasBeenHit)
+            Transform parent = collision.transform.parent;
+            if (parent.GetComponent<SliderController>() != null)
             {
-                collision.transform.parent.GetComponent<SliderController>().canBeHit = false;
-                rhythmRunner.UpdateNotesMissed(1);
-                selectableSlider = null;
+                if (!parent.GetComponent<SliderController>().hasBeenHit)
+                {
+                    parent.GetComponent<SliderController>().canBeHit = false;
+                    rhythmRunner.UpdateNotesMissed(1);
+                    selectableSlider = null;
+                }
             }
+
         }
         else if (collision.tag == "SliderSprite")
         {
-            if (collision.transform.parent.parent.GetComponent<SliderController>().incompleteHit) //Separate from top if b/c notesMissed is called when the slider stops being hit half way instead of doing it here when it is dissapearing
+            Transform parent = collision.transform.parent.parent;
+            if (parent.GetComponent<SliderController>() != null)
             {
-                collision.transform.parent.parent.GetComponent<SliderController>().StartDeathFade();
+                if (parent.GetComponent<SliderController>().incompleteHit || !parent.GetComponent<SliderController>().hasBeenHit) //Separate from top if b/c notesMissed is called when the slider stops being hit half way instead of doing it here when it is dissapearing
+                {
+                    parent.GetComponent<SliderController>().StartDeathFade();
+                }
+                else
+                {
+                    rhythmRunner.UpdateNotesHit(1);
+                    rhythmRunner.UpdateScore(1);
+                    parent.GetComponent<SliderController>().HitDeath();
+                    selectableSliderBeingHit = false;
+                    noteHitParticle.Stop();
+                }
+                selectableSlider = null;
             }
-            else
-            {
-                rhythmRunner.UpdateNotesHit(1);
-                rhythmRunner.UpdateScore(1);
-                selectableSlider.GetComponent<SliderController>().HitDeath();
-                selectableSliderBeingHit = false;
-                noteHitParticle.Stop();
-            }
-            selectableSlider = null;
         }
     }
 
