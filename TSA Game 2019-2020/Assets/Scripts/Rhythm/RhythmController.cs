@@ -217,10 +217,11 @@ public class RhythmController : MonoBehaviour
         if (path.Length != 0)
         {
             isSaved = true;
-            savedRecordingPath = path;
 
             if (path.Substring(path.Length - 4) != ".xml")
                 path += ".xml";
+
+            savedRecordingPath = path;
 
             savedRecordingName = savedRecordingPath.Substring(savedRecordingPath.LastIndexOf('\\') + 1);
             savedRecordingName = savedRecordingName.Remove(savedRecordingName.Length - 4);

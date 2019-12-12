@@ -91,7 +91,7 @@ public class BlobStorage : BaseStorage
 
 		WriteLine("File written to " + path);
 
-		/*// Clean up after the demo 
+		// Clean up after the demo 
 		WriteLine("5. Delete block Blob");
 		await blockBlob.DeleteAsync();
 
@@ -99,7 +99,7 @@ public class BlobStorage : BaseStorage
 		// name - hence to enable you to run the demo in quick succession the container is not deleted. If you want 
 		// to delete the container uncomment the line of code below. 
 		WriteLine("6. Delete Container -- Note that it will take a few seconds before you can recreate a container with the same name");
-		await container.DeleteAsync();*/
+		await container.DeleteAsync();
 
 		WriteLine("-- Test Complete --");
 	}
@@ -151,7 +151,7 @@ public class BlobStorage : BaseStorage
 		int bytesRead = await pageBlob.DownloadRangeToByteArrayAsync(samplePagedata, 0, 0, samplePagedata.Length);
 		WriteLine($"Read {bytesRead} bytes from blob");
 
-		/*/ Clean up after the demo 
+		// Clean up after the demo 
 		WriteLine("5. Delete page Blob");
 		await pageBlob.DeleteAsync();
 
@@ -159,7 +159,7 @@ public class BlobStorage : BaseStorage
 		// name - hence to enable you to run the demo in quick succession the container is not deleted. If you want 
 		// to delete the container uncomment the line of code below. 
 		WriteLine("6. Delete Container");
-		await container.DeleteAsync();*/
+		await container.DeleteAsync();
 
 		WriteLine("-- Test Complete --");
 	}

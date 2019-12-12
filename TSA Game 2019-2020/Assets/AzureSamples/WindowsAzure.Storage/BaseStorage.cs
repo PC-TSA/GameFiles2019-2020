@@ -10,8 +10,9 @@ public class BaseStorage : MonoBehaviour
 	private Text _myText;
 
 	// Use this for initialization
-	void Awake ()
+	void Start ()
 	{
+		_myText = GameObject.Find("DebugText").GetComponent<Text>();
 		StorageAccount = CloudStorageAccount.Parse(ConnectionString);
 	}
 
