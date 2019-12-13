@@ -15,7 +15,7 @@ public class SQLController : MonoBehaviour
 
     public bool isWorkshopOpen;
 
-    string connectionString = "Data Source=tritonal.database.windows.net,1433; Database=TriTonalSQL; User ID=Client; Password=Iteam2015";
+    string connectionString = "Data Source=tritonal.database.windows.net,1433; Database=TriTonalSQL; User ID=client; Password=z+0+8ZtCm6vPNXnPnixbslEpoSk1Sj8gzPm8wq3idH8";
 
     public string shareName = "workshop";
 
