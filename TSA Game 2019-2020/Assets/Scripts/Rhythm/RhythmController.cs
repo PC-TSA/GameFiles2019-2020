@@ -67,6 +67,8 @@ public class RhythmController : MonoBehaviour
 
     public GameObject splashTitlePrefab;
 
+    public WorkshopController workshopController;
+
     private void Start()
     {
         Object[] temp = Resources.LoadAll("Songs", typeof(AudioClip)); //Read all audioclips in the Resources/Songs folder and add them to the 'Songs' list
@@ -597,6 +599,6 @@ public class RhythmController : MonoBehaviour
 
     public void UploadRecording()
     {
-        //workshopController.UploadRecording("gabrieltm9", savedRecordingPath, savedRecordingName + ".xml");
+        workshopController.UploadRecording("gabrieltm9", savedRecordingPath, savedRecordingName + ".xml");
     }
 }

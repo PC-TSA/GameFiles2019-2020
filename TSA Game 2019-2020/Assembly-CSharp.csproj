@@ -67,6 +67,11 @@
     <Compile Include="Assets\ARTnGAME\SunShaftsSRP\Shaders - Scripts\SunShaftsHDRP.cs" />
     <Compile Include="Assets\ARTnGAME\VolumeFogSRP\Scripts - Shaders\controlVolumeFogSRPPOSTFX.cs" />
     <Compile Include="Assets\ARTnGAME\VolumeFogSRP\Scripts - Shaders\VolumeFogSM_SRP.cs" />
+    <Compile Include="Assets\AzureSamples\WindowsAzure.Storage\BaseStorage.cs" />
+    <Compile Include="Assets\AzureSamples\WindowsAzure.Storage\BlobStorage.cs" />
+    <Compile Include="Assets\AzureSamples\WindowsAzure.Storage\FileStorage.cs" />
+    <Compile Include="Assets\AzureSamples\WindowsAzure.Storage\QueueStorage.cs" />
+    <Compile Include="Assets\AzureSamples\WindowsAzure.Storage\TableStorage.cs" />
     <Compile Include="Assets\Scripts\CrossSceneController.cs" />
     <Compile Include="Assets\Scripts\FPSDisplay.cs" />
     <Compile Include="Assets\Scripts\Rhythm\BeatGenController.cs" />
@@ -91,7 +96,7 @@
     <Compile Include="Assets\Scripts\Rhythm\Visualization\WaveformVisualizer.cs" />
     <Compile Include="Assets\Scripts\SimpleCameraController.cs" />
     <Compile Include="Assets\Scripts\UI\ButtonHighlighter.cs" />
-    <Compile Include="Assets\Scripts\Workshop\SQLController.cs" />
+    <Compile Include="Assets\Scripts\Workshop\WorkshopController.cs" />
     <Compile Include="Assets\StandaloneFileBrowser\IStandaloneFileBrowser.cs" />
     <Compile Include="Assets\StandaloneFileBrowser\Sample\BasicSample.cs" />
     <Compile Include="Assets\StandaloneFileBrowser\Sample\CanvasSampleOpenFileImage.cs" />
@@ -422,6 +427,7 @@
     </Reference>
     <Reference Include="UnityEngine.SpatialTracking">
       <HintPath>E:/Unity/2018.4.12f1/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
+<<<<<<< HEAD
     </Reference>
     <Reference Include="Mono.Data.Sqlite">
       <HintPath>E:/Game Making/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/Mono.Data.Sqlite.dll</HintPath>
@@ -437,6 +443,17 @@
     </Reference>
     <Reference Include="System.Security">
       <HintPath>E:/Game Making/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/System.Security.dll</HintPath>
+=======
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage">
+      <HintPath>E:/Game Making/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>E:/Game Making/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reflection.TypeExtensions">
+      <HintPath>E:/Game Making/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/System.Reflection.TypeExtensions.dll</HintPath>
+>>>>>>> parent of 4612202... SQL Database foundation
     </Reference>
     <Reference Include="Ookii.Dialogs">
       <HintPath>E:/Game Making/GameFiles 2019-2020/TSA Game 2019-2020/Assets/StandaloneFileBrowser/Plugins/Ookii.Dialogs.dll</HintPath>

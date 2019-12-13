@@ -20529,6 +20529,7 @@ MonoBehaviour:
   isSaved: 0
   splashTitlePrefab: {fileID: 8806644418379813400, guid: b1e8884bc5bb67c4f87c934b6d7777a5,
     type: 3}
+  workshopController: {fileID: 0}
 --- !u!82 &1293953076
 AudioSource:
   m_ObjectHideFlags: 0
@@ -21090,15 +21091,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1331919530}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b11ebac4f1146894bbea221d2d91efb6, type: 3}
+  m_Script: {fileID: 11500000, guid: 3aa99f5d316a80845b8198db90192749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isWorkshopOpen: 0
+  connectionString: DefaultEndpointsProtocol=https;AccountName=tritonal;AccountKey=YQVpz7Gxy48K4wVxDtI2jX1kmhUot/J6wH3IKXEWNpNy/Th8JBdpefQ46SQytZRx4eIPyL05HJ0Da6egTfMXJA==;EndpointSuffix=core.windows.net
   shareName: workshop
   getSubAsyncsRunning: 0
-  workshopUI: {fileID: 0}
-  workshopContentObj: {fileID: 0}
-  workshopItemPrefab: {fileID: 0}
+  workshopUI: {fileID: 1386401817}
+  workshopContentObj: {fileID: 1601081759}
+  workshopItemPrefab: {fileID: 4647792407399442678, guid: 3ed6fa29c09d26f428abd1961a88bcd5,
+    type: 3}
 --- !u!1 &1343873529
 GameObject:
   m_ObjectHideFlags: 0
