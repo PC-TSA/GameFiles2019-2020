@@ -24,6 +24,7 @@ public class RhythmRunner : MonoBehaviour
     public int health = 20; //How much deathCount needs to reach to lose the game
     public float score; //Current score in a run; Every note hit += current combo, every FixedUpdate call a slider is hit + current combo * 0.01
     public int rank; //Letter ranking = Accuracy; E = < 20, D = 20-35, C = 35-50, B = 50-60, A = 60-80, S = 80-90, SS = 90+
+    public float accuracy; //Average accuracy between hits; Used to get rank ^
 
     public GameObject rhythmCanvasObj;
 
@@ -147,7 +148,12 @@ public class RhythmRunner : MonoBehaviour
         BreakCombo();
     }
 
-    public void UpdateRanking(int i)
+    public void UpdateRanking(float i)
+    {
+        
+    }
+
+    public void UpdateAccuracy(float i)
     {
 
     }
