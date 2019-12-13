@@ -137,6 +137,7 @@ public class WorkshopController : MonoBehaviour
 #else
 		await file.UploadFromFileAsync(filePath);
 #endif
+
 		Debug.Log("--Upload Complete--"); 
 	}
 

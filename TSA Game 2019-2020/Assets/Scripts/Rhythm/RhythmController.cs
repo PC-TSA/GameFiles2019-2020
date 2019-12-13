@@ -68,6 +68,7 @@ public class RhythmController : MonoBehaviour
     public GameObject splashTitlePrefab;
 
     public WorkshopController workshopController;
+    public LeaderboardController leaderboardController;
 
     private void Start()
     {
@@ -599,6 +600,10 @@ public class RhythmController : MonoBehaviour
 
     public void UploadRecording()
     {
+        //Upload to workshop
         workshopController.UploadRecording("gabrieltm9", savedRecordingPath, savedRecordingName + ".xml");
+
+        //Create leaderboard table
+        leaderboardController.NewLeaderboard(savedRecordingName);
     }
 }

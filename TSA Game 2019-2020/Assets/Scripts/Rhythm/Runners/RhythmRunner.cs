@@ -23,6 +23,7 @@ public class RhythmRunner : MonoBehaviour
     public int deathCount = 0; //How many notes have been missed in a row. (ex. if you miss 5, but then get 1 right, your deathCount is 4. Doesnt go above 0 and works independently of combo)
     public int health = 20; //How much deathCount needs to reach to lose the game
     public float score; //Current score in a run; Every note hit += current combo, every FixedUpdate call a slider is hit + current combo * 0.01
+    public int rank; //Letter ranking = Accuracy; E = < 20, D = 20-35, C = 35-50, B = 50-60, A = 60-80, S = 80-90, SS = 90+
 
     public GameObject rhythmCanvasObj;
 
@@ -82,6 +83,8 @@ public class RhythmRunner : MonoBehaviour
 
     public GameObject splashTitlePrefab;
 
+    public GameObject rhythmMakerButton;
+
     private void Start()
     {
         Object[] temp = Resources.LoadAll("Songs", typeof(AudioClip)); //Read all audioclips in the Resources/Songs folder and add them to the 'Songs' list
@@ -100,6 +103,7 @@ public class RhythmRunner : MonoBehaviour
             XMLRecordingName = name.Remove(name.Length - 4);
             StartCoroutine(DelayedStart(1, XMLRecordingPath));
             CrossSceneController.recordingToLoad = "";
+            rhythmMakerButton.SetActive(true);
         }
         else
             StartCoroutine(DelayedStart(1));
@@ -121,7 +125,7 @@ public class RhythmRunner : MonoBehaviour
     public void UpdateNotesHit(int i)
     {
         notesHit += i;
-        notesHitTxt.GetComponent<TextMeshProUGUI>().text = "Notes Hit: " + notesHit;
+        //notesHitTxt.GetComponent<TextMeshProUGUI>().text = "Notes Hit: " + notesHit;
         UpdateDeathCount(-i); //-i because the lower the death count the better and hitting a note is good
         UpdateCombo(i);
         AnimSpeedUp();
@@ -130,7 +134,7 @@ public class RhythmRunner : MonoBehaviour
     public void UpdateNotesMissed(int i)
     {
         notesMissed += i;
-        notesMissedTxt.GetComponent<TextMeshProUGUI>().text = "Notes Missed: " + notesMissed;
+        //notesMissedTxt.GetComponent<TextMeshProUGUI>().text = "Notes Missed: " + notesMissed;
         UpdateDeathCount(i);
         BreakCombo();
     }
@@ -138,15 +142,21 @@ public class RhythmRunner : MonoBehaviour
     public void UpdateMissclicks(int i)
     {
         missClicks += i;
-        missClicksTxt.GetComponent<TextMeshProUGUI>().text = "Misclicks: " + missClicks;
+        //missClicksTxt.GetComponent<TextMeshProUGUI>().text = "Misclicks: " + missClicks;
         UpdateDeathCount(i);
         BreakCombo();
+    }
+
+    public void UpdateRanking(int i)
+    {
+
     }
 
     public void UpdateScore(float multiplier)
     {
         score += combo * multiplier;
-        scoreCountTxt.GetComponent<TextMeshProUGUI>().text = "Score: " + score;
+        score = Mathf.Round(score * 100) / 100;
+        scoreCountTxt.GetComponent<TextMeshProUGUI>().text = "" + score;
     }
 
     public void LoadRecording() //Deserializes xml file and sets it as current recording
