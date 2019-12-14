@@ -12,7 +12,6 @@ public static class CrossSceneController
         recordingToLoad = recordingPath;
         if (recordingToLoad.Substring(recordingToLoad.Length - 4) != ".xml")
             recordingToLoad += ".xml";
-        SceneManager.LoadScene("Overworld");
     }
 
     public static void GameToMaker(string recordingName) //Triggered from game, sends current track to maker
@@ -20,6 +19,5 @@ public static class CrossSceneController
         recordingToLoad = recordingName;
         if (recordingToLoad.Substring(recordingToLoad.Length - 4) != ".xml")
             recordingToLoad += ".xml";
-        SceneManager.LoadScene("RhythmMaker");
     }
 }

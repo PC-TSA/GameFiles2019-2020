@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 using System.Xml;
 using System.Xml.Serialization;
@@ -23,8 +24,11 @@ public class RhythmRunner : MonoBehaviour
     public int deathCount = 0; //How many notes have been missed in a row. (ex. if you miss 5, but then get 1 right, your deathCount is 4. Doesnt go above 0 and works independently of combo)
     public int health = 20; //How much deathCount needs to reach to lose the game
     public float score; //Current score in a run; Every note hit += current combo, every FixedUpdate call a slider is hit + current combo * 0.01
-    public int rank; //Letter ranking = Accuracy; E = < 20, D = 20-35, C = 35-50, B = 50-60, A = 60-80, S = 80-90, SS = 90+
+    
     public float accuracy; //Average accuracy between hits; Used to get rank ^
+    public float totalAccuracy; //Each note hit's accuracy is added to this
+    public int accuracyTimesAdded; //Essentially how many notes have been hit. Divide total accuracy by this
+    public string ranking; //Letter ranking = accuracy in sections; D = < 30, C = 30-50, B = 50-70, A = 70-90, S = 90-95, SS = 95-100
 
     public GameObject rhythmCanvasObj;
 
@@ -34,6 +38,8 @@ public class RhythmRunner : MonoBehaviour
     public GameObject comboTxt;
     public GameObject deathCountTxt;
     public GameObject scoreCountTxt;
+    public GameObject accuracyTxt;
+    public GameObject rankingTxt;
 
     public List<AudioClip> songs;
 
@@ -85,6 +91,9 @@ public class RhythmRunner : MonoBehaviour
     public GameObject splashTitlePrefab;
 
     public GameObject rhythmMakerButton;
+
+    public GameObject loadingBar;
+    public List<GameObject> loadingTextPeriods;
 
     private void Start()
     {
@@ -148,14 +157,31 @@ public class RhythmRunner : MonoBehaviour
         BreakCombo();
     }
 
-    public void UpdateRanking(float i)
-    {
-        
-    }
-
     public void UpdateAccuracy(float i)
     {
+        totalAccuracy += i;
+        accuracyTimesAdded++;
+        accuracy = totalAccuracy / accuracyTimesAdded;
+        accuracy = Mathf.Round(accuracy * 10) / 10;
+        UpdateRanking();
+        accuracyTxt.GetComponent<TMP_Text>().text = accuracy + "%";
+    }
 
+    public void UpdateRanking()
+    {
+        if (accuracy <= 30)
+            ranking = "D";
+        else if (accuracy > 30 && accuracy <= 50)
+            ranking = "C";
+        else if (accuracy > 50 && accuracy <= 70)
+            ranking = "B";
+        else if (accuracy > 70 && accuracy <= 90)
+            ranking = "A";
+        else if (accuracy > 90 && accuracy <= 95)
+            ranking = "S";
+        else if (accuracy > 95)
+            ranking = "SS";
+        rankingTxt.GetComponent<TMP_Text>().text = ranking;
     }
 
     public void UpdateScore(float multiplier)
@@ -458,6 +484,7 @@ public class RhythmRunner : MonoBehaviour
     public void ToRhythmMaker()
     {
         CrossSceneController.GameToMaker(XMLRecordingPath);
+        StartCoroutine(LoadAsyncScene("RhythmMaker"));
     }
 
     public void SpawnSplashTitle(string titleText, Color titleColor)
@@ -472,5 +499,40 @@ public class RhythmRunner : MonoBehaviour
     {
         yield return new WaitForSeconds(title.GetComponent<Animation>().clip.length);
         Destroy(title);
+    }
+
+    IEnumerator LoadAsyncScene(string scene)
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene);
+        StartCoroutine(LoadingBar());
+        // Wait until the asynchronous scene fully loads
+        while (!asyncLoad.isDone)
+        {
+            loadingBar.GetComponent<Slider>().value = asyncLoad.progress;
+            yield return null;
+        }
+    }
+
+    IEnumerator LoadingBar()
+    {
+        loadingBar.SetActive(true);
+        int periodIndex = 0;
+        while (true)
+        {
+            for (int i = 0; i < loadingTextPeriods.Count; i++)
+                if (i == periodIndex)
+                    loadingTextPeriods[i].SetActive(true);
+
+            if (periodIndex == loadingTextPeriods.Count)
+            {
+                periodIndex = 0;
+                foreach (GameObject obj in loadingTextPeriods)
+                    obj.SetActive(false);
+            }
+            else
+                periodIndex++;
+
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 }

@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.File;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 
 public class WorkshopController : MonoBehaviour
-{
-	public bool isWorkshopOpen;
-	
+{	
 	public string connectionString;
 
 	public string shareName = "workshop";
@@ -26,9 +26,17 @@ public class WorkshopController : MonoBehaviour
 
 	public CloudStorageAccount StorageAccount;
 
+	public GameObject loadingBar;
+	public List<GameObject> loadingTextPeriods;
+
 	private void Awake()
 	{
 		StorageAccount = CloudStorageAccount.Parse(connectionString);
+	}
+
+	private void Start()
+	{
+		OpenWorkshop();
 	}
 
 	public void PopulateWorkshop(string s)
@@ -37,21 +45,16 @@ public class WorkshopController : MonoBehaviour
 		item.transform.GetChild(1).GetComponent<TMP_Text>().text = s;
 	}
 
-	public void ToggleWorkshop()
-	{
-		isWorkshopOpen = !isWorkshopOpen;
-		if (isWorkshopOpen)
-			OpenWorkshop();
-		else
-			workshopUI.SetActive(false);
-	}
-
 	void OpenWorkshop()
 	{
-		workshopUI.SetActive(true);
 		for (int i = 0; i < workshopContentObj.transform.childCount; i++) //Clear content
 			Destroy(workshopContentObj.transform.GetChild(i).gameObject);
 		ListAll();
+	}
+
+	public void ExitWorkshop()
+	{
+		StartCoroutine(LoadAsyncScene("MainMenu"));
 	}
 
 	public async void ListAll()
@@ -173,6 +176,41 @@ public class WorkshopController : MonoBehaviour
 		{
 			Debug.Log(file.Name + " | " + file.Uri);
 			PopulateWorkshop(file.Name.Substring(0, file.Name.Length - 4));
+		}
+	}
+
+	IEnumerator LoadAsyncScene(string scene)
+	{
+		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene);
+		StartCoroutine(LoadingBar());
+		// Wait until the asynchronous scene fully loads
+		while (!asyncLoad.isDone)
+		{
+			loadingBar.GetComponent<Slider>().value = asyncLoad.progress;
+			yield return null;
+		}
+	}
+
+	IEnumerator LoadingBar()
+	{
+		loadingBar.SetActive(true);
+		int periodIndex = 0;
+		while (true)
+		{
+			for (int i = 0; i < loadingTextPeriods.Count; i++)
+				if (i == periodIndex)
+					loadingTextPeriods[i].SetActive(true);
+
+			if (periodIndex == loadingTextPeriods.Count)
+			{
+				periodIndex = 0;
+				foreach (GameObject obj in loadingTextPeriods)
+					obj.SetActive(false);
+			}
+			else
+				periodIndex++;
+
+			yield return new WaitForSeconds(0.5f);
 		}
 	}
 }
