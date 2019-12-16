@@ -95,6 +95,8 @@ public class RhythmRunner : MonoBehaviour
     public GameObject loadingBar;
     public List<GameObject> loadingTextPeriods;
 
+    public GameObject endTrackScreen;
+
     private void Start()
     {
         Object[] temp = Resources.LoadAll("Songs", typeof(AudioClip)); //Read all audioclips in the Resources/Songs folder and add them to the 'Songs' list
@@ -123,6 +125,11 @@ public class RhythmRunner : MonoBehaviour
     {
         //Smoothly lerps vignette to deathCount / 20 value
         vignette.intensity.value = Mathf.Lerp(vignette.intensity.value, vignetteNewVal, Time.deltaTime);
+
+        if(!audioSource.isPlaying)
+        {
+
+        }
     }
 
     private void FixedUpdate()
@@ -501,7 +508,7 @@ public class RhythmRunner : MonoBehaviour
         Destroy(title);
     }
 
-    IEnumerator LoadAsyncScene(string scene)
+    public IEnumerator LoadAsyncScene(string scene)
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene);
         StartCoroutine(LoadingBar());
@@ -534,5 +541,10 @@ public class RhythmRunner : MonoBehaviour
 
             yield return new WaitForSeconds(0.5f);
         }
+    }
+
+    void FinishTrack()
+    {
+        endTrackScreen.SetActive(true);
     }
 }

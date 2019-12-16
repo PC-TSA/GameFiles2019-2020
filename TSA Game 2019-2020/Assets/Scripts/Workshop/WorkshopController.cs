@@ -24,18 +24,15 @@ public class WorkshopController : MonoBehaviour
 	public GameObject workshopContentObj;
 	public GameObject workshopItemPrefab;
 
+	public NetworkingUtilities networkingUtilities;
 	public CloudStorageAccount StorageAccount;
 
 	public GameObject loadingBar;
 	public List<GameObject> loadingTextPeriods;
 
-	private void Awake()
-	{
-		StorageAccount = CloudStorageAccount.Parse(connectionString);
-	}
-
 	private void Start()
 	{
+		StorageAccount = networkingUtilities.StorageAccount;
 		OpenWorkshop();
 	}
 

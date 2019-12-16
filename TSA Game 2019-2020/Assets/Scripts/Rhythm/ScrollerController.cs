@@ -159,6 +159,8 @@ public class ScrollerController : MonoBehaviour
 
     public void ChangeScrollSpeed()
     {
-        scrollSpeed = float.Parse(speedPickerInputField.GetComponent<TMP_InputField>().text);
+        string temp = speedPickerInputField.GetComponent<TMP_InputField>().text;
+        if(temp.Length > 0) //If is not null
+            scrollSpeed = float.Parse(temp);
     }
 }

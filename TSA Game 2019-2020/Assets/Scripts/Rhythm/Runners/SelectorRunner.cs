@@ -166,7 +166,6 @@ public class SelectorRunner : MonoBehaviour
             rhythmRunner.SpawnSplashTitle("Perfect", Color.green);
         }
         rhythmRunner.UpdateAccuracy(100 - hitAccuracy);
-        Debug.Log(100 - hitAccuracy);
     }
 
     public void SliderHitAccuracy(GameObject slider)

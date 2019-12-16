@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Recording
 {
+    public string songName; //The name of the song this recording was made for
+    public string songArtist; //The name of the artist of the song this recording was made for; Not the maker of this recording
+    public string trackArtist; //The name of the player who made this track
+    public string trackDifficulty; //The track's diffilculty as specified by it's maker; Easy -> Medium -> Hard -> Expert
+
     public string clipName; //The name of the audio clip that these tamp stamps pertain to; NOT the audio clip itself
     public float scrollSpeed; //The speed at which this recording should scroll; If different from the speed at which it was recorded the notes wont fit the song's beat
     public int laneCount = 3; //How many lanes should be used to play this song

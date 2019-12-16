@@ -68,8 +68,7 @@ public class RhythmController : MonoBehaviour
 
     public GameObject splashTitlePrefab;
 
-    public WorkshopController workshopController;
-    public LeaderboardController leaderboardController;
+    public NetworkingUtilities networkingUtilities;
 
     public GameObject loadingBar;
     public List<GameObject> loadingTextPeriods;
@@ -613,10 +612,10 @@ public class RhythmController : MonoBehaviour
     public void UploadRecording()
     {
         //Upload to workshop
-        workshopController.UploadRecording("gabrieltm9", savedRecordingPath, savedRecordingName + ".xml");
+        networkingUtilities.UploadRecording("gabrieltm9", savedRecordingPath, savedRecordingName + ".xml");
 
-        //Create leaderboard table
-        leaderboardController.NewLeaderboard(savedRecordingName);
+        //Create leaderboard table1
+        networkingUtilities.NewLeaderboard(savedRecordingName);
     }
 
     IEnumerator LoadAsyncScene(string scene)
