@@ -12,8 +12,6 @@ using System.Collections;
 
 public class WorkshopController : MonoBehaviour
 {	
-	public string connectionString;
-
 	public string shareName = "workshop";
 
 	public int getSubAsyncsRunning = 0; //While this is > 0 ListAll will wait for these to finish before listing
@@ -170,10 +168,7 @@ public class WorkshopController : MonoBehaviour
 		while (getSubAsyncsRunning > 0) { yield return new WaitForSeconds(0.1f); }
 
 		foreach (CloudFile file in recordings)
-		{
-			Debug.Log(file.Name + " | " + file.Uri);
 			PopulateWorkshop(file.Name.Substring(0, file.Name.Length - 4));
-		}
 	}
 
 	IEnumerator LoadAsyncScene(string scene)

@@ -44,6 +44,7 @@ public class RhythmController : MonoBehaviour
 
     public GameObject EditModeButton;
     public GameObject StartPauseButton;
+    public List<Sprite> startPauseIcons; //0 = start, 1 = pause
 
     public List<KeyCode> laneKeycodes = new List<KeyCode>(); //index 0 = left lane, 1 = middle lane, 2 == right lane; values gotten by SelectorComponent.cs
     public List<KeyCode> manualGenKeycodes = new List<KeyCode>(); //^; alternate keys used for placing notes in manual gen mode
@@ -123,13 +124,13 @@ public class RhythmController : MonoBehaviour
     {
         audioSource.Play();
         sliderController.SetSlider();
-        StartPauseButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Pause";
+        StartPauseButton.transform.GetChild(0).GetComponent<Image>().sprite = startPauseIcons[0];
     }
 
     void PauseLevel()
     {
         audioSource.Pause();
-        StartPauseButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Start";
+        StartPauseButton.transform.GetChild(0).GetComponent<Image>().sprite = startPauseIcons[1];
     }
 
     void StartPause()
@@ -180,12 +181,14 @@ public class RhythmController : MonoBehaviour
     {
         Texture2D tex = GetComponent<WaveformVisualizer>().PaintWaveformSpectrum(audioSource.clip, 1, (int) waveformObj.GetComponent<RectTransform>().sizeDelta.x, (int) waveformObj.GetComponent<RectTransform>().sizeDelta.y, Color.yellow);
         waveformObj.GetComponent<Image>().sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-        waveformObj.GetComponent<Image>().color = Color.white;  
+        waveformObj.GetComponent<Image>().color = Color.white;
+        waveformObj.SetActive(true);
     }
 
     public void UpdateWaveform()
     {
-        waveformObj.transform.GetChild(0).transform.localPosition = new Vector3(((sliderController.GetComponent<Slider>().value * waveformObj.GetComponent<RectTransform>().sizeDelta.x) / audioSource.clip.length) - (waveformObj.GetComponent<RectTransform>().sizeDelta.x / 2), 0, 0);
+        if(audioSource.clip != null)
+            waveformObj.transform.GetChild(0).localPosition = new Vector3(((sliderController.GetComponent<Slider>().value * waveformObj.GetComponent<RectTransform>().sizeDelta.x) / audioSource.clip.length) - (waveformObj.GetComponent<RectTransform>().sizeDelta.x / 2), 0, 0);
     }
 
     public void SelectSong()
@@ -475,7 +478,7 @@ public class RhythmController : MonoBehaviour
         if (canParse != 0)
         {
             int count = int.Parse(laneCountPicker.GetComponent<TMP_InputField>().text);
-            if (count > 0 && count < 5)
+            if (count > 0 && count <= lanes.Count)
             {
                 laneCount = count;
                 currentRecording.laneCount = laneCount;
@@ -489,7 +492,18 @@ public class RhythmController : MonoBehaviour
                         lanes[index].SetActive(false);
                     index++;
                 }
+                laneCountPicker.transform.GetChild(0).GetChild(1    ).GetComponent<TMP_Text>().text = "" + count;
             }
+            else
+            {
+                if (count < 0) //If they inputted something less than 0
+                    count = 0;
+                else //If they inputted something greater than the max lane count
+                    count = lanes.Count;
+                laneCountPicker.GetComponent<TMP_InputField>().text = "" + count;
+                laneCountPicker.transform.GetChild(0).GetChild(1).GetComponent<TMP_Text>().text = "" + count;
+            }
+
 
             UpdateSpaceSelector();
         }
