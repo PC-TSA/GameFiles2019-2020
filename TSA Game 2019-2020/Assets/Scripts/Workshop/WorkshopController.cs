@@ -11,7 +11,7 @@ using TMPro;
 using System.Collections;
 
 public class WorkshopController : MonoBehaviour
-{	
+{
 	public string shareName = "workshop";
 
 	public int getSubAsyncsRunning = 0; //While this is > 0 ListAll will wait for these to finish before listing
@@ -34,10 +34,10 @@ public class WorkshopController : MonoBehaviour
 		OpenWorkshop();
 	}
 
-	public void PopulateWorkshop(string s)
+	public void PopulateWorkshop(Sprite coverSprite, string songName, string songArtist, string trackArtist, string difficulty)
 	{
 		GameObject item = Instantiate(workshopItemPrefab, workshopContentObj.transform);
-		item.transform.GetChild(1).GetComponent<TMP_Text>().text = s;
+		item.GetComponent<WorkshopItemController>().InitializeItem(coverSprite, songName, songArtist, trackArtist, difficulty); 
 	}
 
 	void OpenWorkshop()
@@ -89,9 +89,9 @@ public class WorkshopController : MonoBehaviour
 		{
 			// listItem type will be CloudFile or CloudFileDirectory
 			if (listItem is CloudFileDirectory)
-				GetSubs((CloudFileDirectory) listItem); //Get subdirectories
+				GetSubs((CloudFileDirectory)listItem); //Get subdirectories
 			else
-				recordings.Add((CloudFile) listItem);
+				recordings.Add((CloudFile)listItem);
 		}
 
 		StartCoroutine(WaitForSubs());
@@ -99,7 +99,7 @@ public class WorkshopController : MonoBehaviour
 		Debug.Log("--Listing Complete--");
 	}
 
-	public async void UploadRecording(string directory, string filePath, string fileName)
+	public async void UploadRecording(Recording recording, string directory, string filePath)
 	{
 		Debug.Log("--Starting Upload--");
 
@@ -126,6 +126,7 @@ public class WorkshopController : MonoBehaviour
 		await dir.CreateIfNotExistsAsync();
 
 		// Uploading a local file to the directory created above 
+		string fileName = recording.songName + " | " + recording.songArtist + " | " + recording.trackDifficulty + " | " + recording.trackArtist;
 		CloudFile file = dir.GetFileReference(fileName);
 
 #if WINDOWS_UWP && ENABLE_DOTNET
@@ -136,7 +137,7 @@ public class WorkshopController : MonoBehaviour
 		await file.UploadFromFileAsync(filePath);
 #endif
 
-		Debug.Log("--Upload Complete--"); 
+		Debug.Log("--Upload Complete--");
 	}
 
 	async void GetSubs(CloudFileDirectory directory)
@@ -156,7 +157,7 @@ public class WorkshopController : MonoBehaviour
 				if (listItem is CloudFileDirectory)
 					GetSubs((CloudFileDirectory)listItem); //Get subdirectories
 				else
-					recordings.Add((CloudFile) listItem);
+					recordings.Add((CloudFile)listItem);
 			}
 		}
 		while (token != null);
@@ -168,7 +169,11 @@ public class WorkshopController : MonoBehaviour
 		while (getSubAsyncsRunning > 0) { yield return new WaitForSeconds(0.1f); }
 
 		foreach (CloudFile file in recordings)
-			PopulateWorkshop(file.Name.Substring(0, file.Name.Length - 4));
+		{
+			string songName = file.Name.Substring(0, file.Name.Length - 4);
+			PopulateWorkshop(null, songName, "", "", "");
+			//GET VALUES ABOVE BY READING FILE NAME AND SEARCHING FOR '|' DIVIDING SONG NAME | SONG ARITST | DIFFICULTY | TRACK ARTIST
+		}
 	}
 
 	IEnumerator LoadAsyncScene(string scene)
@@ -204,5 +209,10 @@ public class WorkshopController : MonoBehaviour
 
 			yield return new WaitForSeconds(0.5f);
 		}
+	}
+
+	public void OpenItem(GameObject item)
+	{
+
 	}
 }
