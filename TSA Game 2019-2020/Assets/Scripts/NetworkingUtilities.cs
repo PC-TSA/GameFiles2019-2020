@@ -13,7 +13,12 @@ public class NetworkingUtilities : MonoBehaviour
 	public CloudStorageAccount StorageAccount;
 	private void Awake()
 	{
-		StorageAccount = CloudStorageAccount.Parse(connectionString);
+		StorageAccount = SetStorageAccount();
+	}
+
+	public CloudStorageAccount SetStorageAccount()
+	{
+		return CloudStorageAccount.Parse(connectionString);
 	}
 
 	public async void UploadRecording(string directory, string filePath, string fileName)

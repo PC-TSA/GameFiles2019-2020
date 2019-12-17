@@ -78,6 +78,7 @@ public class RhythmRunner : MonoBehaviour
     public PostProcessVolume postProcessingVolume;
     Vignette vignette;
     public float vignetteNewVal;
+    public float vignetteLerpSpeed;
 
     public float customSpeed;
 
@@ -96,6 +97,8 @@ public class RhythmRunner : MonoBehaviour
     public List<GameObject> loadingTextPeriods;
 
     public GameObject endTrackScreen;
+
+    public Slider deathCountSlider;
 
     private void Start()
     {
@@ -119,17 +122,15 @@ public class RhythmRunner : MonoBehaviour
         }
         else
             StartCoroutine(DelayedStart(1));
+
+        deathCountSlider.maxValue = health;
+        deathCountSlider.value = health;
     }
 
     private void Update()
     {
         //Smoothly lerps vignette to deathCount / 20 value
-        vignette.intensity.value = Mathf.Lerp(vignette.intensity.value, vignetteNewVal, Time.deltaTime);
-
-        if(!audioSource.isPlaying)
-        {
-
-        }
+        vignette.intensity.value = Mathf.Lerp(vignette.intensity.value, vignetteNewVal, Time.deltaTime * vignetteLerpSpeed);
     }
 
     private void FixedUpdate()
@@ -327,7 +328,8 @@ public class RhythmRunner : MonoBehaviour
         sliderSpriteChild.GetComponent<RectTransform>().sizeDelta = new Vector2(sliderSpriteChild.GetComponent<RectTransform>().sizeDelta.x, s.height);
 
         sliderMaskChild.transform.localPosition = new Vector3(sliderMaskChild.transform.localPosition.x, s.height / 2, newSlider.transform.localPosition.z);
-        sliderSpriteChild.GetComponent<BoxCollider>().size = new Vector3(sliderSpriteChild.GetComponent<BoxCollider>().size.x, s.height, sliderSpriteChild.GetComponent<BoxCollider>().size.z);
+        sliderSpriteChild.GetComponent<BoxCollider>().size = new Vector3(sliderSpriteChild.GetComponent<BoxCollider>().size.x, s.height - 70, sliderSpriteChild.GetComponent<BoxCollider>().size.z);
+        sliderSpriteChild.GetComponent<BoxCollider>().center = new Vector3(sliderSpriteChild.GetComponent<BoxCollider>().center.x, sliderSpriteChild.GetComponent<BoxCollider>().center.y - 35, sliderSpriteChild.GetComponent<BoxCollider>().center.z); //-35 & -70 (above) to make slider not need to completely exit selector zone to end sliding
     }
 
     public void DeserializeSpace(SpaceObj s)
@@ -374,6 +376,8 @@ public class RhythmRunner : MonoBehaviour
                 //Update vignette
                 vignetteNewVal = 0.25f + (deathCount * 0.1f / health);
             }
+           
+            deathCountSlider.value = health - deathCount;
         }
     }
 

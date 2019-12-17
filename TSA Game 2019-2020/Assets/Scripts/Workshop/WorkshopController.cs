@@ -30,7 +30,7 @@ public class WorkshopController : MonoBehaviour
 
 	private void Start()
 	{
-		StorageAccount = networkingUtilities.StorageAccount;
+		StorageAccount = networkingUtilities.SetStorageAccount();
 		OpenWorkshop();
 	}
 

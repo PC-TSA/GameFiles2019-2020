@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Playables;
 
 public class MainMenuController : MonoBehaviour
 {
     public GameObject loadingBar;
     public List<GameObject> loadingTextPeriods;
+
+    public GameObject mainMenuCanvas;
+
+    public PlayableAsset mainMenuClose; //The timeline animation to slide the main menu back into the bar
 
     public void GoToMainGame()
     {
@@ -42,13 +47,29 @@ public class MainMenuController : MonoBehaviour
     IEnumerator LoadAsyncScene(string scene)
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene);
+        asyncLoad.allowSceneActivation = false;
         StartCoroutine(LoadingBar());
         // Wait until the asynchronous scene fully loads
+            bool isPlayingAnimOut = false;
         while (!asyncLoad.isDone)
         {
             loadingBar.GetComponent<Slider>().value = asyncLoad.progress;
+
+            if(asyncLoad.progress >= 0.9f && !isPlayingAnimOut)
+            {
+                isPlayingAnimOut = true;
+                mainMenuCanvas.GetComponent<PlayableDirector>().Play(mainMenuClose);
+                StartCoroutine(MainMenuAnimWait(asyncLoad));
+            }
+
             yield return null;
         }
+    }
+
+    IEnumerator MainMenuAnimWait(AsyncOperation op)
+    {
+        yield return new WaitForSeconds(1.5f);
+        op.allowSceneActivation = true;
     }
 
     IEnumerator LoadingBar()
