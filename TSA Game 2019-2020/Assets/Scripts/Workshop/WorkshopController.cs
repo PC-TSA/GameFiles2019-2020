@@ -4,15 +4,21 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.File;
+using Microsoft.WindowsAzure.Storage.Table;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using System.Xml;
+using System.Xml.Serialization;
+using SFB;
 
 public class WorkshopController : MonoBehaviour
 {
 	public string shareName = "workshop";
+
+	public string username;
 
 	public int getSubAsyncsRunning = 0; //While this is > 0 ListAll will wait for these to finish before listing
 
@@ -27,6 +33,16 @@ public class WorkshopController : MonoBehaviour
 
 	public GameObject loadingBar;
 	public List<GameObject> loadingTextPeriods;
+
+	//---------- Upload UI ----------
+	public string selectedTrackPath;
+	public TMP_Text selectedTrackPathText;
+	public string selectedCoverPath;
+	public TMP_Text selectedCoverPathText;
+
+	public TMP_InputField songNameInput;
+	public TMP_InputField songArtistInput;
+	public TMP_Dropdown difficultyDropdown;
 
 	private void Start()
 	{
@@ -99,7 +115,66 @@ public class WorkshopController : MonoBehaviour
 		Debug.Log("--Listing Complete--");
 	}
 
-	public async void UploadRecording(Recording recording, string directory, string filePath)
+	public void PickRecording() 
+	{
+		var extensions = new[] {
+			new ExtensionFilter("XML", "xml" ), };
+
+		string[] temp = StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions, false);
+		if (temp.Length != 0 && temp[0].Length != 0)
+			selectedTrackPath = temp[0];
+
+		selectedTrackPathText.text = selectedTrackPath;
+	}
+
+	public void PickCover()
+	{
+		var extensions = new[] {
+			new ExtensionFilter("Image Files", "png", "jpg", "jpeg" ), };
+		string[] temp = StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions, false);
+		if (temp.Length != 0 && temp[0].Length != 0)
+			selectedCoverPath = temp[0];
+
+		selectedCoverPathText.text = selectedCoverPath;
+	}
+
+	public void Upload()
+	{
+		string songName = songNameInput.text;
+		string songArtist = songArtistInput.text;
+		string difficulty = difficultyDropdown.options[difficultyDropdown.value].text;
+		if (selectedTrackPath.Length > 0 && songName.Length > 0 && songArtist.Length > 0) //A path has been picked, song name & song artist have been specified
+		{
+			//Get xml name from path
+			string xmlName = selectedTrackPath;
+			xmlName = selectedTrackPath.Substring(selectedTrackPath.LastIndexOf('\\') + 1);
+
+			//Get cover name from path
+			string coverName = selectedCoverPath;
+			if (selectedCoverPath.Length > 0)
+				coverName = selectedCoverPath.Substring(selectedCoverPath.LastIndexOf('\\') + 1);
+
+			//Get XML as recording
+			var serializer = new XmlSerializer(typeof(Recording));
+			var stream = new FileStream(selectedTrackPath, FileMode.Open);
+			Recording rec = serializer.Deserialize(stream) as Recording;
+			stream.Close();
+
+			//Update recording vals
+			rec.songName = songName;
+			rec.songArtist = songArtist;
+			rec.trackDifficulty = difficulty;
+
+			//Override XML file with new vals
+			stream = new FileStream(selectedTrackPath, FileMode.Create);
+			serializer.Serialize(stream, rec);
+			stream.Close();
+
+			UploadRecording(rec, selectedTrackPath, xmlName, songName, songArtist, difficulty, selectedCoverPath, coverName);
+		}
+	}
+
+	async void UploadRecording(Recording recording, string xmlPath, string xmlName, string songName, string songArtist, string difficulty, string coverPath, string coverName)
 	{
 		Debug.Log("--Starting Upload--");
 
@@ -122,22 +197,50 @@ public class WorkshopController : MonoBehaviour
 		CloudFileDirectory root = share.GetRootDirectoryReference();
 
 		// Create a directory under the root directory 
-		CloudFileDirectory dir = root.GetDirectoryReference(directory);
+		CloudFileDirectory userDir = root.GetDirectoryReference(username);
+		await userDir.CreateIfNotExistsAsync();
+		// Create a directory under the user directory 
+		CloudFileDirectory dir = userDir.GetDirectoryReference(songName);
 		await dir.CreateIfNotExistsAsync();
 
-		// Uploading a local file to the directory created above 
-		string fileName = recording.songName + " | " + recording.songArtist + " | " + recording.trackDifficulty + " | " + recording.trackArtist;
-		CloudFile file = dir.GetFileReference(fileName);
+		// Uploading XML
+		CloudFile file = dir.GetFileReference(xmlName);
+		await file.UploadFromFileAsync(xmlPath);
 
-#if WINDOWS_UWP && ENABLE_DOTNET
-		StorageFolder storageFolder = await StorageFolder.GetFolderFromPathAsync(Application.streamingAssetsPath.Replace('/', '\\'));
-		StorageFile sf = await storageFolder.GetFileAsync(ImageToUpload);
-		await file.UploadFromFileAsync(sf);
-#else
-		await file.UploadFromFileAsync(filePath);
-#endif
+		//Upload cover (if one has been selected)
+		if(coverPath.Length > 0)
+		{
+			file = dir.GetFileReference(coverName);
+			await file.UploadFromFileAsync(coverPath);
+		}
+
+		//Upload song
+		//FILL HERE ONCE SONG FILE HAS BEEN TIED TO XML
+
+		AddToTracksTable(xmlName, songName, songArtist);
 
 		Debug.Log("--Upload Complete--");
+	}
+
+	//XML name | xml artist | song name | song artist
+	public async void AddToTracksTable(string xmlName, string songName, string songArtist)
+	{
+		Debug.Log("-- Adding ' " + xmlName + "' to Tracks Table --");
+		CloudTableClient tableClient = StorageAccount.CreateCloudTableClient();
+
+		// Create a table client for interacting with the table service 
+		CloudTable table = tableClient.GetTableReference("Tracks");
+		try
+		{
+			await table.CreateIfNotExistsAsync();
+		}
+		catch (StorageException)
+		{
+			throw;
+		}
+
+		TrackEntity trackEntity = new TrackEntity(xmlName, username, songName, songArtist);
+		await InsertOrMergeEntityAsync(table, trackEntity);
 	}
 
 	async void GetSubs(CloudFileDirectory directory)
@@ -170,8 +273,14 @@ public class WorkshopController : MonoBehaviour
 
 		foreach (CloudFile file in recordings)
 		{
-			string songName = file.Name.Substring(0, file.Name.Length - 4);
-			PopulateWorkshop(null, songName, "", "", "");
+			string fileName = file.Name;
+			string songName = "";
+			string artistName = "";
+			string difficulty = "";
+			string trackArtist = "";
+			Debug.Log("Item: " + songName + " " + artistName + " " + difficulty + " " + trackArtist);
+
+			PopulateWorkshop(null, songName, artistName, difficulty, trackArtist);
 			//GET VALUES ABOVE BY READING FILE NAME AND SEARCHING FOR '|' DIVIDING SONG NAME | SONG ARITST | DIFFICULTY | TRACK ARTIST
 		}
 	}
@@ -211,8 +320,37 @@ public class WorkshopController : MonoBehaviour
 		}
 	}
 
-	public void OpenItem(GameObject item)
+	private async Task<ScoreEntity> InsertOrMergeEntityAsync(CloudTable table, TrackEntity entity)
 	{
+		if (entity == null)
+		{
+			throw new ArgumentNullException("entity");
+		}
 
+		// Create the InsertOrReplace  TableOperation
+		TableOperation insertOrMergeOperation = TableOperation.InsertOrMerge(entity);
+
+		// Execute the operation.
+		TableResult result = await table.ExecuteAsync(insertOrMergeOperation);
+		ScoreEntity insertedCustomer = result.Result as ScoreEntity;
+		return insertedCustomer;
 	}
+}
+
+public class TrackEntity : TableEntity
+{
+	// Your entity type must expose a parameter-less constructor
+	public TrackEntity() { }
+
+	// Define the PK and RK
+	public TrackEntity(string xmlName, string xmlArtist, string songName, string songArtist)
+	{
+		this.PartitionKey = xmlName;
+		this.RowKey = xmlArtist;
+		SongName = songName;
+		SongArtist = songArtist;
+	}
+
+	public string SongName { get; set; }
+	public string SongArtist { get; set; }
 }

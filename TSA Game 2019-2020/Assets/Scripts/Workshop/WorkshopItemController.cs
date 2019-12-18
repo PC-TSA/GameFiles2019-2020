@@ -40,6 +40,6 @@ public class WorkshopItemController : MonoBehaviour
 
     void OpenItem()
     {
-        GameObject.FindObjectOfType<WorkshopController>().OpenItem(gameObject);
+        //GameObject.FindObjectOfType<WorkshopController>().OpenItem(gameObject);
     }
 }

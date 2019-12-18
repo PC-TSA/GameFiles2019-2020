@@ -219,7 +219,10 @@ public class RhythmController : MonoBehaviour
         currentRecording.scrollSpeed = scrollerController.scrollSpeed;
 
         var serializer = new XmlSerializer(typeof(Recording));
-        string path = StandaloneFileBrowser.SaveFilePanel("Save File", "", "", "");
+
+        var extensions = new[] {
+            new ExtensionFilter("XML", "xml" ), };
+        string path = StandaloneFileBrowser.SaveFilePanel("Save File", "", "", extensions);
 
         if (path.Length != 0)
         {
@@ -248,8 +251,11 @@ public class RhythmController : MonoBehaviour
         var serializer = new XmlSerializer(typeof(Recording));
         string path = "";
 
-        string[] temp = StandaloneFileBrowser.OpenFilePanel("Open File", "", "", false);
-        if(temp.Length != 0)
+        var extensions = new[] {
+            new ExtensionFilter("XML", "xml" ), };
+
+        string[] temp = StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions, false);
+        if (temp.Length != 0)
             path = temp[0];
 
         if (path.Length != 0)
