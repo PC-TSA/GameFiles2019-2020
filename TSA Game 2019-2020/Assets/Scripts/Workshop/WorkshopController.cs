@@ -50,10 +50,34 @@ public class WorkshopController : MonoBehaviour
 		OpenWorkshop();
 	}
 
-	public void PopulateWorkshop(Sprite coverSprite, string songName, string songArtist, string trackArtist, string difficulty)
+	public void PopulateWorkshop(string songName, string songArtist, string trackArtist, string difficulty, string coverName)
 	{
 		GameObject item = Instantiate(workshopItemPrefab, workshopContentObj.transform);
-		item.GetComponent<WorkshopItemController>().InitializeItem(coverSprite, songName, songArtist, trackArtist, difficulty); 
+		Sprite cover = GetCoverImage(username, songName, coverName);
+		item.GetComponent<WorkshopItemController>().InitializeItem(cover, songName, songArtist, trackArtist, difficulty); 
+	}
+
+	public Sprite GetCoverImage(string username, string songName, string coverName) //NOT DONE
+	{
+		// Create a file client for interacting with the file service.
+		CloudFileClient fileClient = StorageAccount.CreateCloudFileClient();
+
+		// Create a share for organizing files and directories within the storage account.
+		CloudFileShare share = fileClient.GetShareReference(shareName);
+
+		// Get a reference to the root directory of the share.        
+		CloudFileDirectory root = share.GetRootDirectoryReference();
+		// Get a directory under the root directory 
+		CloudFileDirectory userDir = root.GetDirectoryReference(username);
+		//Get a directory under the user directory 
+		CloudFileDirectory dir = userDir.GetDirectoryReference(songName);
+		// Get image file
+		CloudFile file = dir.GetFileReference(coverName);
+		string path = Path.Combine(Application.temporaryCachePath, coverName);
+		file.DownloadToFileAsync(path, FileMode.Create);
+
+		//RETURN FILE AT Application.temporaryCachePath + coverName AS SPRITE
+		return null;
 	}
 
 	void OpenWorkshop()
@@ -113,6 +137,24 @@ public class WorkshopController : MonoBehaviour
 		StartCoroutine(WaitForSubs());
 
 		Debug.Log("--Listing Complete--");
+	}
+
+	private async Task TableScanAsync(CloudTable table)
+	{
+		TableQuery<TrackEntity> partitionScanQuery = new TableQuery<TrackEntity>();
+
+		TableContinuationToken token = null;
+		// Page through the results
+		do
+		{
+			TableQuerySegment<TrackEntity> segment = await table.ExecuteQuerySegmentedAsync(partitionScanQuery, token);
+			token = segment.ContinuationToken;
+			foreach (TrackEntity entity in segment)
+			{
+				PopulateWorkshop(entity.SongName, entity.SongArtist, entity.RowKey, entity.Difficulty, entity.CoverName);
+			}
+		}
+		while (token != null);
 	}
 
 	public void PickRecording() 
@@ -217,13 +259,13 @@ public class WorkshopController : MonoBehaviour
 		//Upload song
 		//FILL HERE ONCE SONG FILE HAS BEEN TIED TO XML
 
-		AddToTracksTable(xmlName, songName, songArtist);
+		AddToTracksTable(xmlName, songName, songArtist, coverName, difficulty);
 
 		Debug.Log("--Upload Complete--");
 	}
 
 	//XML name | xml artist | song name | song artist
-	public async void AddToTracksTable(string xmlName, string songName, string songArtist)
+	public async void AddToTracksTable(string xmlName, string songName, string songArtist, string coverName, string difficulty)
 	{
 		Debug.Log("-- Adding ' " + xmlName + "' to Tracks Table --");
 		CloudTableClient tableClient = StorageAccount.CreateCloudTableClient();
@@ -239,7 +281,7 @@ public class WorkshopController : MonoBehaviour
 			throw;
 		}
 
-		TrackEntity trackEntity = new TrackEntity(xmlName, username, songName, songArtist);
+		TrackEntity trackEntity = new TrackEntity(xmlName, username, songName, songArtist, coverName, difficulty);
 		await InsertOrMergeEntityAsync(table, trackEntity);
 	}
 
@@ -267,7 +309,7 @@ public class WorkshopController : MonoBehaviour
 		getSubAsyncsRunning--;
 	}
 
-	IEnumerator WaitForSubs()
+	IEnumerator WaitForSubs() //BROKEN NEEDS TO BE REMADE
 	{
 		while (getSubAsyncsRunning > 0) { yield return new WaitForSeconds(0.1f); }
 
@@ -280,7 +322,7 @@ public class WorkshopController : MonoBehaviour
 			string trackArtist = "";
 			Debug.Log("Item: " + songName + " " + artistName + " " + difficulty + " " + trackArtist);
 
-			PopulateWorkshop(null, songName, artistName, difficulty, trackArtist);
+			PopulateWorkshop(null, songName, artistName, difficulty, null);
 			//GET VALUES ABOVE BY READING FILE NAME AND SEARCHING FOR '|' DIVIDING SONG NAME | SONG ARITST | DIFFICULTY | TRACK ARTIST
 		}
 	}
@@ -343,14 +385,18 @@ public class TrackEntity : TableEntity
 	public TrackEntity() { }
 
 	// Define the PK and RK
-	public TrackEntity(string xmlName, string xmlArtist, string songName, string songArtist)
+	public TrackEntity(string xmlName, string xmlArtist, string songName, string songArtist, string coverName, string difficulty)
 	{
 		this.PartitionKey = xmlName;
 		this.RowKey = xmlArtist;
 		SongName = songName;
 		SongArtist = songArtist;
+		CoverName = coverName;
+		Difficulty = difficulty;
 	}
 
 	public string SongName { get; set; }
 	public string SongArtist { get; set; }
+	public string CoverName { get; set; }
+	public string Difficulty { get; set; }
 }
