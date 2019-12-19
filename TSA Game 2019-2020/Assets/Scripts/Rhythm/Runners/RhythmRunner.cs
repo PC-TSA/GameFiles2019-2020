@@ -9,6 +9,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.Networking;
 
 public class RhythmRunner : MonoBehaviour
 {
@@ -102,10 +103,6 @@ public class RhythmRunner : MonoBehaviour
 
     private void Start()
     {
-        Object[] temp = Resources.LoadAll("Songs", typeof(AudioClip)); //Read all audioclips in the Resources/Songs folder and add them to the 'Songs' list
-        foreach (Object o in temp)
-            songs.Add((AudioClip)o);
-
         originalPos = scrollerObj.transform.localPosition;
 
         //Get vignette from post processing profile
@@ -116,12 +113,19 @@ public class RhythmRunner : MonoBehaviour
             XMLRecordingPath = CrossSceneController.recordingToLoad;
             string name = XMLRecordingPath.Substring(XMLRecordingPath.LastIndexOf('\\') + 1);
             XMLRecordingName = name.Remove(name.Length - 4);
+            songs.Add(CrossSceneController.clipToLoad);
             StartCoroutine(DelayedStart(1, XMLRecordingPath));
             CrossSceneController.recordingToLoad = "";
+            CrossSceneController.clipToLoad = null;
             rhythmMakerButton.SetActive(true);
         }
         else
+        {
+            Object[] temp = Resources.LoadAll("Songs", typeof(AudioClip)); //Read all audioclips in the Resources/Songs folder and add them to the 'Songs' list
+            foreach (Object o in temp)
+                songs.Add((AudioClip)o);
             StartCoroutine(DelayedStart(1));
+        }
 
         deathCountSlider.maxValue = health;
         deathCountSlider.value = health;
@@ -550,5 +554,26 @@ public class RhythmRunner : MonoBehaviour
     void FinishTrack()
     {
         endTrackScreen.SetActive(true);
+    }
+
+    IEnumerator LoadAudioFileStart(string path)
+    {
+        UnityWebRequest AudioFiles = null;
+        string audioFileName = path.Substring(path.LastIndexOf('\\') + 1);
+        audioFileName = audioFileName.Remove(audioFileName.Length - 4);
+        AudioFiles = UnityWebRequestMultimedia.GetAudioClip(path, AudioType.WAV);
+
+        if (AudioFiles != null)
+        {
+            yield return AudioFiles.SendWebRequest();
+            if (AudioFiles.isNetworkError)
+                Debug.Log(AudioFiles.error);
+            else
+            {
+                AudioClip clip = DownloadHandlerAudioClip.GetContent(AudioFiles);
+                clip.name = audioFileName;
+                songs.Add(clip);
+            }
+        }
     }
 }

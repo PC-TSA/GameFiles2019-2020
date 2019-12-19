@@ -4,11 +4,14 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
 using TMPro;
 using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
 using SFB;
+using NAudio;
+using NAudio.Wave;
 
 //Main variable class
 public class RhythmController : MonoBehaviour
@@ -74,20 +77,24 @@ public class RhythmController : MonoBehaviour
     public GameObject loadingBar;
     public List<GameObject> loadingTextPeriods;
 
-    private void Start()
-    {
-        Object[] temp = Resources.LoadAll("Songs", typeof(AudioClip)); //Read all audioclips in the Resources/Songs folder and add them to the 'Songs' list
-        foreach (Object o in temp)
-            songs.Add((AudioClip) o);
+    public bool loadSongsRunning;
+    public int loadAudioFileStartRunning;
 
-        for(int i = 0; i < songs.Count; i++) //Generate song BPMs, populate song picker dropdown
+    private void Awake()
+    {
+        StartCoroutine(LoadSongs());
+    }
+
+    void StartPreparations()
+    {
+        for (int i = 0; i < songs.Count; i++) //Generate song BPMs, populate song picker dropdown
         {
             int bpm = UniBpmAnalyzer.AnalyzeBpm(songs[i]);
             songBPMs.Add(bpm / 2);
             songPickerDropdown.GetComponent<TMP_Dropdown>().options.Add(new TMP_Dropdown.OptionData() { text = songs[i].name + " | " + songBPMs[i] });
         }
 
-        if(CrossSceneController.recordingToLoad != "")
+        if (CrossSceneController.recordingToLoad != "")
         {
             LoadRecording(CrossSceneController.recordingToLoad);
             CrossSceneController.recordingToLoad = "";
@@ -96,10 +103,32 @@ public class RhythmController : MonoBehaviour
             currentRecording = new Recording();
     }
 
+    IEnumerator LoadSongs()
+    {
+        loadSongsRunning = true;
+        Object[] temp = Resources.LoadAll("Songs", typeof(AudioClip)); //Read all audioclips in the Resources/Songs folder and add them to the 'Songs' list
+        foreach (Object o in temp)
+            songs.Add((AudioClip)o);
+
+        System.IO.Directory.CreateDirectory(Application.persistentDataPath + "\\" + "Songs");
+        foreach (string filePath in System.IO.Directory.GetFiles(Application.persistentDataPath + "\\" + "Songs"))
+            StartCoroutine(LoadAudioFileStart(filePath));
+
+        yield return null;
+    }
+
     private void Update()
     {
         if (isPlaying) //Update Waveform \/
             UpdateWaveform();
+        if (loadSongsRunning)
+        {
+            if (loadAudioFileStartRunning == 0)
+            {
+                loadSongsRunning = false;
+                StartPreparations();
+            }
+        }
     }
 
     public void UpdateNoteCount(int i)
@@ -432,6 +461,102 @@ public class RhythmController : MonoBehaviour
             SpawnSplashTitle("Load failed, no path", Color.red);
     }
 
+    public void StartImportSong()
+    {
+        string path = "";
+        var extensions = new[] {
+            new ExtensionFilter("Music Files", "mp3", "wav"), };
+
+        string[] temp = StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions, false);
+        if (temp.Length != 0)
+            path = temp[0];
+
+        if (path.Length != 0)
+        {
+            StartCoroutine(LoadAudioFile(path));
+        }
+    }
+
+    public void AddClipToSongs(AudioClip song)
+    {
+        songs.Add(song);
+    }
+
+    IEnumerator LoadAudioFile(string path)
+    {
+        UnityWebRequest AudioFiles = null;
+        string audioFileName = path.Substring(path.LastIndexOf('\\') + 1);
+        string fileExtension = audioFileName.Substring(audioFileName.Length - 4);
+        audioFileName = audioFileName.Remove(audioFileName.Length - 4);
+        if (fileExtension == ".mp3")
+        {
+            fileExtension = ".aif";
+            AudioToWav(path, Application.persistentDataPath + "\\" + "Songs" + "\\" + audioFileName + fileExtension);
+            path = Application.persistentDataPath + "\\" + "Songs" + "\\" + audioFileName;
+        }
+        else
+        {
+            File.Copy(path, Application.persistentDataPath + "\\" + "Songs" + "\\" + audioFileName + fileExtension);
+        }
+        path = Application.persistentDataPath + "\\" + "Songs" + "\\" + audioFileName + fileExtension;
+
+        AudioFiles = UnityWebRequestMultimedia.GetAudioClip(path, AudioType.AIFF);
+        AudioClip clip = null;
+
+        if (AudioFiles != null)
+        {
+            yield return AudioFiles.SendWebRequest();
+            if (AudioFiles.isNetworkError)
+                Debug.Log(AudioFiles.error);
+            else
+            {
+                clip = DownloadHandlerAudioClip.GetContent(AudioFiles);
+                clip.name = audioFileName;
+                AddClipToSongs(clip);
+            }
+        }
+
+        FinishImportSong(clip);
+    }
+
+    void FinishImportSong(AudioClip clip)
+    {
+        int bpm = UniBpmAnalyzer.AnalyzeBpm(clip);
+        songBPMs.Add(bpm / 2);
+        songPickerDropdown.GetComponent<TMP_Dropdown>().options.Add(new TMP_Dropdown.OptionData() { text = clip.name + " | " + bpm / 2});
+    }
+
+    IEnumerator LoadAudioFileStart(string path)
+    {
+        loadAudioFileStartRunning++;
+        UnityWebRequest AudioFiles = null;
+        string audioFileName = path.Substring(path.LastIndexOf('\\') + 1);
+        audioFileName = audioFileName.Remove(audioFileName.Length - 4);
+        AudioFiles = UnityWebRequestMultimedia.GetAudioClip(path, AudioType.WAV);
+
+        if (AudioFiles != null)
+        {
+            yield return AudioFiles.SendWebRequest();
+            if (AudioFiles.isNetworkError)
+                Debug.Log(AudioFiles.error);
+            else
+            {
+                AudioClip clip = DownloadHandlerAudioClip.GetContent(AudioFiles);
+                clip.name = audioFileName;
+                AddClipToSongs(clip);
+            }
+        }
+        loadAudioFileStartRunning--;
+    }
+
+    public static void AudioToWav(string mp3File, string outputFile)
+    {
+        using (Mp3FileReader reader = new Mp3FileReader(mp3File))
+        {
+            AiffFileWriter.CreateAiffFile(outputFile, reader);
+        }
+    }
+
     public void ClearRhythmInScene() //Clears all notes, sliders, and spaces
     {
         ClearNotes();
@@ -605,7 +730,7 @@ public class RhythmController : MonoBehaviour
 
         if (savedRecordingPath.Length != 0)
         {
-            CrossSceneController.MakerToGame(savedRecordingPath);
+            CrossSceneController.MakerToGame(savedRecordingPath, audioSource.clip);
             StartCoroutine(LoadAsyncScene("Overworld"));
         }
     }

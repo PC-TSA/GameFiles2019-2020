@@ -6476,7 +6476,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1293953075}
-        m_MethodName: 
+        m_MethodName: StartImportSong
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -22297,6 +22297,8 @@ MonoBehaviour:
   - {fileID: 1291508224}
   - {fileID: 1291508223}
   - {fileID: 1291508222}
+  loadSongsRunning: 0
+  loadAudioFileStartRunning: 0
 --- !u!82 &1293953076
 AudioSource:
   m_ObjectHideFlags: 0

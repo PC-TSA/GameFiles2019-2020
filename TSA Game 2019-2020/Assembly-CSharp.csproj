@@ -425,6 +425,9 @@
     <Reference Include="Microsoft.WindowsAzure.Storage">
       <HintPath>E:/Game Making/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
+    <Reference Include="NAudio">
+      <HintPath>E:/Game Making/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>E:/Game Making/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/Newtonsoft.Json.dll</HintPath>
     </Reference>

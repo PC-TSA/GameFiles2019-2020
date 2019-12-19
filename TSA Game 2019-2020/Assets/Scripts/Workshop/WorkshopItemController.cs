@@ -6,11 +6,13 @@ using TMPro;
 
 public class WorkshopItemController : MonoBehaviour
 {
+    public int id;
     public Sprite coverSprite;
     public string songName;
     public string songArtist;
     public string trackArtist;
     public string difficulty;
+    public string xmlName;
 
     public Image songCoverImage;
     public TMP_Text songNameText;
@@ -18,7 +20,7 @@ public class WorkshopItemController : MonoBehaviour
     public TMP_Text difficultyText;
     public TMP_Text trackArtistText;
 
-    public void InitializeItem(Sprite coverSprite, string songName, string songArtist, string trackArtist, string difficulty)
+    public void InitializeItem(Sprite coverSprite, string songName, string songArtist, string trackArtist, string difficulty, string xmlName)
     {
         if(coverSprite != null)
             this.coverSprite = coverSprite;
@@ -26,6 +28,7 @@ public class WorkshopItemController : MonoBehaviour
         this.songArtist = songArtist;
         this.trackArtist = trackArtist;
         this.difficulty = difficulty;
+        this.xmlName = xmlName;
         UpdateChildren();
     }
 
@@ -40,6 +43,6 @@ public class WorkshopItemController : MonoBehaviour
 
     void OpenItem()
     {
-        //GameObject.FindObjectOfType<WorkshopController>().OpenItem(gameObject);
+        GameObject.FindObjectOfType<WorkshopController>().OpenItem(this);
     }
 }
