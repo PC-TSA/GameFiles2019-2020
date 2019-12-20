@@ -431,6 +431,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>E:/Game Making/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="OggVorbisEncoder">
+      <HintPath>E:/Game Making/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/OggVorbisEncoder.dll</HintPath>
+    </Reference>
     <Reference Include="System.Reflection.TypeExtensions">
       <HintPath>E:/Game Making/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/System.Reflection.TypeExtensions.dll</HintPath>
     </Reference>

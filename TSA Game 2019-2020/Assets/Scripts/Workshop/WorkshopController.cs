@@ -35,6 +35,10 @@ public class WorkshopController : MonoBehaviour
 	public GameObject loadingBar;
 	public List<GameObject> loadingTextPeriods;
 
+	public GameObject uploadBar;
+	public List<GameObject> uploadTextPeriods;
+	public TMP_Text progressTxt;
+
 	public Sprite tempSprite;
 
 	//---------- Upload UI ----------
@@ -54,8 +58,9 @@ public class WorkshopController : MonoBehaviour
 		StorageAccount = networkingUtilities.SetStorageAccount();
 		System.IO.Directory.CreateDirectory(Application.persistentDataPath + "\\" + "Workshop");
 
-		foreach(AudioClip s in Resources.FindObjectsOfTypeAll<AudioClip>())
-			builtInSongs.Add(s.name);
+		UnityEngine.Object[] temp = Resources.LoadAll("Songs", typeof(AudioClip)); //Read all audioclips in the Resources/Songs folder and add them to the 'Songs' list
+		foreach (UnityEngine.Object o in temp)
+			builtInSongs.Add(o.name);
 
 		OpenWorkshop();
 	}
@@ -200,6 +205,10 @@ public class WorkshopController : MonoBehaviour
 
 	public void Upload()
 	{
+		uploadBar.SetActive(true);
+		progressTxt.text = "Reading xml...";
+		StartCoroutine(UploadBar());
+
 		string songName = songNameInput.text;
 		string songArtist = songArtistInput.text;
 		string difficulty = difficultyDropdown.options[difficultyDropdown.value].text;
@@ -214,7 +223,7 @@ public class WorkshopController : MonoBehaviour
 			if (selectedCoverPath.Length > 0)
 				coverName = selectedCoverPath.Substring(selectedCoverPath.LastIndexOf('\\') + 1);
 
-			string wavPath = "";
+			string mp3Path = "";
 
 			//Get XML as recording
 			var serializer = new XmlSerializer(typeof(Recording));
@@ -228,23 +237,23 @@ public class WorkshopController : MonoBehaviour
 			rec.trackDifficulty = difficulty;
 
 			if (!builtInSongs.Contains(rec.clipName)) //If the recording is not for a built in song
-			{
-				wavPath = Application.persistentDataPath + "\\" + "Songs" + "\\" + rec.clipName + ".wav"; 
-				rec.clipName = rec.songName;
-			}
+				mp3Path = Application.persistentDataPath + "\\" + "Songs" + "\\" + rec.clipName + ".mp3";
 
 			//Override XML file with new vals
 			stream = new FileStream(selectedTrackPath, FileMode.Create);
 			serializer.Serialize(stream, rec);
 			stream.Close();
 
-			UploadRecording(rec, selectedTrackPath, xmlName, songName, songArtist, difficulty, selectedCoverPath, coverName, wavPath);
+			UploadRecording(rec, selectedTrackPath, xmlName, songName, songArtist, difficulty, selectedCoverPath, coverName, mp3Path);
 		}
 	}
 
-	async void UploadRecording(Recording recording, string xmlPath, string xmlName, string songName, string songArtist, string difficulty, string coverPath, string coverName, string wavPath)
+	async void UploadRecording(Recording recording, string xmlPath, string xmlName, string songName, string songArtist, string difficulty, string coverPath, string coverName, string mp3Path)
 	{
 		Debug.Log("--Starting Upload--");
+
+		progressTxt.text = "Creating database directories...";
+		uploadBar.GetComponent<Slider>().value++;
 
 		// Create a file client for interacting with the file service.
 		CloudFileClient fileClient = StorageAccount.CreateCloudFileClient();
@@ -271,25 +280,41 @@ public class WorkshopController : MonoBehaviour
 		CloudFileDirectory dir = userDir.GetDirectoryReference(songName);
 		await dir.CreateIfNotExistsAsync();
 
+		progressTxt.text = "Uploading recording...";
+		uploadBar.GetComponent<Slider>().value++;
+
 		// Uploading XML
 		CloudFile file = dir.GetFileReference(xmlName);
 		await file.UploadFromFileAsync(xmlPath);
 
+		progressTxt.text = "Uploading cover...";
+		uploadBar.GetComponent<Slider>().value++;
+
 		//Upload cover (if one has been selected)
-		if(coverPath.Length > 0)
+		if (coverPath.Length > 0)
 		{
 			file = dir.GetFileReference(coverName);
 			await file.UploadFromFileAsync(coverPath);
 		}
 
+		progressTxt.text = "Uploading audio...";
+		uploadBar.GetComponent<Slider>().value++;
+
 		//Upload song (if the recording is not for a built in song)
-		if(wavPath.Length > 0)
+		if (mp3Path.Length > 0)
 		{
-			file = dir.GetFileReference(songName + ".wav");
-			await file.UploadFromFileAsync(wavPath);
+			file = dir.GetFileReference(songName + ".mp3");
+			await file.UploadFromFileAsync(mp3Path);
 		}
 
+		progressTxt.text = "Adding to tracks table...";
+		uploadBar.GetComponent<Slider>().value++;
+
 		AddToTracksTable(xmlName, songName, songArtist, coverName, difficulty);
+
+		progressTxt.text = "--Upload Complete--";
+		uploadBar.GetComponent<Slider>().value++;
+		StartCoroutine(UploadBarOut());
 
 		Debug.Log("--Upload Complete--");
 	}
@@ -365,7 +390,7 @@ public class WorkshopController : MonoBehaviour
 	{
 		loadingBar.SetActive(true);
 		int periodIndex = 0;
-		while (true)
+		while (loadingBar.activeSelf)
 		{
 			for (int i = 0; i < loadingTextPeriods.Count; i++)
 				if (i == periodIndex)
@@ -382,6 +407,36 @@ public class WorkshopController : MonoBehaviour
 
 			yield return new WaitForSeconds(0.5f);
 		}
+	}
+
+	IEnumerator UploadBar()
+	{
+		uploadBar.SetActive(true);
+		int periodIndex = 0;
+		while (uploadBar.activeSelf)
+		{
+			for (int i = 0; i < uploadTextPeriods.Count; i++)
+				if (i == periodIndex)
+					uploadTextPeriods[i].SetActive(true);
+
+			if (periodIndex == uploadTextPeriods.Count)
+			{
+				periodIndex = 0;
+				foreach (GameObject obj in uploadTextPeriods)
+					obj.SetActive(false);
+			}
+			else
+				periodIndex++;
+
+			yield return new WaitForSeconds(0.5f);
+		}
+	}
+
+	IEnumerator UploadBarOut()
+	{
+		uploadBar.GetComponent<Animator>().Play("CanvasGroupFadeOut");
+		yield return new WaitForSeconds(1);
+		uploadBar.SetActive(false);
 	}
 
 	private async Task<ScoreEntity> InsertOrMergeEntityAsync(CloudTable table, TrackEntity entity)
