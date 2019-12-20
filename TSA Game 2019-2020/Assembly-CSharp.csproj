@@ -99,6 +99,7 @@
     <Compile Include="Assets\Scripts\UI\ButtonHighlighter.cs" />
     <Compile Include="Assets\Scripts\UI\EndTrackScreenController.cs" />
     <Compile Include="Assets\Scripts\UI\MainMenuController.cs" />
+    <Compile Include="Assets\Scripts\Workshop\DownloadedTrack.cs" />
     <Compile Include="Assets\Scripts\Workshop\WorkshopController.cs" />
     <Compile Include="Assets\Scripts\Workshop\WorkshopItemController.cs" />
     <Compile Include="Assets\Sprites\UniBpmAnalyzer\UniBpmAnalyzer.cs" />

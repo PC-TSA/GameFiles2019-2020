@@ -28,18 +28,21 @@ public class WorkshopController : MonoBehaviour
 	public GameObject workshopUI;
 	public GameObject workshopContentObj;
 	public GameObject workshopItemPrefab;
+	public GameObject workshopUIMisc;
 
 	public NetworkingUtilities networkingUtilities;
 	public CloudStorageAccount StorageAccount;
 
 	public GameObject loadingBar;
-	public List<GameObject> loadingTextPeriods;
-
 	public GameObject uploadBar;
-	public List<GameObject> uploadTextPeriods;
-	public TMP_Text progressTxt;
+	public GameObject downloadBar;
 
-	public Sprite tempSprite;
+	public TMP_Text uploadBarProgress;
+	public TMP_Text downloadBarProgress;
+
+	public GameObject splashTitlePrefab;
+
+	Sprite tempSprite;
 
 	//---------- Upload UI ----------
 	public string selectedTrackPath;
@@ -50,26 +53,48 @@ public class WorkshopController : MonoBehaviour
 	public TMP_InputField songNameInput;
 	public TMP_InputField songArtistInput;
 	public TMP_Dropdown difficultyDropdown;
+	//-------------------------------
 
 	public List<string> builtInSongs;
+	public List<DownloadedTrack> downloadedTracks;
 
 	private void Start()
 	{
 		StorageAccount = networkingUtilities.SetStorageAccount();
 		System.IO.Directory.CreateDirectory(Application.persistentDataPath + "\\" + "Workshop");
+		System.IO.Directory.CreateDirectory(Application.persistentDataPath + "\\" + "DownloadedTracks");
 
-		UnityEngine.Object[] temp = Resources.LoadAll("Songs", typeof(AudioClip)); //Read all audioclips in the Resources/Songs folder and add them to the 'Songs' list
+		//Read all audioclips in the Resources/Songs folder and add them to the 'builtInSongs' list
+		UnityEngine.Object[] temp = Resources.LoadAll("Songs", typeof(AudioClip));
 		foreach (UnityEngine.Object o in temp)
 			builtInSongs.Add(o.name);
+
+		PopulateDownloadedTracks();
 
 		OpenWorkshop();
 	}
 
-	public async void PopulateWorkshop(string songName, string songArtist, string trackArtist, string difficulty, string coverName, string xmlName)
+	//Populate downloadedTracks list by reading Application.persistentDataPath / DownloadedTracks / all downloadedTack xmls
+	void PopulateDownloadedTracks()
+	{
+		downloadedTracks = new List<DownloadedTrack>();
+
+		//For each downloadedTrack xml in the DowloadedTracks folder
+		foreach (string file in System.IO.Directory.GetFiles(Application.persistentDataPath + "\\" + "DownloadedTracks"))
+		{
+			var serializer = new XmlSerializer(typeof(DownloadedTrack));
+			var stream = new FileStream(file, FileMode.Open);
+			DownloadedTrack track = serializer.Deserialize(stream) as DownloadedTrack;
+			stream.Close();
+			downloadedTracks.Add(track);
+		}
+	}
+
+	async void PopulateWorkshop(string songName, string songArtist, string trackArtist, string difficulty, string coverName, string xmlName, string mp3Name, int id)
 	{
 		GameObject item = Instantiate(workshopItemPrefab, workshopContentObj.transform);
-		Sprite s = await GetCoverImage(username, songName, coverName);
-		item.GetComponent<WorkshopItemController>().InitializeItem(s, songName, songArtist, trackArtist, difficulty, xmlName); 
+		Sprite sprite = await GetCoverImage(username, songName, coverName);
+		item.GetComponent<WorkshopItemController>().InitializeItem(sprite, songName, songArtist, trackArtist, difficulty, xmlName, mp3Name, id); 
 	}
 
 	public async Task<Sprite> GetCoverImage(string username, string songName, string coverName) 
@@ -174,7 +199,7 @@ public class WorkshopController : MonoBehaviour
 			foreach (TrackEntity entity in segment)
 			{
 				if(entity.PartitionKey != "TrackCounter") //TrackCounter keeps track of table size
-					PopulateWorkshop(entity.SongName, entity.SongArtist, entity.RowKey, entity.Difficulty, entity.CoverName, entity.RowKey);
+					PopulateWorkshop(entity.SongName, entity.SongArtist, entity.XMLArtist, entity.Difficulty, entity.CoverName, entity.RowKey, entity.Mp3Name, int.Parse(entity.PartitionKey));
 			}
 		}
 		while (token != null);
@@ -206,8 +231,8 @@ public class WorkshopController : MonoBehaviour
 	public void Upload()
 	{
 		uploadBar.SetActive(true);
-		progressTxt.text = "Reading xml...";
-		StartCoroutine(UploadBar());
+		uploadBarProgress.text = "Reading xml...";
+		StartCoroutine(StartBar(uploadBar));
 
 		string songName = songNameInput.text;
 		string songArtist = songArtistInput.text;
@@ -215,11 +240,10 @@ public class WorkshopController : MonoBehaviour
 		if (selectedTrackPath.Length > 0 && songName.Length > 0 && songArtist.Length > 0) //A path has been picked, song name & song artist have been specified
 		{
 			//Get xml name from path
-			string xmlName = selectedTrackPath;
-			xmlName = selectedTrackPath.Substring(selectedTrackPath.LastIndexOf('\\') + 1);
+			string xmlName = selectedTrackPath.Substring(selectedTrackPath.LastIndexOf('\\') + 1);
 
 			//Get cover name from path
-			string coverName = selectedCoverPath;
+			string coverName = "";
 			if (selectedCoverPath.Length > 0)
 				coverName = selectedCoverPath.Substring(selectedCoverPath.LastIndexOf('\\') + 1);
 
@@ -244,15 +268,15 @@ public class WorkshopController : MonoBehaviour
 			serializer.Serialize(stream, rec);
 			stream.Close();
 
-			UploadRecording(rec, selectedTrackPath, xmlName, songName, songArtist, difficulty, selectedCoverPath, coverName, mp3Path);
+			UploadRecording(rec, selectedTrackPath, xmlName, songName, songArtist, difficulty, selectedCoverPath, coverName, mp3Path, rec.clipName);
 		}
 	}
 
-	async void UploadRecording(Recording recording, string xmlPath, string xmlName, string songName, string songArtist, string difficulty, string coverPath, string coverName, string mp3Path)
+	async void UploadRecording(Recording recording, string xmlPath, string xmlName, string songName, string songArtist, string difficulty, string coverPath, string coverName, string mp3Path, string mp3Name)
 	{
 		Debug.Log("--Starting Upload--");
 
-		progressTxt.text = "Creating database directories...";
+		uploadBarProgress.text = "Creating database directories...";
 		uploadBar.GetComponent<Slider>().value++;
 
 		// Create a file client for interacting with the file service.
@@ -280,14 +304,14 @@ public class WorkshopController : MonoBehaviour
 		CloudFileDirectory dir = userDir.GetDirectoryReference(songName);
 		await dir.CreateIfNotExistsAsync();
 
-		progressTxt.text = "Uploading recording...";
+		uploadBarProgress.text = "Uploading recording...";
 		uploadBar.GetComponent<Slider>().value++;
 
 		// Uploading XML
 		CloudFile file = dir.GetFileReference(xmlName);
 		await file.UploadFromFileAsync(xmlPath);
 
-		progressTxt.text = "Uploading cover...";
+		uploadBarProgress.text = "Uploading cover...";
 		uploadBar.GetComponent<Slider>().value++;
 
 		//Upload cover (if one has been selected)
@@ -297,30 +321,30 @@ public class WorkshopController : MonoBehaviour
 			await file.UploadFromFileAsync(coverPath);
 		}
 
-		progressTxt.text = "Uploading audio...";
+		uploadBarProgress.text = "Uploading audio...";
 		uploadBar.GetComponent<Slider>().value++;
 
 		//Upload song (if the recording is not for a built in song)
 		if (mp3Path.Length > 0)
 		{
-			file = dir.GetFileReference(songName + ".mp3");
+			file = dir.GetFileReference(mp3Name + ".mp3");
 			await file.UploadFromFileAsync(mp3Path);
 		}
 
-		progressTxt.text = "Adding to tracks table...";
+		uploadBarProgress.text = "Adding to tracks table...";
 		uploadBar.GetComponent<Slider>().value++;
 
-		AddToTracksTable(xmlName, songName, songArtist, coverName, difficulty);
+		AddToTracksTable(xmlName, songName, songArtist, coverName, difficulty, mp3Name);
 
-		progressTxt.text = "--Upload Complete--";
+		uploadBarProgress.text = "--Upload Complete--";
 		uploadBar.GetComponent<Slider>().value++;
-		StartCoroutine(UploadBarOut());
+		StartCoroutine(StopBar(uploadBar, true));
 
 		Debug.Log("--Upload Complete--");
 	}
 
 	//XML name | xml artist | song name | song artist
-	public async void AddToTracksTable(string xmlName, string songName, string songArtist, string coverName, string difficulty)
+	public async void AddToTracksTable(string xmlName, string songName, string songArtist, string coverName, string difficulty, string mp3Name)
 	{
 		Debug.Log("-- Adding ' " + xmlName + "' to Tracks Table --");
 		CloudTableClient tableClient = StorageAccount.CreateCloudTableClient();
@@ -346,7 +370,7 @@ public class WorkshopController : MonoBehaviour
 		TableOperation insert = TableOperation.InsertOrReplace(trackCounter);
 		await table.ExecuteAsync(insert);
 
-		TrackEntity trackEntity = new TrackEntity(trackCounter.TrackCount, xmlName, username, songName, songArtist, coverName, difficulty);
+		TrackEntity trackEntity = new TrackEntity(trackCounter.TrackCount, xmlName, username, songName, songArtist, coverName, difficulty, mp3Name);
 		await InsertOrMergeEntityAsync(table, trackEntity);
 	}
 
@@ -377,7 +401,7 @@ public class WorkshopController : MonoBehaviour
 	IEnumerator LoadAsyncScene(string scene)
 	{
 		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene);
-		StartCoroutine(LoadingBar());
+		StartCoroutine(StartBar(loadingBar));
 		// Wait until the asynchronous scene fully loads
 		while (!asyncLoad.isDone)
 		{
@@ -386,11 +410,15 @@ public class WorkshopController : MonoBehaviour
 		}
 	}
 
-	IEnumerator LoadingBar()
+	IEnumerator StartBar(GameObject bar)
 	{
-		loadingBar.SetActive(true);
+		bar.SetActive(true);
 		int periodIndex = 0;
-		while (loadingBar.activeSelf)
+		List<GameObject> loadingTextPeriods = new List<GameObject>();
+		for(int i = 0; i < bar.transform.GetChild(0).childCount; i ++) //Populate loading text periods from bar's children
+			loadingTextPeriods.Add(bar.transform.GetChild(0).GetChild(i).gameObject);
+
+		while (bar.activeSelf) //While the bar is active, animate loading text periods
 		{
 			for (int i = 0; i < loadingTextPeriods.Count; i++)
 				if (i == periodIndex)
@@ -408,35 +436,16 @@ public class WorkshopController : MonoBehaviour
 			yield return new WaitForSeconds(0.5f);
 		}
 	}
-
-	IEnumerator UploadBar()
+	IEnumerator StopBar(GameObject bar, bool shouldFade)
 	{
-		uploadBar.SetActive(true);
-		int periodIndex = 0;
-		while (uploadBar.activeSelf)
+		if (shouldFade)
 		{
-			for (int i = 0; i < uploadTextPeriods.Count; i++)
-				if (i == periodIndex)
-					uploadTextPeriods[i].SetActive(true);
-
-			if (periodIndex == uploadTextPeriods.Count)
-			{
-				periodIndex = 0;
-				foreach (GameObject obj in uploadTextPeriods)
-					obj.SetActive(false);
-			}
-			else
-				periodIndex++;
-
-			yield return new WaitForSeconds(0.5f);
+			bar.GetComponent<Animator>().Play("CanvasGroupFadeOut");
+			yield return new WaitForSeconds(1);
 		}
-	}
-
-	IEnumerator UploadBarOut()
-	{
-		uploadBar.GetComponent<Animator>().Play("CanvasGroupFadeOut");
-		yield return new WaitForSeconds(1);
-		uploadBar.SetActive(false);
+		bar.SetActive(false);
+		if (shouldFade)
+			bar.GetComponent<CanvasGroup>().alpha = 1;
 	}
 
 	private async Task<ScoreEntity> InsertOrMergeEntityAsync(CloudTable table, TrackEntity entity)
@@ -483,8 +492,41 @@ public class WorkshopController : MonoBehaviour
 		return null;                     // Return null if load failed
 	}
 
-	/*public async Task<AudioClip> DownloadWorkshopItem(WorkshopItemController item) 
+	public void OpenItem(WorkshopItemController item)
 	{
+
+		DownloadWorkshopItem(item);
+	}
+
+	async void DownloadWorkshopItem(WorkshopItemController item)
+	{
+		//If this track has already been downloaded, exit with warning
+		DownloadedTrack track = new DownloadedTrack(item);
+		foreach (DownloadedTrack t in downloadedTracks)
+		{
+			if (t.id == track.id)
+			{
+				SpawnSplashTitle("Song Already Downloaded", Color.red);
+				return;
+			}
+		}
+
+		//Save and serialize downloadedTrack xml
+		downloadedTracks.Add(track);
+		var serializer = new XmlSerializer(typeof(DownloadedTrack));
+		var stream = new FileStream(Application.persistentDataPath + "\\DownloadedTracks\\" + track.xmlName, FileMode.Create);
+		serializer.Serialize(stream, track);
+		stream.Close();
+
+		//Create directories
+		System.IO.Directory.CreateDirectory(Application.persistentDataPath + "\\Workshop\\" + item.trackArtist);
+		System.IO.Directory.CreateDirectory(Application.persistentDataPath + "\\Workshop\\" + item.trackArtist + "\\" + item.songName);
+
+		//Start download bar
+		downloadBar.SetActive(true);
+		downloadBarProgress.text = "Starting download...";
+		StartCoroutine(StartBar(downloadBar));
+
 		// Create a file client for interacting with the file service.
 		CloudFileClient fileClient = StorageAccount.CreateCloudFileClient();
 
@@ -497,33 +539,47 @@ public class WorkshopController : MonoBehaviour
 		CloudFileDirectory userDir = root.GetDirectoryReference(item.trackArtist);
 		//Get a directory under the user directory 
 		CloudFileDirectory dir = userDir.GetDirectoryReference(item.songName);
-		// Get image file
+
+		downloadBarProgress.text = "Downloading XML...";
+		//Download XML file
 		CloudFile file = dir.GetFileReference(item.xmlName);
-		string path = Application.persistentDataPath + "\\" + "Workshop" + "\\" + item.trackArtist + "\\" + item.xmlName.Substring(0, item.xmlName.Length - 4) + ".wav";
+		string path = Application.persistentDataPath + "\\" + "Workshop" + "\\" + item.trackArtist + "\\" + item.songName + "\\" + item.xmlName;
 		await file.DownloadToFileAsync(path, FileMode.CreateNew);
 
-		UnityWebRequest AudioFiles = null;
-		string audioFileName = path.Substring(path.LastIndexOf('\\') + 1);
-		audioFileName = audioFileName.Remove(audioFileName.Length - 4);
-		AudioFiles = UnityWebRequestMultimedia.GetAudioClip(path, AudioType.WAV);
+		downloadBarProgress.text = "Saving cover...";
+		//Save already downloaded cover file
+		byte[] coverBytes = item.coverSprite.texture.EncodeToJPG();
+		path = Application.persistentDataPath + "\\" + "Workshop" + "\\" + item.trackArtist + "\\" + item.songName + "\\" + "cover.jpg";
+		var coverFile = File.Open(path, FileMode.Create);
+		var writer = new BinaryWriter(coverFile);
+		writer.Write(coverBytes);
+		coverFile.Close();
 
-		if (AudioFiles != null)
+		//Download music file (if not a built in song)
+		if (!builtInSongs.Contains(item.mp3Name))
 		{
-			yield return AudioFiles.SendWebRequest();
-			if (AudioFiles.isNetworkError)
-				Debug.Log(AudioFiles.error);
-			else
-			{
-				AudioClip clip = DownloadHandlerAudioClip.GetContent(AudioFiles);
-				clip.name = audioFileName;
-			}
+			downloadBarProgress.text = "Downloading song...";
+			file = dir.GetFileReference(item.mp3Name + ".mp3");
+			path = Application.persistentDataPath + "\\" + "Workshop" + "\\" + item.trackArtist + "\\" + item.songName + "\\" + item.mp3Name + ".mp3";
+			await file.DownloadToFileAsync(path, FileMode.CreateNew);
 		}
-	}*/
 
-	public void OpenItem(WorkshopItemController item)
+		downloadBarProgress.text = "--Download Complete--";
+		StartCoroutine(StopBar(downloadBar, true));
+	}
+
+	public void SpawnSplashTitle(string titleText, Color titleColor)
 	{
-		System.IO.Directory.CreateDirectory(Application.persistentDataPath + "\\" + "Workshop" + "\\" + item.trackArtist);
+		GameObject newSplashTitle = Instantiate(splashTitlePrefab, workshopUIMisc.transform);
+		newSplashTitle.GetComponent<TMP_Text>().text = titleText;
+		newSplashTitle.GetComponent<TMP_Text>().color = titleColor;
+		StartCoroutine(KillSplashTitle(newSplashTitle));
+	}
 
+	IEnumerator KillSplashTitle(GameObject title)
+	{
+		yield return new WaitForSeconds(title.GetComponent<Animation>().clip.length);
+		Destroy(title);
 	}
 }
 
@@ -533,7 +589,7 @@ public class TrackEntity : TableEntity
 	public TrackEntity() { }
 
 	// Define the PK and RK
-	public TrackEntity(int id, string xmlName, string xmlArtist, string songName, string songArtist, string coverName, string difficulty)
+	public TrackEntity(int id, string xmlName, string xmlArtist, string songName, string songArtist, string coverName, string difficulty, string mp3Name)
 	{
 		this.PartitionKey = "" + id;	
 		this.RowKey = xmlName;
@@ -542,12 +598,14 @@ public class TrackEntity : TableEntity
 		SongArtist = songArtist;
 		CoverName = coverName;
 		Difficulty = difficulty;
+		Mp3Name = mp3Name;
 	}
 	public string XMLArtist { get; set; }
 	public string SongName { get; set; }
 	public string SongArtist { get; set; }
 	public string CoverName { get; set; }
 	public string Difficulty { get; set; }
+	public string Mp3Name { get; set; }
 }
 
 public class TrackCounter : TableEntity

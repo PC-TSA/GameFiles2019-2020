@@ -601,12 +601,12 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: 
+        - m_Target: {fileID: 5716243702997604780}
+          m_MethodName: OpenItem
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
@@ -625,16 +625,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a6d3d0d17c37fd479d4d82b666a783b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 0
   coverSprite: {fileID: 21300000, guid: fc3a272b0d44edc4288462209a9fab07, type: 3}
   songName: 
   songArtist: 
   trackArtist: 
   difficulty: 
+  xmlName: 
   songCoverImage: {fileID: 4498349897320761744}
   songNameText: {fileID: 4118500688976453300}
   songArtistText: {fileID: 8582765226741461195}
-  trackArtistText: {fileID: 428282893598847707}
   difficultyText: {fileID: 4646693381951725710}
+  trackArtistText: {fileID: 428282893598847707}
 --- !u!1 &6970939406648174664
 GameObject:
   m_ObjectHideFlags: 0
