@@ -10,6 +10,8 @@ public class EndTrackScreenController : MonoBehaviour
     public GameObject leaderboardTabParent;
 
     // ---------- Score Tab Variables ----------
+    public GameObject clearedOrFailedTxt;
+        
     public TMP_Text finalScoreTxt;
     public TMP_Text rankingTxt;
     public TMP_Text songNameTxt;
@@ -26,6 +28,9 @@ public class EndTrackScreenController : MonoBehaviour
 
     private void OnEnable()
     {
+        PopulateScoreTab();
+        PopulateDetailsTab();
+        PopulateLeaderboardsTab();
         GetComponent<Animator>().Play("CanvasGroupFadeIn");
     }
 
@@ -37,7 +42,7 @@ public class EndTrackScreenController : MonoBehaviour
         detailsTabParent.SetActive(false);
         leaderboardTabParent.SetActive(false);
 
-        tabHighlightGoalPos = new Vector3(tabButton.transform.position.x, tabHighlightDivider.transform.position.y, tabButton.transform.position.z);
+        tabHighlightGoalPos = new Vector3(tabButton.transform.localPosition.x, tabHighlightDivider.transform.localPosition.y, tabHighlightDivider.transform.localPosition.z);
         tabHighlightMoving = true;
     }
 
@@ -49,7 +54,7 @@ public class EndTrackScreenController : MonoBehaviour
         detailsTabParent.SetActive(true);
         leaderboardTabParent.SetActive(false);
 
-        tabHighlightGoalPos = new Vector3(tabButton.transform.position.x, tabHighlightDivider.transform.position.y, tabButton.transform.position.z);
+        tabHighlightGoalPos = new Vector3(tabButton.transform.localPosition.x, tabHighlightDivider.transform.localPosition.y, tabHighlightDivider.transform.localPosition.z);
         tabHighlightMoving = true;
     }
 
@@ -61,7 +66,7 @@ public class EndTrackScreenController : MonoBehaviour
         detailsTabParent.SetActive(false);
         leaderboardTabParent.SetActive(true);
 
-        tabHighlightGoalPos = new Vector3(tabButton.transform.position.x, tabHighlightDivider.transform.position.y, tabButton.transform.position.z);
+        tabHighlightGoalPos = new Vector3(tabButton.transform.localPosition.x, tabHighlightDivider.transform.localPosition.y, tabHighlightDivider.transform.localPosition.z);
         tabHighlightMoving = true;
 
         PopulateLeaderboardsTab();
@@ -70,6 +75,7 @@ public class EndTrackScreenController : MonoBehaviour
     public void PopulateScoreTab()
     {
         Recording recording = rhythmRunner.currentRecording;
+        Debug.Log(recording.clipName);
         finalScoreTxt.text = "" + rhythmRunner.score;
         rankingTxt.text = rhythmRunner.ranking;
         songNameTxt.text = recording.songName;
@@ -90,13 +96,16 @@ public class EndTrackScreenController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return)) //Enter to continue
+        if (Input.GetKeyDown(KeyCode.Return)) //Enter to exit
             StartCoroutine(rhythmRunner.LoadAsyncScene("MainMenu"));
+
+        if (Input.GetKeyDown(KeyCode.Space)) //Space to restart
+            StartCoroutine(rhythmRunner.LoadAsyncScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name));
 
         if (tabHighlightMoving)
         {
-            tabHighlightDivider.transform.position = Vector3.Lerp(tabHighlightDivider.transform.position, tabHighlightGoalPos, Time.deltaTime * tabHighlightMoveSpeed);
-            if (Vector3.Distance(tabHighlightDivider.transform.position, tabHighlightGoalPos) < 0.001)
+            tabHighlightDivider.transform.localPosition = Vector3.Lerp(tabHighlightDivider.transform.localPosition, tabHighlightGoalPos, Time.deltaTime * tabHighlightMoveSpeed);
+            if (Vector3.Distance(tabHighlightDivider.transform.localPosition, tabHighlightGoalPos) < 0.001)
                 tabHighlightMoving = false;
         }
     }

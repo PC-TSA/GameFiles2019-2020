@@ -78,6 +78,7 @@ public class RhythmRunner : MonoBehaviour
 
     public PostProcessVolume postProcessingVolume;
     Vignette vignette;
+    ColorGrading colorGrading;
     public float vignetteNewVal;
     public float vignetteLerpSpeed;
 
@@ -101,12 +102,17 @@ public class RhythmRunner : MonoBehaviour
 
     public Slider deathCountSlider;
 
+    public bool hasLost;
+    public bool goToLostVals;
+    public GameObject cameraTrack;
+
     private void Start()
     {
         originalPos = scrollerObj.transform.localPosition;
 
         //Get vignette from post processing profile
         postProcessingVolume.profile.TryGetSettings(out vignette);
+        postProcessingVolume.profile.TryGetSettings(out colorGrading);
 
         if (CrossSceneController.recordingToLoad.Length != 0) //If transfering song from other scene, load from given path instead of predefined file name from build Resources
         {
@@ -135,6 +141,15 @@ public class RhythmRunner : MonoBehaviour
     {
         //Smoothly lerps vignette to deathCount / 20 value
         vignette.intensity.value = Mathf.Lerp(vignette.intensity.value, vignetteNewVal, Time.deltaTime * vignetteLerpSpeed);
+
+        if (goToLostVals)
+        {
+            colorGrading.saturation.value = Mathf.Lerp(colorGrading.saturation.value, -30, Time.deltaTime * 3);
+            audioSource.volume = Mathf.Lerp(audioSource.volume, 0, Time.deltaTime * 3);
+            scrollSpeed = Mathf.Lerp(scrollSpeed, 0, Time.deltaTime * 3);
+            playerObj.GetComponent<PathCreation.Examples.PathFollower>().speed = Mathf.Lerp(playerObj.GetComponent<PathCreation.Examples.PathFollower>().speed, 0, Time.deltaTime * 3);
+            playerObj.GetComponent<Animator>().speed = Mathf.Lerp(playerObj.GetComponent<Animator>().speed, 0, Time.deltaTime * 3);
+        }
     }
 
     private void FixedUpdate()
@@ -313,7 +328,8 @@ public class RhythmRunner : MonoBehaviour
 
     public void DeserializeNote(Note n)
     {
-        GameObject newNote = Instantiate(arrowPrefabs[n.lane], new Vector3(0, 0, 0), transform.rotation, notesParent.transform);    
+        GameObject newNote = Instantiate(arrowPrefabs[n.lane], new Vector3(0, 0, 0), transform.rotation, notesParent.transform);
+        newNote.transform.SetSiblingIndex(0);
         newNote.transform.localPosition = n.pos;
         newNote.transform.localRotation = transform.rotation;
     }
@@ -387,8 +403,21 @@ public class RhythmRunner : MonoBehaviour
 
     void Lose()
     {
-        //Temp code
-        Debug.Log("You Lost!");
+        Debug.Log("Track Failed!");
+        StartCoroutine(GoToLostVals());
+    }
+
+    IEnumerator GoToLostVals()
+    {
+        goToLostVals = true; //When true, vals lerp in Update
+        yield return new WaitForSeconds(1.5f);
+        audioSource.Stop();
+        cameraTrack.GetComponent<CPC_CameraPath>().StopPath();
+        playerObj.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
+        endTrackScreen.SetActive(true);
+        endTrackScreen.GetComponent<EndTrackScreenController>().clearedOrFailedTxt.GetComponent<TMP_Text>().text = "Track Failed!";
+        yield return new WaitForSeconds(1.5f);
+        goToLostVals = false;
     }
 
     void UpdateCombo(int i)

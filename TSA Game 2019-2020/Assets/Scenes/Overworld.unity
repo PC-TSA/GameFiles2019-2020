@@ -201,7 +201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33aabe1a2dec93349b06e6e5dc51bc06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pathCreator: {fileID: 0}
+  pathCreator: {fileID: 1578464421}
   endOfPathInstruction: 0
   speed: 5
 --- !u!1 &62527401
@@ -343,7 +343,7 @@ GameObject:
   - component: {fileID: 73443169}
   - component: {fileID: 73443168}
   m_Layer: 0
-  m_Name: EnterToContinueTxt
+  m_Name: EnterToExitTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -386,7 +386,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press ENTER to Continue
+  m_text: Press ENTER to Exit
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 07249e64d5ee8ac448a79180896c54e1, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: f8536a5b79803014c8bcfad3083e9d26, type: 2}
@@ -455,7 +455,7 @@ MonoBehaviour:
   m_margin: {x: -236.12978, y: 0, z: -242.20132, w: 0}
   m_textInfo:
     textComponent: {fileID: 73443168}
-    characterCount: 23
+    characterCount: 19
     spriteCount: 0
     spaceCount: 3
     wordCount: 4
@@ -898,6 +898,9 @@ MonoBehaviour:
   - {fileID: 1626063921}
   endTrackScreen: {fileID: 1590647530}
   deathCountSlider: {fileID: 3368546058744769377}
+  hasLost: 0
+  goToLostVals: 0
+  cameraTrack: {fileID: 1195981067}
 --- !u!82 &90242894
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1387,6 +1390,161 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 117797719}
   m_CullTransparentMesh: 0
+--- !u!1 &145715712
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 145715713}
+  - component: {fileID: 145715715}
+  - component: {fileID: 145715714}
+  m_Layer: 0
+  m_Name: SpaceToRestartTxt
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &145715713
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145715712}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalScale: {x: 0.99766105, y: 0.9976611, z: 0.9976613}
+  m_Children: []
+  m_Father: {fileID: 1590647531}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 4, y: -281}
+  m_SizeDelta: {x: 0, y: -70}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &145715714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145715712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Press SPACE to Play Again
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 07249e64d5ee8ac448a79180896c54e1, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: f8536a5b79803014c8bcfad3083e9d26, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4281479730
+  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_outlineColor:
+    serializedVersion: 2
+    rgba: 4278190080
+  m_fontSize: 24
+  m_fontSizeBase: 24
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_textAlignment: 514
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_firstOverflowCharacterIndex: 0
+  m_linkedTextComponent: {fileID: 0}
+  m_isLinkedTextComponent: 0
+  m_isTextTruncated: 0
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_ignoreRectMaskCulling: 0
+  m_ignoreCulling: 1
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_VertexBufferAutoSizeReduction: 1
+  m_firstVisibleCharacter: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: -236.12978, y: 0, z: -242.20132, w: 0}
+  m_textInfo:
+    textComponent: {fileID: 145715714}
+    characterCount: 25
+    spriteCount: 0
+    spaceCount: 4
+    wordCount: 5
+    linkCount: 0
+    lineCount: 1
+    pageCount: 1
+    materialCount: 1
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_spriteAnimator: {fileID: 0}
+  m_hasFontAssetChanged: 0
+  m_subTextObjects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &145715715
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145715712}
+  m_CullTransparentMesh: 0
 --- !u!1 &151602079
 GameObject:
   m_ObjectHideFlags: 0
@@ -1399,7 +1557,7 @@ GameObject:
   - component: {fileID: 151602082}
   - component: {fileID: 151602081}
   m_Layer: 0
-  m_Name: SongClearedTxt
+  m_Name: ClearedOrFailedTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7370,9 +7528,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Combo: 1000
-
-'
+  m_text: 'Combo: 0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 07249e64d5ee8ac448a79180896c54e1, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: f8536a5b79803014c8bcfad3083e9d26, type: 2}
@@ -7441,9 +7597,9 @@ MonoBehaviour:
   m_margin: {x: -9.23583, y: 5.674602, z: 49.731853, w: 14.143833}
   m_textInfo:
     textComponent: {fileID: 420583467}
-    characterCount: 12
+    characterCount: 8
     spriteCount: 0
-    spaceCount: 2
+    spaceCount: 1
     wordCount: 2
     linkCount: 0
     lineCount: 1
@@ -19971,7 +20127,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100000
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 07249e64d5ee8ac448a79180896c54e1, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: f8536a5b79803014c8bcfad3083e9d26, type: 2}
@@ -20040,7 +20196,7 @@ MonoBehaviour:
   m_margin: {x: -0.59536195, y: 5.674602, z: 87.407936, w: 14.143833}
   m_textInfo:
     textComponent: {fileID: 1006569414}
-    characterCount: 6
+    characterCount: 1
     spriteCount: 0
     spaceCount: 0
     wordCount: 1
@@ -20926,7 +21082,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1195981067}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2edac0b6f5e12204bbc4b9f4391db7ec, type: 3}
   m_Name: 
@@ -20942,13 +21098,13 @@ MonoBehaviour:
     rotation: {x: 0.1366696, y: 0.2857622, z: -0.0412742, w: 0.9476064}
     handleprev: {x: -0.007736206, y: 0.24711967, z: -0.63594055}
     handlenext: {x: 0.007736206, y: -0.24711967, z: 0.63594055}
-    curveTypeRotation: 1
+    curveTypeRotation: 0
     rotationCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -20967,15 +21123,15 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    curveTypePosition: 1
+    curveTypePosition: 0
     positionCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
-        outSlope: 1
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
@@ -20983,7 +21139,7 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
+        inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
@@ -20997,13 +21153,13 @@ MonoBehaviour:
     rotation: {x: 0.07434571, y: 0.44588307, z: -0.037259202, w: 0.89121985}
     handleprev: {x: -0.030792236, y: 0.32317066, z: -0.3548584}
     handlenext: {x: 0.030792236, y: -0.32317066, z: 0.3548584}
-    curveTypeRotation: 1
+    curveTypeRotation: 0
     rotationCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -21022,15 +21178,15 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    curveTypePosition: 1
+    curveTypePosition: 0
     positionCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
-        outSlope: 1
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
@@ -21038,7 +21194,7 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
+        inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
@@ -21052,13 +21208,13 @@ MonoBehaviour:
     rotation: {x: 0.02975089, y: 0.25105792, z: -0.007778793, w: 0.9674835}
     handleprev: {x: -0.72824097, y: 0.3281319, z: 0.6592865}
     handlenext: {x: 0.72824097, y: -0.3281319, z: -0.6592865}
-    curveTypeRotation: 1
+    curveTypeRotation: 0
     rotationCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -21077,15 +21233,15 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    curveTypePosition: 1
+    curveTypePosition: 0
     positionCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
-        outSlope: 1
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
@@ -21093,7 +21249,7 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
+        inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
@@ -21107,13 +21263,13 @@ MonoBehaviour:
     rotation: {x: 0.16951299, y: -0.21933626, z: 0.038669188, w: 0.96003217}
     handleprev: {x: -0.89453125, y: -0.14317465, z: -0.67562866}
     handlenext: {x: 0.89453125, y: 0.14317465, z: 0.67562866}
-    curveTypeRotation: 1
+    curveTypeRotation: 0
     rotationCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -21132,15 +21288,15 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    curveTypePosition: 1
+    curveTypePosition: 0
     positionCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
-        outSlope: 1
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
@@ -21148,7 +21304,7 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
+        inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
@@ -21162,13 +21318,13 @@ MonoBehaviour:
     rotation: {x: 0.15583248, y: -0.6957258, z: 0.15864907, w: 0.68301713}
     handleprev: {x: -0.7749634, y: -0.20994568, z: -1.9277039}
     handlenext: {x: 0.7749634, y: 0.20994568, z: 1.9277039}
-    curveTypeRotation: 1
+    curveTypeRotation: 0
     rotationCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -21187,15 +21343,15 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    curveTypePosition: 1
+    curveTypePosition: 0
     positionCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
-        outSlope: 1
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
@@ -21203,7 +21359,7 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
+        inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
@@ -21217,13 +21373,13 @@ MonoBehaviour:
     rotation: {x: 0.14308605, y: -0.850823, z: 0.29783955, w: 0.4085564}
     handleprev: {x: 0.54852295, y: 1.2125816, z: -0.750824}
     handlenext: {x: -0.54852295, y: -1.2125816, z: 0.750824}
-    curveTypeRotation: 1
+    curveTypeRotation: 0
     rotationCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -21242,15 +21398,15 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    curveTypePosition: 1
+    curveTypePosition: 0
     positionCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
-        outSlope: 1
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
@@ -21258,7 +21414,7 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
+        inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
@@ -21272,13 +21428,13 @@ MonoBehaviour:
     rotation: {x: -0.046256315, y: -0.9380731, z: 0.31427014, w: -0.1382517}
     handleprev: {x: 0.36695862, y: 1.3776817, z: -0.5346985}
     handlenext: {x: -0.36695862, y: -1.3776817, z: 0.5346985}
-    curveTypeRotation: 1
+    curveTypeRotation: 0
     rotationCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -21297,15 +21453,15 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    curveTypePosition: 1
+    curveTypePosition: 0
     positionCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
-        outSlope: 1
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
@@ -21313,7 +21469,7 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
+        inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
@@ -21327,13 +21483,13 @@ MonoBehaviour:
     rotation: {x: -0.122089654, y: -0.8277039, z: 0.19798978, w: -0.5106863}
     handleprev: {x: -0.2909546, y: 0.2821617, z: 0.4649353}
     handlenext: {x: 0.2909546, y: -0.2821617, z: -0.4649353}
-    curveTypeRotation: 1
+    curveTypeRotation: 0
     rotationCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -21352,15 +21508,15 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    curveTypePosition: 1
+    curveTypePosition: 0
     positionCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
-        outSlope: 1
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
@@ -21368,7 +21524,7 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
+        inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
@@ -21382,13 +21538,13 @@ MonoBehaviour:
     rotation: {x: -0.07997361, y: -0.7845238, z: 0.10360475, w: -0.60612935}
     handleprev: {x: -0.108444214, y: 0.75750446, z: 1.4318237}
     handlenext: {x: 0.108444214, y: -0.75750446, z: -1.4318237}
-    curveTypeRotation: 1
+    curveTypeRotation: 0
     rotationCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -21407,15 +21563,15 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    curveTypePosition: 1
+    curveTypePosition: 0
     positionCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
-        outSlope: 1
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
@@ -21423,7 +21579,7 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
+        inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
@@ -21437,13 +21593,13 @@ MonoBehaviour:
     rotation: {x: -0.035069566, y: -0.6683459, z: 0.031649914, w: -0.7423491}
     handleprev: {x: -0.9329071, y: 0.5537472, z: 0.4570923}
     handlenext: {x: 0.9329071, y: -0.5537472, z: -0.4570923}
-    curveTypeRotation: 1
+    curveTypeRotation: 0
     rotationCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -21462,15 +21618,15 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    curveTypePosition: 1
+    curveTypePosition: 0
     positionCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
-        outSlope: 1
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
@@ -21478,7 +21634,7 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
+        inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
@@ -21492,13 +21648,13 @@ MonoBehaviour:
     rotation: {x: -0.038850162, y: -0.3860225, z: 0.016335642, w: -0.9215262}
     handleprev: {x: -1.316391, y: 0.23670912, z: 1.1433563}
     handlenext: {x: 1.316391, y: -0.23670912, z: -1.1433563}
-    curveTypeRotation: 1
+    curveTypeRotation: 0
     rotationCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -21517,15 +21673,15 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    curveTypePosition: 1
+    curveTypePosition: 0
     positionCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
-        outSlope: 1
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
@@ -21533,7 +21689,7 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
+        inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
@@ -21547,13 +21703,13 @@ MonoBehaviour:
     rotation: {x: -0.04324825, y: -0.53191835, z: 0.027283315, w: -0.84525037}
     handleprev: {x: 0, y: 0, z: -1}
     handlenext: {x: 0, y: 0, z: 1}
-    curveTypeRotation: 1
+    curveTypeRotation: 0
     rotationCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -21572,15 +21728,15 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    curveTypePosition: 1
+    curveTypePosition: 0
     positionCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0
+        time: -0.020832062
+        value: 0.5047302
         inSlope: 0
-        outSlope: 1
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
@@ -21588,7 +21744,7 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
+        inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
@@ -23112,7 +23268,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1578464419}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 231.88673, y: 2.9, z: 230.32988}
+  m_LocalPosition: {x: 231.88673, y: 1.476, z: 230.32988}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1919127472}
@@ -23237,6 +23393,7 @@ RectTransform:
   - {fileID: 840111405}
   - {fileID: 329345768}
   - {fileID: 73443167}
+  - {fileID: 145715713}
   m_Father: {fileID: 422952004}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -23260,6 +23417,7 @@ MonoBehaviour:
   scoreTabParent: {fileID: 745451277}
   detailsTabParent: {fileID: 2106543406}
   leaderboardTabParent: {fileID: 840111404}
+  clearedOrFailedTxt: {fileID: 151602079}
   finalScoreTxt: {fileID: 88727409}
   rankingTxt: {fileID: 488125336}
   songNameTxt: {fileID: 842927885}
@@ -23279,7 +23437,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1590647530}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -23439,6 +23597,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.94
       objectReference: {fileID: 0}
+    - target: {fileID: 1786817432798991565, guid: f9db4bff6fa56b844b386aada8987e69,
+        type: 3}
+      propertyPath: m_Colors.m_ColorMultiplier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1786817432798991565, guid: f9db4bff6fa56b844b386aada8987e69,
+        type: 3}
+      propertyPath: m_Value
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1786817432248498114, guid: f9db4bff6fa56b844b386aada8987e69,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -23453,16 +23621,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 1.606626
-      objectReference: {fileID: 0}
-    - target: {fileID: 1786817432798991565, guid: f9db4bff6fa56b844b386aada8987e69,
-        type: 3}
-      propertyPath: m_Colors.m_ColorMultiplier
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1786817432798991565, guid: f9db4bff6fa56b844b386aada8987e69,
-        type: 3}
-      propertyPath: m_Value
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1786817432248498115, guid: f9db4bff6fa56b844b386aada8987e69,
         type: 3}
@@ -25340,7 +25498,7 @@ PrefabInstance:
     - target: {fileID: 6566542389047705704, guid: 0d08a9261dfee1640baccb91e3841fcf,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6566542389047745608, guid: 0d08a9261dfee1640baccb91e3841fcf,
         type: 3}
@@ -30920,7 +31078,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2088296049}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 33aabe1a2dec93349b06e6e5dc51bc06, type: 3}
   m_Name: 
