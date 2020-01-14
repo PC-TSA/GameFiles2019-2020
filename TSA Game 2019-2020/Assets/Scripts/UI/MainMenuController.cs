@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Playables;
+using TMPro;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -93,5 +94,10 @@ public class MainMenuController : MonoBehaviour
 
             yield return new WaitForSeconds(0.5f);
         }
+    }
+
+    public void SetUsername(GameObject obj)
+    {
+        CrossSceneController.username = obj.GetComponent<TMP_Text>().text;
     }
 }

@@ -75,7 +75,6 @@ public class EndTrackScreenController : MonoBehaviour
     public void PopulateScoreTab()
     {
         Recording recording = rhythmRunner.currentRecording;
-        Debug.Log(recording.clipName);
         finalScoreTxt.text = "" + rhythmRunner.score;
         rankingTxt.text = rhythmRunner.ranking;
         songNameTxt.text = recording.songName;

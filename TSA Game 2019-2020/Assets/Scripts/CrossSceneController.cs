@@ -8,6 +8,8 @@ public static class CrossSceneController
     public static string recordingToLoad = "";
     public static AudioClip clipToLoad;
 
+    public static string username;
+
     public static void MakerToGame(string recordingPath, AudioClip clip) //Triggered from maker, sends current track to game
     {
         recordingToLoad = recordingPath;

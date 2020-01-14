@@ -147,7 +147,7 @@ public class RhythmRunner : MonoBehaviour
             colorGrading.saturation.value = Mathf.Lerp(colorGrading.saturation.value, -30, Time.deltaTime * 3);
             audioSource.volume = Mathf.Lerp(audioSource.volume, 0, Time.deltaTime * 3);
             scrollSpeed = Mathf.Lerp(scrollSpeed, 0, Time.deltaTime * 3);
-            playerObj.GetComponent<PathCreation.Examples.PathFollower>().speed = Mathf.Lerp(playerObj.GetComponent<PathCreation.Examples.PathFollower>().speed, 0, Time.deltaTime * 3);
+            playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().speed = Mathf.Lerp(playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().speed, 0, Time.deltaTime * 3);
             playerObj.GetComponent<Animator>().speed = Mathf.Lerp(playerObj.GetComponent<Animator>().speed, 0, Time.deltaTime * 3);
         }
     }
@@ -413,7 +413,7 @@ public class RhythmRunner : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         audioSource.Stop();
         cameraTrack.GetComponent<CPC_CameraPath>().StopPath();
-        playerObj.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
+        playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
         endTrackScreen.SetActive(true);
         endTrackScreen.GetComponent<EndTrackScreenController>().clearedOrFailedTxt.GetComponent<TMP_Text>().text = "Track Failed!";
         yield return new WaitForSeconds(1.5f);
