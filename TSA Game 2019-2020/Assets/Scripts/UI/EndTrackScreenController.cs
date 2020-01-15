@@ -36,8 +36,6 @@ public class EndTrackScreenController : MonoBehaviour
 
     public void SelectScoreTab(GameObject tabButton)
     {
-        PopulateScoreTab();
-
         scoreTabParent.SetActive(true);
         detailsTabParent.SetActive(false);
         leaderboardTabParent.SetActive(false);
