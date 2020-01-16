@@ -62,7 +62,7 @@ public class WorkshopController : MonoBehaviour
 	{
 		StorageAccount = networkingUtilities.SetStorageAccount();
 		System.IO.Directory.CreateDirectory(Application.persistentDataPath + "\\" + "Workshop");
-		System.IO.Directory.CreateDirectory(Application.persistentDataPath + "\\" + "DownloadedTracks");
+		username = PlayerPrefs.GetString("username");
 
 		//Read all audioclips in the Resources/Songs folder and add them to the 'builtInSongs' list
 		UnityEngine.Object[] temp = Resources.LoadAll("Songs", typeof(AudioClip));
@@ -74,31 +74,38 @@ public class WorkshopController : MonoBehaviour
 		OpenWorkshop();
 	}
 
-	//Populate downloadedTracks list by reading Application.persistentDataPath / DownloadedTracks / all downloadedTack xmls
+	//Populate downloadedTracks list by reading Application.persistentDataPath / DownloadedTracks / DownloadedTracks
 	void PopulateDownloadedTracks()
 	{
 		downloadedTracks = new List<DownloadedTrack>();
 
-		//For each downloadedTrack xml in the DowloadedTracks folder
 		foreach (string file in System.IO.Directory.GetFiles(Application.persistentDataPath + "\\" + "DownloadedTracks"))
 		{
-			var serializer = new XmlSerializer(typeof(DownloadedTrack));
-			var stream = new FileStream(file, FileMode.Open);
-			DownloadedTrack track = serializer.Deserialize(stream) as DownloadedTrack;
-			stream.Close();
-			downloadedTracks.Add(track);
+			if (file.Substring(file.Length - 3) == "xml")
+			{
+				var serializer = new XmlSerializer(typeof(DownloadedTrack));
+				var stream = new FileStream(file, FileMode.Open);
+				DownloadedTrack track = serializer.Deserialize(stream) as DownloadedTrack;
+				stream.Close();
+				downloadedTracks.Add(track);
+			}
+			else
+				return;
 		}
 	}
 
-	async void PopulateWorkshop(string songName, string songArtist, string trackArtist, string difficulty, string coverName, string xmlName, string mp3Name, int id)
+	async void PopulateWorkshop(string songName, string songArtist, string xmlArtist, string difficulty, string coverName, string xmlName, string mp3Name, int id)
 	{
-		GameObject item = Instantiate(workshopItemPrefab, workshopContentObj.transform);
-		Sprite sprite = await GetCoverImage(username, songName, coverName);
-		item.GetComponent<WorkshopItemController>().InitializeItem(sprite, songName, songArtist, trackArtist, difficulty, xmlName, mp3Name, id); 
+		GameObject item = Instantiate(workshopItemPrefab, workshopContentObj.transform);	
+		Sprite sprite = await GetCoverImage(xmlArtist, songName, coverName);
+		item.GetComponent<WorkshopItemController>().InitializeItem(sprite, songName, songArtist, xmlArtist, difficulty, xmlName, mp3Name, id); 
 	}
 
 	public async Task<Sprite> GetCoverImage(string username, string songName, string coverName) 
 	{
+		if(coverName == "")
+			return null;
+
 		// Create a file client for interacting with the file service.
 		CloudFileClient fileClient = StorageAccount.CreateCloudFileClient();
 
@@ -334,7 +341,11 @@ public class WorkshopController : MonoBehaviour
 		uploadBarProgress.text = "Adding to tracks table...";
 		uploadBar.GetComponent<Slider>().value++;
 
+		//Add to tracks table
 		AddToTracksTable(xmlName, songName, songArtist, coverName, difficulty, mp3Name);
+
+		//Make leaderboard table
+		networkingUtilities.NewLeaderboard(username + xmlName);
 
 		uploadBarProgress.text = "--Upload Complete--";
 		uploadBar.GetComponent<Slider>().value++;

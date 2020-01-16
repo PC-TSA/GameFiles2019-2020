@@ -3312,9 +3312,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnDown: {fileID: 869750435}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -3838,7 +3838,6 @@ MonoBehaviour:
   songArtistInput: {fileID: 869750435}
   difficultyDropdown: {fileID: 1450419093}
   builtInSongs: []
-  downloadedTracks: []
 --- !u!114 &1331919533
 MonoBehaviour:
   m_ObjectHideFlags: 0

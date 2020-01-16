@@ -7,13 +7,19 @@ using UnityEngine.Playables;
 using TMPro;
 
 public class MainMenuController : MonoBehaviour
-{
+{ 
     public GameObject loadingBar;
     public List<GameObject> loadingTextPeriods;
 
     public GameObject mainMenuCanvas;
+    public GameObject usernameInput;
 
     public PlayableAsset mainMenuClose; //The timeline animation to slide the main menu back into the bar
+
+    private void Start()
+    {
+        usernameInput.GetComponent<TMP_InputField>().text = PlayerPrefs.GetString("username");
+    }
 
     public void GoToMainGame()
     {
@@ -96,8 +102,13 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
-    public void SetUsername(GameObject obj)
+    public void SetUsername()
     {
-        CrossSceneController.username = obj.GetComponent<TMP_Text>().text;
+        string temp = usernameInput.GetComponent<TMP_InputField>().text;
+        if (temp != "")
+        {
+            PlayerPrefs.SetString("username", usernameInput.GetComponent<TMP_InputField>().text);
+            Debug.Log("Player prefs username updated: " + PlayerPrefs.GetString("username"));
+        }
     }
 }

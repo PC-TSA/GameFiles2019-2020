@@ -7,6 +7,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using Random = UnityEngine.Random;
 
 public class LeaderboardController : MonoBehaviour
 {
@@ -14,18 +15,29 @@ public class LeaderboardController : MonoBehaviour
 
 	public CloudStorageAccount StorageAccount;
 
+	public List<ScoreEntity> tempTableResult;
+
 	private void Awake()
 	{
 		StorageAccount = CloudStorageAccount.Parse(connectionString);
+		//PopulateTest("gabrieltm8Frame", 100);
 	}
 
-	public async void AddToLeaderboard(string tableName, string player, float score)
+	void PopulateTest(string tableName, int count)
+	{
+		for(int i = 0; i < count; i++)
+		{
+			AddToLeaderboard(tableName, "" + Random.Range(-100, 0), Random.Range(0, 1000), (float)(Random.Range(0, 1000) / 10), "SS");
+		}
+	}
+
+	public async void AddToLeaderboard(string tableName, string player, float score, float accuracy, string rank)
 	{
 		Debug.Log("--Adding Score Table: " + tableName + "--");
 		CloudTableClient tableClient = StorageAccount.CreateCloudTableClient();
 
 		// Create a table client for interacting with the table service 
-		CloudTable table = tableClient.GetTableReference(tableName.Substring(0, tableName.Length - 4));
+		CloudTable table = tableClient.GetTableReference(tableName);
 
 		try
 		{
@@ -36,7 +48,7 @@ public class LeaderboardController : MonoBehaviour
 			throw;
 		}
 
-		ScoreEntity scoreEntity = new ScoreEntity(player, score);
+		ScoreEntity scoreEntity = new ScoreEntity(player, score, accuracy, rank);
 		await InsertOrMergeEntityAsync(table, scoreEntity);
 		Debug.Log("Score Added: " + player + " | " + score);
 	}
@@ -73,24 +85,22 @@ public class LeaderboardController : MonoBehaviour
 
 		// Execute the operation.
 		TableResult result = await table.ExecuteAsync(insertOrMergeOperation);
-		ScoreEntity insertedCustomer = result.Result as ScoreEntity;
-		return insertedCustomer;
+		ScoreEntity insertedScore = result.Result as ScoreEntity;
+		return insertedScore;
 	}
 
-	private async Task<ScoreEntity> RetrieveEntityUsingPointQueryAsync(CloudTable table, string partitionKey, string rowKey)
+	public async Task<ScoreEntity> GetEntityFromTable(string tableName, string partitionKey, string rowKey)
 	{
 		TableOperation retrieveOperation = TableOperation.Retrieve<ScoreEntity>(partitionKey, rowKey);
-		TableResult result = await table.ExecuteAsync(retrieveOperation);
-		ScoreEntity score = result.Result as ScoreEntity;
-		if (score != null)
-		{
-			Debug.Log(table.Name + ": " + score.PartitionKey + " | " + score.RowKey);
-		}
+		CloudTableClient tableClient = StorageAccount.CreateCloudTableClient();
+		CloudTable table = tableClient.GetTableReference(tableName);
 
-		return score;
+		TableResult result = await table.ExecuteAsync(retrieveOperation);
+		ScoreEntity scoreEntity = result.Result as ScoreEntity;
+		return scoreEntity;
 	}
 
-	private async Task DeleteEntityAsync(CloudTable table, ScoreEntity deleteEntity)
+	public async Task DeleteEntityAsync(CloudTable table, ScoreEntity deleteEntity)
 	{
 		if (deleteEntity == null)
 		{
@@ -101,10 +111,20 @@ public class LeaderboardController : MonoBehaviour
 		await table.ExecuteAsync(deleteOperation);
 	}
 
-	private async Task PartitionScanAsync(CloudTable table, string partitionKey)
+	public async Task<List<ScoreEntity>> GetLeaderboardTable(string tableName)
 	{
-		TableQuery<ScoreEntity> partitionScanQuery = new TableQuery<ScoreEntity>().Where
-			(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, partitionKey));
+		await PartitionScanAsync(tableName); //Pulls entire leaderboard table into tempTableResult list
+		return tempTableResult;
+	}
+
+	public async Task PartitionScanAsync(string tableName)
+	{
+		tempTableResult = new List<ScoreEntity>();
+		TableQuery<ScoreEntity> partitionScanQuery = new TableQuery<ScoreEntity>();
+		CloudTableClient tableClient = StorageAccount.CreateCloudTableClient();
+
+		// Create a table client for interacting with the table service 
+		CloudTable table = tableClient.GetTableReference(tableName);
 
 		TableContinuationToken token = null;
 		// Page through the results
@@ -114,7 +134,7 @@ public class LeaderboardController : MonoBehaviour
 			token = segment.ContinuationToken;
 			foreach (ScoreEntity entity in segment)
 			{
-				Debug.Log(table.Name + ": " + entity.PartitionKey + " | " + entity.RowKey);
+				tempTableResult.Add(entity);
 			}
 		}
 		while (token != null);
@@ -123,13 +143,18 @@ public class LeaderboardController : MonoBehaviour
 
 public class ScoreEntity : TableEntity
 {
-	// Your entity type must expose a parameter-less constructor
+	public string score { get; set; }
+	public string accuracy { get; set; }
+	public string rank { get; set; }
+
 	public ScoreEntity() { }
 
-	// Define the PK and RK
-	public ScoreEntity(string name, float score)
+	public ScoreEntity(string name, float score, float accuracy, string rank)
 	{
-		this.PartitionKey = name;
-		this.RowKey = "" + score;
+		this.PartitionKey = "Player";
+		this.RowKey = name;
+		this.score = "" + score;
+		this.accuracy = "" + accuracy;
+		this.rank = rank;
 	}
 }

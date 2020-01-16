@@ -24332,6 +24332,7 @@ GameObject:
   - component: {fileID: 1590647532}
   - component: {fileID: 1590647533}
   - component: {fileID: 1590647534}
+  - component: {fileID: 1590647535}
   m_Layer: 0
   m_Name: EndTrackScreen
   m_TagString: Untagged
@@ -24380,6 +24381,7 @@ MonoBehaviour:
   scoreTabParent: {fileID: 745451277}
   detailsTabParent: {fileID: 2106543406}
   leaderboardTabParent: {fileID: 840111404}
+  username: 
   clearedOrFailedTxt: {fileID: 151602079}
   finalScoreTxt: {fileID: 88727409}
   rankingTxt: {fileID: 488125336}
@@ -24392,6 +24394,8 @@ MonoBehaviour:
   tabHighlightMoveSpeed: 6
   tabHighlightGoalPos: {x: 0, y: 0, z: 0}
   rhythmRunner: {fileID: 90242893}
+  leaderboardController: {fileID: 1590647535}
+  leaderboardTable: 
 --- !u!225 &1590647533
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -24423,6 +24427,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1590647535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1590647530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e07cbde3d91bfed4e8ed434fe7fcfd96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  connectionString: DefaultEndpointsProtocol=https;AccountName=tritonal;AccountKey=YQVpz7Gxy48K4wVxDtI2jX1kmhUot/J6wH3IKXEWNpNy/Th8JBdpefQ46SQytZRx4eIPyL05HJ0Da6egTfMXJA==;EndpointSuffix=core.windows.net
 --- !u!1001 &1626063920
 PrefabInstance:
   m_ObjectHideFlags: 0
