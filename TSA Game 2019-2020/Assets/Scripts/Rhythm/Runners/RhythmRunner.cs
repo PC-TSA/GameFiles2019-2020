@@ -31,6 +31,12 @@ public class RhythmRunner : MonoBehaviour
     public int accuracyTimesAdded; //Essentially how many notes have been hit. Divide total accuracy by this
     public string ranking; //Letter ranking = accuracy in sections; D = < 30, C = 30-50, B = 50-70, A = 70-90, S = 90-95, SS = 95-100
 
+    public int perfectHits;
+    public int goodHits;
+    public int okayHits;
+    public int badHits;
+    public int maxCombo;
+
     public GameObject rhythmCanvasObj;
 
     public GameObject notesHitTxt;
@@ -423,6 +429,8 @@ public class RhythmRunner : MonoBehaviour
     void UpdateCombo(int i)
     {
         combo += i;
+        if (combo > maxCombo)
+            maxCombo = combo;
         comboTxt.GetComponent<TextMeshProUGUI>().text = "Combo: " + combo;
         if (combo < 10)
             comboLvl = 0;

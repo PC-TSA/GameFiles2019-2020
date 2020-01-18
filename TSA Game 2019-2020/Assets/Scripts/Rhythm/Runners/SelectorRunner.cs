@@ -154,18 +154,24 @@ public class SelectorRunner : MonoBehaviour
             {
                 rhythmRunner.UpdateScore(0.4f); //Bad hit
                 rhythmRunner.SpawnSplashTitle("Bad", Color.red);
+                rhythmRunner.badHits++;
             }
             else if (hitAccuracy < 40 && hitAccuracy >= 15)
-                rhythmRunner.UpdateScore(0.6f); //Moderate hit
+            {
+                rhythmRunner.UpdateScore(0.6f); //Okay hit
+                rhythmRunner.okayHits++;
+            }
             else if (hitAccuracy < 15 && hitAccuracy >= 8)
             {
                 rhythmRunner.UpdateScore(0.8f); //Good hit
                 rhythmRunner.SpawnSplashTitle("Good", Color.cyan);
+                rhythmRunner.goodHits++;
             }
             else if (hitAccuracy < 8)
             {
                 rhythmRunner.UpdateScore(1); //Perfect hit
                 rhythmRunner.SpawnSplashTitle("Perfect", Color.green);
+                rhythmRunner.perfectHits++;
             }
             rhythmRunner.UpdateAccuracy(100 - hitAccuracy);
         }
@@ -178,18 +184,24 @@ public class SelectorRunner : MonoBehaviour
         {
             sliderAccuracyMultiplier = 0.04f; //Bad hit
             rhythmRunner.SpawnSplashTitle("Bad", Color.red);
+            rhythmRunner.badHits++;
         }
         else if (hitAccuracy < 40 && hitAccuracy >= 15)
+        {
             sliderAccuracyMultiplier = 0.06f; //Moderate hit
+            rhythmRunner.okayHits++;
+        }
         else if (hitAccuracy < 15 && hitAccuracy >= 8)
         {
             sliderAccuracyMultiplier = 0.08f; //Good hit
             rhythmRunner.SpawnSplashTitle("Good", Color.cyan);
+            rhythmRunner.goodHits++;
         }
         else if (hitAccuracy < 8)
         {
             sliderAccuracyMultiplier = 0.1f; //Perfect hit
             rhythmRunner.SpawnSplashTitle("Perfect", Color.green);
+            rhythmRunner.perfectHits++;
         }
     }
 }

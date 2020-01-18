@@ -29,6 +29,22 @@ public class EndTrackScreenController : MonoBehaviour
     public RhythmRunner rhythmRunner;
     public LeaderboardController leaderboardController;
 
+    //---------- Details Tab Variables ----------
+    public TMP_Text notesHitTxt;
+    public TMP_Text perfectHitsTxt;
+    public TMP_Text goodHitsTxt;
+    public TMP_Text okayHitsTxt;
+    public TMP_Text badHitsTxt;
+    public TMP_Text notesMiseedTxt;
+    public TMP_Text missClicksTxt;
+    public TMP_Text accuracyTxt;
+    public TMP_Text maxComboTxt;
+
+    //---------- Leaderboard Tab Variables ----------
+    public GameObject leaderboardEntriesParent;
+    public GameObject leaderboardEntryPrefab;
+    public GameObject currentScoreEntry;
+
     //---------- Leaderboard Variables ----------
     public string leaderboardTable;
     public ScoreEntity currentScore;
@@ -65,8 +81,6 @@ public class EndTrackScreenController : MonoBehaviour
 
     public void SelectDetailsTab(GameObject tabButton)
     {
-        PopulateDetailsTab();
-
         scoreTabParent.SetActive(false);
         detailsTabParent.SetActive(true);
         leaderboardTabParent.SetActive(false);
@@ -77,16 +91,12 @@ public class EndTrackScreenController : MonoBehaviour
 
     public void SelectLeaderboardsTab(GameObject tabButton)
     {
-        PopulateLeaderboardsTab();
-
         scoreTabParent.SetActive(false);
         detailsTabParent.SetActive(false);
         leaderboardTabParent.SetActive(true);
 
         tabHighlightGoalPos = new Vector3(tabButton.transform.localPosition.x, tabHighlightDivider.transform.localPosition.y, tabHighlightDivider.transform.localPosition.z);
         tabHighlightMoving = true;
-
-        PopulateLeaderboardsTab();
     }
 
     public void PopulateScoreTab()
@@ -102,12 +112,21 @@ public class EndTrackScreenController : MonoBehaviour
 
     public void PopulateDetailsTab()
     {
-
+        notesHitTxt.text = "" + rhythmRunner.notesHit;
+        perfectHitsTxt.text = "" + rhythmRunner.perfectHits;
+        goodHitsTxt.text = "" + rhythmRunner.goodHits;
+        okayHitsTxt.text = "" + rhythmRunner.okayHits;
+        badHitsTxt.text = "" + rhythmRunner.badHits;
+        notesMiseedTxt.text = "" + rhythmRunner.notesMissed;
+        missClicksTxt.text = "" + rhythmRunner.missClicks;
+        accuracyTxt.text = "" + rhythmRunner.accuracy + "%";
+        maxComboTxt.text = "" + rhythmRunner.maxCombo;
     }
 
     public async void PopulateLeaderboardsTab()
     {
         leaderboard.AddRange(await leaderboardController.GetLeaderboardTable(leaderboardTable));
+        bool hasBeenUploaded = false;
         foreach(ScoreEntity e in leaderboard)
         {
             if(e.RowKey == username)
@@ -118,17 +137,37 @@ public class EndTrackScreenController : MonoBehaviour
                     leaderboard.Add(currentScore);
                     highScore = currentScore;
                     leaderboard.Remove(e);
+                    hasBeenUploaded = true;
                     break;
                 }
                 else
                     highScore = e;
             }
         }
+        if(!hasBeenUploaded)
+        {
+            leaderboardController.AddToLeaderboard(leaderboardTable, username, rhythmRunner.score, rhythmRunner.accuracy, rhythmRunner.ranking); //Upload score
+            leaderboard.Add(currentScore);
+            highScore = currentScore;
+        }
 
         leaderboard.Sort(delegate (ScoreEntity e1, ScoreEntity e2) { return float.Parse(e1.score).CompareTo(float.Parse(e2.score)); }); //Sorts leaderboard in ascending order
+        int currentScoreRank = leaderboard.Count - leaderboard.IndexOf(highScore);
         leaderboard.RemoveRange(0, leaderboard.Count - 10);
-        foreach (ScoreEntity e in leaderboard)
+        leaderboard.Reverse();
+        for (int i = 0; i < leaderboard.Count; i++)
+        {
+            ScoreEntity e = leaderboard[i];
             Debug.Log(e.RowKey + " | " + e.score + " | " + e.accuracy + " | " + e.rank);
+            GameObject entry = Instantiate(leaderboardEntryPrefab, leaderboardEntriesParent.transform);
+            entry.transform.localPosition = new Vector3(entry.transform.localPosition.x, entry.transform.localPosition.y - (25 * i), entry.transform.localPosition.z);
+            entry.transform.GetChild(0).GetComponent<TMP_Text>().text = "" + (i + 1);
+            entry.transform.GetChild(1).GetComponent<TMP_Text>().text = e.RowKey;
+            entry.transform.GetChild(2).GetComponent<TMP_Text>().text = e.score;
+        }
+        currentScoreEntry.transform.GetChild(0).GetComponent<TMP_Text>().text = "" + currentScoreRank;
+        currentScoreEntry.transform.GetChild(1).GetComponent<TMP_Text>().text = highScore.RowKey;
+        currentScoreEntry.transform.GetChild(2).GetComponent<TMP_Text>().text = highScore.score;
     }
 
     private void Update()
