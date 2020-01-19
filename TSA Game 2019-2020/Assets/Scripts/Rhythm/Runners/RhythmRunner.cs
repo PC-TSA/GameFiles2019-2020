@@ -98,6 +98,7 @@ public class RhythmRunner : MonoBehaviour
     public float dividerWidth;
 
     public GameObject splashTitlePrefab;
+    public GameObject splashImagePrefab;
 
     public GameObject rhythmMakerButton;
 
@@ -112,13 +113,19 @@ public class RhythmRunner : MonoBehaviour
     public bool goToLostVals;
     public GameObject cameraTrack;
 
+    public List<Sprite> splashImages;
+
     private void Start()
     {
+        Cursor.visible = false;
         originalPos = scrollerObj.transform.localPosition;
 
         //Get vignette from post processing profile
         postProcessingVolume.profile.TryGetSettings(out vignette);
         postProcessingVolume.profile.TryGetSettings(out colorGrading);
+
+        //Set Music volume
+        audioSource.volume *= PlayerPrefs.GetFloat("MusicVolume");
 
         if (CrossSceneController.recordingToLoad.Length != 0) //If transfering song from other scene, load from given path instead of predefined file name from build Resources
         {
@@ -129,7 +136,9 @@ public class RhythmRunner : MonoBehaviour
             StartCoroutine(DelayedStart(1, XMLRecordingPath));
             CrossSceneController.recordingToLoad = "";
             CrossSceneController.clipToLoad = null;
+
             rhythmMakerButton.SetActive(true);
+            endTrackScreen.GetComponent<EndTrackScreenController>().isTestTrack = true;
         }
         else
         {
@@ -188,6 +197,7 @@ public class RhythmRunner : MonoBehaviour
         //missClicksTxt.GetComponent<TextMeshProUGUI>().text = "Misclicks: " + missClicks;
         UpdateDeathCount(i);
         BreakCombo();
+        UpdateAccuracy(0);
     }
 
     public void UpdateAccuracy(float i)
@@ -219,7 +229,7 @@ public class RhythmRunner : MonoBehaviour
 
     public void UpdateScore(float multiplier)
     {
-        score += combo * multiplier;
+        score += (combo + 1) * multiplier;
         score = Mathf.Round(score * 100) / 100;
         scoreCountTxt.GetComponent<TextMeshProUGUI>().text = "" + score;
     }
@@ -275,6 +285,7 @@ public class RhythmRunner : MonoBehaviour
             selector.sliderHeightChange = scrollSpeed;
 
         audioSource.Play();
+        StartCoroutine(WaitToFinishTrack(audioSource.clip.length));
         isRunning = true;
     }
 
@@ -440,12 +451,34 @@ public class RhythmRunner : MonoBehaviour
             {
                 case 10:
                     comboLvl = 1;
+                    SpawnSplashImage(splashImages[0]);
                     break;
                 case 20:
                     comboLvl = 2;
                     break;
+                case 25:
+                    SpawnSplashImage(splashImages[1]);
+                    break;
                 case 30:
                     comboLvl = 3;
+                    break;
+                case 50:
+                    SpawnSplashImage(splashImages[2]);
+                    break;
+                case 100:
+                    SpawnSplashImage(splashImages[3]);
+                    break;
+                case 200:
+                    SpawnSplashImage(splashImages[4]);
+                    break;
+                case 300:
+                    SpawnSplashImage(splashImages[5]);
+                    break;
+                case 400:
+                    SpawnSplashImage(splashImages[6]);
+                    break;
+                case 500:
+                    SpawnSplashImage(splashImages[7]);
                     break;
             }
 
@@ -461,7 +494,7 @@ public class RhythmRunner : MonoBehaviour
 
     void BreakCombo()
     {
-        combo = 1;
+        combo = 0;
         comboLvl = 0;
         foreach (TrailRenderer tr in trailRenderers)
             tr.emitting = false;
@@ -547,6 +580,13 @@ public class RhythmRunner : MonoBehaviour
         StartCoroutine(KillSplashTitle(newSplashTitle));
     }
 
+    public void SpawnSplashImage(Sprite image)
+    {
+        GameObject newSplashImage = Instantiate(splashImagePrefab, rhythmCanvasObj.transform);
+        newSplashImage.GetComponent<Image>().sprite = image;
+        StartCoroutine(KillSplashTitle(newSplashImage));
+    }
+
     IEnumerator KillSplashTitle(GameObject title)
     {
         yield return new WaitForSeconds(title.GetComponent<Animation>().clip.length);
@@ -588,9 +628,19 @@ public class RhythmRunner : MonoBehaviour
         }
     }
 
+    IEnumerator WaitToFinishTrack(float songLength)
+    {
+        yield return new WaitForSeconds(songLength);
+        FinishTrack();
+    }
+
     void FinishTrack()
     {
+        audioSource.Stop();
+        cameraTrack.GetComponent<CPC_CameraPath>().StopPath();
+        playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
         endTrackScreen.SetActive(true);
+        endTrackScreen.GetComponent<EndTrackScreenController>().clearedOrFailedTxt.GetComponent<TMP_Text>().text = "Track Cleared!";
     }
 
     IEnumerator LoadAudioFileStart(string path)

@@ -29,6 +29,8 @@ public class EndTrackScreenController : MonoBehaviour
     public RhythmRunner rhythmRunner;
     public LeaderboardController leaderboardController;
 
+    public bool isTestTrack; //If the current game being played is in the Rhythm Maker Test Track function; ENTER will return to rhythm maker instead of main menu
+
     //---------- Details Tab Variables ----------
     public TMP_Text notesHitTxt;
     public TMP_Text perfectHitsTxt;
@@ -53,11 +55,17 @@ public class EndTrackScreenController : MonoBehaviour
 
     private void OnEnable()
     {
+        Cursor.visible = true;
         VarSetup();
         PopulateScoreTab();
         PopulateDetailsTab();
         PopulateLeaderboardsTab();
         GetComponent<Animator>().Play("CanvasGroupFadeIn");
+    }
+
+    private void OnDisable()
+    {
+        Cursor.visible = false;
     }
 
     void VarSetup()
@@ -173,7 +181,12 @@ public class EndTrackScreenController : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return)) //Enter to exit
-            StartCoroutine(rhythmRunner.LoadAsyncScene("MainMenu"));
+        {
+            if (isTestTrack)
+                rhythmRunner.ToRhythmMaker();
+            else
+                StartCoroutine(rhythmRunner.LoadAsyncScene("MainMenu"));
+        }
 
         if (Input.GetKeyDown(KeyCode.Space)) //Space to restart
             StartCoroutine(rhythmRunner.LoadAsyncScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name));

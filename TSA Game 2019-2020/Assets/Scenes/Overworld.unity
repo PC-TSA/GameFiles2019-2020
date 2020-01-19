@@ -277,6 +277,9 @@ MonoBehaviour:
   noteHitParticle: {fileID: 2034629683}
   normalSprite: {fileID: 21300000, guid: 50ba59e4d2773b04386b09dddd29cff3, type: 3}
   pressSprite: {fileID: 21300000, guid: b45a98ceee514b74f9797a5d4a693806, type: 3}
+  splashImages:
+  - {fileID: 21300000, guid: cc80d738619f036498f301f14fda5fc5, type: 3}
+  - {fileID: 21300000, guid: d222609e3c6a4294f8b41f8c32259e47, type: 3}
 --- !u!65 &62527404
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -905,6 +908,8 @@ MonoBehaviour:
   dividerWidth: 12
   splashTitlePrefab: {fileID: 8806644418379813400, guid: 98217077e1e967d4c950dd5a69a40b89,
     type: 3}
+  splashImagePrefab: {fileID: 2871143106166799798, guid: 4ada4a18a251fc14a8fd2b07e246bd76,
+    type: 3}
   rhythmMakerButton: {fileID: 881294658}
   loadingBar: {fileID: 1626063925}
   loadingTextPeriods:
@@ -916,6 +921,15 @@ MonoBehaviour:
   hasLost: 0
   goToLostVals: 0
   cameraTrack: {fileID: 1195981067}
+  splashImages:
+  - {fileID: 21300000, guid: 7e2a14340e2d75149bf2b57f46fe3db1, type: 3}
+  - {fileID: 21300000, guid: 42fa0594a44ebb841af9f4f86830b53f, type: 3}
+  - {fileID: 21300000, guid: 632ceceaf43f05542898acd993bf9c54, type: 3}
+  - {fileID: 21300000, guid: 25432a560e9ae7f499cf4fb7d34375ce, type: 3}
+  - {fileID: 21300000, guid: c732db66e9c5ee64682002aaebc1e8c8, type: 3}
+  - {fileID: 21300000, guid: c64ab7ebabd03ad4cad1eebd9ec3bbee, type: 3}
+  - {fileID: 21300000, guid: 09ebb3004769e40478c386b9cca35470, type: 3}
+  - {fileID: 21300000, guid: 12986bae67e17d24884816c1c86ac3e1, type: 3}
 --- !u!82 &90242894
 AudioSource:
   m_ObjectHideFlags: 0
@@ -8449,7 +8463,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Combo: 0'
+  m_text: 'Combo: 0
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 07249e64d5ee8ac448a79180896c54e1, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: f8536a5b79803014c8bcfad3083e9d26, type: 2}
@@ -8518,9 +8534,9 @@ MonoBehaviour:
   m_margin: {x: -9.23583, y: 5.674602, z: 49.731853, w: 14.143833}
   m_textInfo:
     textComponent: {fileID: 420583467}
-    characterCount: 8
+    characterCount: 9
     spriteCount: 0
-    spaceCount: 1
+    spaceCount: 2
     wordCount: 2
     linkCount: 0
     lineCount: 1
@@ -21446,6 +21462,9 @@ MonoBehaviour:
   noteHitParticle: {fileID: 612636246}
   normalSprite: {fileID: 21300000, guid: 50ba59e4d2773b04386b09dddd29cff3, type: 3}
   pressSprite: {fileID: 21300000, guid: b45a98ceee514b74f9797a5d4a693806, type: 3}
+  splashImages:
+  - {fileID: 21300000, guid: cc80d738619f036498f301f14fda5fc5, type: 3}
+  - {fileID: 21300000, guid: d222609e3c6a4294f8b41f8c32259e47, type: 3}
 --- !u!65 &884042753
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -22863,6 +22882,9 @@ MonoBehaviour:
   noteHitParticle: {fileID: 470052705}
   normalSprite: {fileID: 21300000, guid: 50ba59e4d2773b04386b09dddd29cff3, type: 3}
   pressSprite: {fileID: 21300000, guid: b45a98ceee514b74f9797a5d4a693806, type: 3}
+  splashImages:
+  - {fileID: 21300000, guid: cc80d738619f036498f301f14fda5fc5, type: 3}
+  - {fileID: 21300000, guid: d222609e3c6a4294f8b41f8c32259e47, type: 3}
 --- !u!65 &1071636305
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -26085,6 +26107,9 @@ MonoBehaviour:
   noteHitParticle: {fileID: 317044690}
   normalSprite: {fileID: 21300000, guid: 50ba59e4d2773b04386b09dddd29cff3, type: 3}
   pressSprite: {fileID: 21300000, guid: b45a98ceee514b74f9797a5d4a693806, type: 3}
+  splashImages:
+  - {fileID: 21300000, guid: cc80d738619f036498f301f14fda5fc5, type: 3}
+  - {fileID: 21300000, guid: d222609e3c6a4294f8b41f8c32259e47, type: 3}
 --- !u!65 &1427946449
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -26988,6 +27013,9 @@ MonoBehaviour:
   rhythmRunner: {fileID: 90242893}
   normalSprite: {fileID: 21300000, guid: 27272d555da999542ac099e900d7848f, type: 3}
   pressSprite: {fileID: 21300000, guid: 07fc77e41796f7c4790e78b2d28f5aa3, type: 3}
+  splashImages:
+  - {fileID: 21300000, guid: cc80d738619f036498f301f14fda5fc5, type: 3}
+  - {fileID: 21300000, guid: d222609e3c6a4294f8b41f8c32259e47, type: 3}
 --- !u!65 &1566096387
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -27320,6 +27348,7 @@ MonoBehaviour:
   tabHighlightGoalPos: {x: 0, y: 0, z: 0}
   rhythmRunner: {fileID: 90242893}
   leaderboardController: {fileID: 1590647535}
+  isTestTrack: 0
   notesHitTxt: {fileID: 1827534248}
   perfectHitsTxt: {fileID: 1555471802}
   goodHitsTxt: {fileID: 941862709}

@@ -16,8 +16,19 @@ public class MainMenuController : MonoBehaviour
 
     public PlayableAsset mainMenuClose; //The timeline animation to slide the main menu back into the bar
 
+    public GameObject optionsMenu;
+
     private void Start()
     {
+        Cursor.visible = true;
+        if (PlayerPrefs.GetInt("FirstRun") == 0)
+        {
+            Debug.Log("First run player prefs setup");
+            PlayerPrefs.SetInt("FirstRun", 1);
+            PlayerPrefs.SetFloat("MusicVolume", 1);
+            PlayerPrefs.SetFloat("SFXVolume", 1);
+        }
+
         usernameInput.GetComponent<TMP_InputField>().text = PlayerPrefs.GetString("username");
     }
 
@@ -43,7 +54,7 @@ public class MainMenuController : MonoBehaviour
 
     public void GoToOptions()
     {
-        StartCoroutine(LoadAsyncScene("Options"));
+        optionsMenu.SetActive(true);
     }
 
     public void Quit()

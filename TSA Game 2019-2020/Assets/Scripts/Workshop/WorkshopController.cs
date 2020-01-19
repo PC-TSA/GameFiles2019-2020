@@ -130,8 +130,15 @@ public class WorkshopController : MonoBehaviour
 
 		return cover;
 	}
-	async void OpenWorkshop()
+	void OpenWorkshop()
 	{
+		PopulateWorkshop();
+	}
+
+	async void PopulateWorkshop()
+	{
+		Debug.Log("Clearing and populating workshop...");
+
 		for (int i = 0; i < workshopContentObj.transform.childCount; i++) //Clear content
 			Destroy(workshopContentObj.transform.GetChild(i).gameObject);
 		await ScanTracksTable();
@@ -352,6 +359,8 @@ public class WorkshopController : MonoBehaviour
 		StartCoroutine(StopBar(uploadBar, true));
 
 		Debug.Log("--Upload Complete--");
+
+		PopulateWorkshop();
 	}
 
 	//XML name | xml artist | song name | song artist

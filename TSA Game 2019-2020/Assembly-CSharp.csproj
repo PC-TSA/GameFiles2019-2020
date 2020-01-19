@@ -84,7 +84,12 @@
     <Compile Include="Assets\Scripts\FPSDisplay.cs" />
     <Compile Include="Assets\Scripts\Leaderboards\LeaderboardController.cs" />
     <Compile Include="Assets\Scripts\NetworkingUtilities.cs" />
-    <Compile Include="Assets\Scripts\Rhythm\BeatGenController.cs" />
+    <Compile Include="Assets\Scripts\Rhythm\Maker\BeatGenController.cs" />
+    <Compile Include="Assets\Scripts\Rhythm\Maker\RhythmController.cs" />
+    <Compile Include="Assets\Scripts\Rhythm\Maker\RhythmSliderController.cs" />
+    <Compile Include="Assets\Scripts\Rhythm\Maker\ScrollerController.cs" />
+    <Compile Include="Assets\Scripts\Rhythm\Maker\SelectorController.cs" />
+    <Compile Include="Assets\Scripts\Rhythm\Maker\SpaceSelectorController.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Object Controllers\NoteController.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Object Controllers\SliderController.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Object Controllers\SpaceController.cs" />
@@ -92,14 +97,9 @@
     <Compile Include="Assets\Scripts\Rhythm\Objects\Recording.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Objects\SliderObj.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Objects\SpaceObj.cs" />
-    <Compile Include="Assets\Scripts\Rhythm\RhythmController.cs" />
-    <Compile Include="Assets\Scripts\Rhythm\RhythmSliderController.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Runners\RhythmRunner.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Runners\SelectorRunner.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Runners\SpaceSelectorRunner.cs" />
-    <Compile Include="Assets\Scripts\Rhythm\ScrollerController.cs" />
-    <Compile Include="Assets\Scripts\Rhythm\SelectorController.cs" />
-    <Compile Include="Assets\Scripts\Rhythm\SpaceSelectorController.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Visualization\AudioPeer.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Visualization\AudioVisualizer.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Visualization\WaveformVisualizer.cs" />
@@ -107,6 +107,7 @@
     <Compile Include="Assets\Scripts\UI\ButtonHighlighter.cs" />
     <Compile Include="Assets\Scripts\UI\EndTrackScreenController.cs" />
     <Compile Include="Assets\Scripts\UI\MainMenuController.cs" />
+    <Compile Include="Assets\Scripts\UI\OptionsMenuController.cs" />
     <Compile Include="Assets\Scripts\Workshop\DownloadedTrack.cs" />
     <Compile Include="Assets\Scripts\Workshop\WorkshopController.cs" />
     <Compile Include="Assets\Scripts\Workshop\WorkshopItemController.cs" />

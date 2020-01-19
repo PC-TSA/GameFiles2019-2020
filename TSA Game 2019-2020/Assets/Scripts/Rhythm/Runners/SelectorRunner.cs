@@ -21,6 +21,8 @@ public class SelectorRunner : MonoBehaviour
     public Sprite normalSprite;
     public Sprite pressSprite;
 
+    public List<Sprite> splashImages;
+
     private void Start()
     {
         //KEY HARD CODED IN INSPECTOR ON SELECTOR IN NEW MULTI-LANE SYSTEM
@@ -90,13 +92,18 @@ public class SelectorRunner : MonoBehaviour
             bool somethingClicked = false; //If false by the end of this if, this click counts as a misclick
             if (selectableNotes.Count != 0)
             {
-                somethingClicked = true;
-                rhythmRunner.UpdateNotesHit(1);
-                NoteHitAccuracy(selectableNotes[0]); //Updates score based on accuracy of note hit
+                if(selectableNotes[0] != null)
+                {
+                    somethingClicked = true;
+                    rhythmRunner.UpdateNotesHit(1);
+                    NoteHitAccuracy(selectableNotes[0]); //Updates score based on accuracy of note hit
 
-                //Removes oldest note in the selectable notes list
-                selectableNotes[0].GetComponent<NoteController>().Hit();
-                selectableNotes.RemoveAt(0);
+                    //Removes oldest note in the selectable notes list
+                    selectableNotes[0].GetComponent<NoteController>().Hit();
+                    selectableNotes.RemoveAt(0);
+                }
+                else
+                    selectableNotes.RemoveAt(0);
             }
             
             if(selectableSlider != null && selectableSlider.GetComponent<SliderController>().canBeHit && !selectableSlider.GetComponent<SliderController>().hasBeenHit) //If there is a selectableSlider that can be hit and hasnt been hit yet
@@ -153,7 +160,6 @@ public class SelectorRunner : MonoBehaviour
             if (hitAccuracy >= 40) //Hit accuracy = 0-~90
             {
                 rhythmRunner.UpdateScore(0.4f); //Bad hit
-                rhythmRunner.SpawnSplashTitle("Bad", Color.red);
                 rhythmRunner.badHits++;
             }
             else if (hitAccuracy < 40 && hitAccuracy >= 15)
@@ -164,13 +170,15 @@ public class SelectorRunner : MonoBehaviour
             else if (hitAccuracy < 15 && hitAccuracy >= 8)
             {
                 rhythmRunner.UpdateScore(0.8f); //Good hit
-                rhythmRunner.SpawnSplashTitle("Good", Color.cyan);
+                //rhythmRunner.SpawnSplashTitle("Good", Color.cyan);
+                rhythmRunner.SpawnSplashImage(splashImages[0]);
                 rhythmRunner.goodHits++;
             }
             else if (hitAccuracy < 8)
             {
                 rhythmRunner.UpdateScore(1); //Perfect hit
-                rhythmRunner.SpawnSplashTitle("Perfect", Color.green);
+                //rhythmRunner.SpawnSplashTitle("Perfect", Color.green);
+                rhythmRunner.SpawnSplashImage(splashImages[1]);
                 rhythmRunner.perfectHits++;
             }
             rhythmRunner.UpdateAccuracy(100 - hitAccuracy);
@@ -183,7 +191,6 @@ public class SelectorRunner : MonoBehaviour
         if (hitAccuracy >= 40) //Hit accuracy = 0-~90
         {
             sliderAccuracyMultiplier = 0.04f; //Bad hit
-            rhythmRunner.SpawnSplashTitle("Bad", Color.red);
             rhythmRunner.badHits++;
         }
         else if (hitAccuracy < 40 && hitAccuracy >= 15)
@@ -194,13 +201,15 @@ public class SelectorRunner : MonoBehaviour
         else if (hitAccuracy < 15 && hitAccuracy >= 8)
         {
             sliderAccuracyMultiplier = 0.08f; //Good hit
-            rhythmRunner.SpawnSplashTitle("Good", Color.cyan);
+            //rhythmRunner.SpawnSplashTitle("Good", Color.cyan);
+            rhythmRunner.SpawnSplashImage(splashImages[0]);
             rhythmRunner.goodHits++;
         }
         else if (hitAccuracy < 8)
         {
             sliderAccuracyMultiplier = 0.1f; //Perfect hit
-            rhythmRunner.SpawnSplashTitle("Perfect", Color.green);
+            //rhythmRunner.SpawnSplashTitle("Perfect", Color.green);
+            rhythmRunner.SpawnSplashImage(splashImages[1]);
             rhythmRunner.perfectHits++;
         }
     }

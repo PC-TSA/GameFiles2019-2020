@@ -90,7 +90,7 @@ LightmapSettings:
     m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 112000000, guid: 012188b45e663dd46b2fec3a6de638b6,
     type: 2}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -147,7 +147,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.1, y: 6.4}
+  m_AnchoredPosition: {x: 0.1, y: 14}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &21818931
@@ -4831,15 +4831,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 827994908}
     m_Modifications:
-    - target: {fileID: 1786817432798991567, guid: f9db4bff6fa56b844b386aada8987e69,
+    - target: {fileID: 1786817432248498114, guid: f9db4bff6fa56b844b386aada8987e69,
         type: 3}
-      propertyPath: m_Name
-      value: LoadingBar
+      propertyPath: m_AnchorMax.x
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1786817432798991567, guid: f9db4bff6fa56b844b386aada8987e69,
+    - target: {fileID: 1786817432248498114, guid: f9db4bff6fa56b844b386aada8987e69,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
+      propertyPath: m_AnchorMax.y
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1786817432798991564, guid: f9db4bff6fa56b844b386aada8987e69,
         type: 3}
@@ -4961,14 +4961,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 2.1126995
       objectReference: {fileID: 0}
-    - target: {fileID: 1786817432248498114, guid: f9db4bff6fa56b844b386aada8987e69,
+    - target: {fileID: 1786817432798991567, guid: f9db4bff6fa56b844b386aada8987e69,
         type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
+      propertyPath: m_Name
+      value: LoadingBar
       objectReference: {fileID: 0}
-    - target: {fileID: 1786817432248498114, guid: f9db4bff6fa56b844b386aada8987e69,
+    - target: {fileID: 1786817432798991567, guid: f9db4bff6fa56b844b386aada8987e69,
         type: 3}
-      propertyPath: m_AnchorMax.y
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -5200,7 +5200,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.1, y: 6.4}
+  m_AnchoredPosition: {x: 0.1, y: 14}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1732038735
