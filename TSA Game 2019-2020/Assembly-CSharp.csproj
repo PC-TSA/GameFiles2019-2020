@@ -63,8 +63,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Addons\CameraPathCreator\DEMO\CPC_DEMO_UpDown.cs" />
-    <Compile Include="Assets\Addons\CameraPathCreator\Scripts\CPC_CameraPath.cs" />
     <Compile Include="Assets\ARTnGAME\SunShaftsSRP\Shaders - Scripts\connectSuntoSunShaftsPOSTFX.cs" />
     <Compile Include="Assets\ARTnGAME\SunShaftsSRP\Shaders - Scripts\SunShaftsHDRP.cs" />
     <Compile Include="Assets\ARTnGAME\VolumeFogSRP\Scripts - Shaders\controlVolumeFogSRPPOSTFX.cs" />
@@ -74,6 +72,47 @@
     <Compile Include="Assets\AzureSamples\WindowsAzure.Storage\FileStorage.cs" />
     <Compile Include="Assets\AzureSamples\WindowsAzure.Storage\QueueStorage.cs" />
     <Compile Include="Assets\AzureSamples\WindowsAzure.Storage\TableStorage.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\BackgroundParallax.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\CameraFollow.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\CameraPathEventListener.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\CameraPathOnRailsTarget.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\CameraPathOnRailsTargetManager.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\CameraPathOnRailsTriggerCollapse.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\CPECallRecieve.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\CPEFPSIntroControl.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\CPEKeyboardControl.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\CPEMouseLook.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\CPEPlayerPathFollow.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\Destroyer.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\DisplayLogo.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\ExternalControlExample.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\LayBombs.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\PlayerControl.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\PlayerHealth.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\SetParticleSortingLayer.cs" />
+    <Compile Include="Assets\Camera Path 3 Examples\Scripts\TwoDController.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\CameraPath.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\CameraPathAnimator.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\CameraPathControlPoint.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\CameraPathDelay.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\CameraPathDelayList.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\CameraPathEvent.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\CameraPathEventList.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\CameraPathFOV.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\CameraPathFOVList.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\CameraPathOrientation.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\CameraPathOrientationList.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\CameraPathPoint.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\CameraPathPointList.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\CameraPathSpeed.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\CameraPathSpeedList.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\CameraPathTilt.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\CameraPathTiltList.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\Enum\CameraPathColours.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\Util\CameraPathPreviewSupport.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\Util\CPMath.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\Util\UnityVersionWrapper.cs" />
+    <Compile Include="Assets\CameraPath3\Scripts\Util\XMLVariableConverter.cs" />
     <Compile Include="Assets\PathCreator\Examples\Scripts\GeneratePathExample.cs" />
     <Compile Include="Assets\PathCreator\Examples\Scripts\PathFollower.cs" />
     <Compile Include="Assets\PathCreator\Examples\Scripts\PathPlacer.cs" />
@@ -83,6 +122,7 @@
     <Compile Include="Assets\Scripts\CrossSceneController.cs" />
     <Compile Include="Assets\Scripts\FPSDisplay.cs" />
     <Compile Include="Assets\Scripts\Leaderboards\LeaderboardController.cs" />
+    <Compile Include="Assets\Scripts\LevelSelect\LevelSelectController.cs" />
     <Compile Include="Assets\Scripts\NetworkingUtilities.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Maker\BeatGenController.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Maker\RhythmController.cs" />
@@ -157,13 +197,32 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\RealtimeReflectionInWaterFlow.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
+    <None Include="Assets\CameraPath3\3.1x Upgrade readme.txt" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\RealtimeReflectionReplacement.shader" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\Additive.shader" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\ReflectiveBackgroundArbitrary.shader" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\ReflectiveBackgroundSelfIllumination.shader" />
+    <None Include="Assets\CameraPath3\readme.txt" />
+    <None Include="Assets\CameraPath3\versionHistory.txt" />
     <None Include="Assets\Resources\Recordings\NewTest.xml" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\Fallback.shader" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\Multiply.shader" />
     <None Include="Assets\ARTnGAME\SunShaftsSRP\Shaders - Scripts\Resources\GreyscaleShafts.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\Blend.shader" />
     <None Include="Assets\ARTnGAME\VolumeFogSRP\Install Instructions and Documentation\Install Instructions and documentation.txt" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\HeightFogBeforeTransparent.shader" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\CharacterSelfIlluminationReflective.shader" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\ColoredNoise.shader" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\InterlacePatternBlend.shader" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\PlanarRealtimeReflection.shader" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\ReflectiveBackgroundPlanar.shader" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\EnemySelfIlluminationReflective.shader" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\MobileBloom.shader" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Oswald-Bold - OFL.txt" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
@@ -172,9 +231,12 @@
     <None Include="Assets\ARTnGAME\VolumeFogSRP\Scripts - Shaders\ClassicNoise3D.hlsl" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Bangers - OFL.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Mobile.shader" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\AlphaCutoutCheapFallback.shader" />
     <None Include="Assets\ARTnGAME\SunShaftsSRP\Shaders - Scripts\Resources\SunShaftsHDRP.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\LaserScope.shader" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\SuperSimpleSelfIllumination.shader" />
     <None Include="Assets\ARTnGAME\SunShaftsSRP\Install Instructions\Install Instructions.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
@@ -183,6 +245,7 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\ARTnGAME\VolumeFogSRP\Scripts - Shaders\InverseProjectVFogLWRP.shader" />
+    <None Include="Assets\Camera Path 3 Examples\Shaders\InterlacePatternAdditive.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Sprite.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\Polygonal Particles\Assets\Shaders\GradientBackgroundShader.shader" />
@@ -815,6 +878,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{B11E16F9-6B38-8D14-936D-20D0BBDAE0BC}</Project>
+      <Name>Assembly-CSharp-firstpass</Name>
+    </ProjectReference>
     <ProjectReference Include="PathCreator.csproj">
       <Project>{8BE790F1-BF67-53FE-1D16-EA0E4AAFFF5F}</Project>
       <Name>PathCreator</Name>

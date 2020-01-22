@@ -1825,7 +1825,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2072197388}
-        m_MethodName: GoToOptions
+        m_MethodName: ToggleOptionsMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5941,6 +5941,7 @@ MonoBehaviour:
   usernameInput: {fileID: 272129783}
   mainMenuClose: {fileID: 11400000, guid: 295c072afea18374aa8655aa04475083, type: 2}
   optionsMenu: {fileID: 593355177}
+  optionsMenuActive: 0
 --- !u!320 &2072197389
 PlayableDirector:
   m_ObjectHideFlags: 0

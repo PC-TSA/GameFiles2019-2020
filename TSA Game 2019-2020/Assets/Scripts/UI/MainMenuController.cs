@@ -17,6 +17,7 @@ public class MainMenuController : MonoBehaviour
     public PlayableAsset mainMenuClose; //The timeline animation to slide the main menu back into the bar
 
     public GameObject optionsMenu;
+    public bool optionsMenuActive;
 
     private void Start()
     {
@@ -52,9 +53,13 @@ public class MainMenuController : MonoBehaviour
         StartCoroutine(LoadAsyncScene("Workshop"));
     }
 
-    public void GoToOptions()
+    public void ToggleOptionsMenu()
     {
-        optionsMenu.SetActive(true);
+        optionsMenuActive = !optionsMenuActive;
+        if(optionsMenuActive)
+            optionsMenu.SetActive(true);
+        else
+            optionsMenu.SetActive(false);
     }
 
     public void Quit()

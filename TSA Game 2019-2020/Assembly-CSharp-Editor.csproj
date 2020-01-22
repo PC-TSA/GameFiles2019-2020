@@ -63,7 +63,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Addons\CameraPathCreator\Scripts\Editor\CPC_CameraPathInspector.cs" />
+    <Compile Include="Assets\CameraPath3\Editor\CameraPathAnimatorEditor.cs" />
+    <Compile Include="Assets\CameraPath3\Editor\CameraPathEditor.cs" />
+    <Compile Include="Assets\CameraPath3\Editor\CameraPathEditorInspectorGUI.cs" />
+    <Compile Include="Assets\CameraPath3\Editor\CameraPathEditorSceneGUI.cs" />
+    <Compile Include="Assets\CameraPath3\Editor\CameraPathMenu.cs" />
     <Compile Include="Assets\PathCreator\Examples\Scripts\Editor\PathSceneToolEditor.cs" />
     <Reference Include="Unity.RenderPipelines.Core.Editor">
       <HintPath>D:/Game Making/GameFiles2019-2020/TSA Game 2019-2020/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
@@ -724,9 +728,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{B11E16F9-6B38-8D14-936D-20D0BBDAE0BC}</Project>
+      <Name>Assembly-CSharp-firstpass</Name>
+    </ProjectReference>
     <ProjectReference Include="Assembly-CSharp.csproj">
       <Project>{DADDE609-B48C-284F-8342-074067B29A24}</Project>
       <Name>Assembly-CSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assembly-CSharp-Editor-firstpass.csproj">
+      <Project>{F5F64E65-5BDA-EE88-5AB3-AA3507F5EB69}</Project>
+      <Name>Assembly-CSharp-Editor-firstpass</Name>
     </ProjectReference>
     <ProjectReference Include="PathCreator.csproj">
       <Project>{8BE790F1-BF67-53FE-1D16-EA0E4AAFFF5F}</Project>

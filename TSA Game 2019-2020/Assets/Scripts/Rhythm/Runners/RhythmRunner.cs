@@ -117,7 +117,6 @@ public class RhythmRunner : MonoBehaviour
 
     private void Start()
     {
-        Cursor.visible = false;
         originalPos = scrollerObj.transform.localPosition;
 
         //Get vignette from post processing profile
@@ -134,11 +133,10 @@ public class RhythmRunner : MonoBehaviour
             XMLRecordingName = name.Remove(name.Length - 4);
             songs.Add(CrossSceneController.clipToLoad);
             StartCoroutine(DelayedStart(1, XMLRecordingPath));
-            CrossSceneController.recordingToLoad = "";
-            CrossSceneController.clipToLoad = null;
 
             rhythmMakerButton.SetActive(true);
             endTrackScreen.GetComponent<EndTrackScreenController>().isTestTrack = true;
+            Cursor.visible = true;
         }
         else
         {
@@ -146,6 +144,7 @@ public class RhythmRunner : MonoBehaviour
             foreach (Object o in temp)
                 songs.Add((AudioClip)o);
             StartCoroutine(DelayedStart(1));
+            Cursor.visible = false;
         }
 
         deathCountSlider.maxValue = health;
@@ -421,6 +420,7 @@ public class RhythmRunner : MonoBehaviour
     void Lose()
     {
         Debug.Log("Track Failed!");
+        ranking = "F";
         StartCoroutine(GoToLostVals());
     }
 
@@ -429,10 +429,10 @@ public class RhythmRunner : MonoBehaviour
         goToLostVals = true; //When true, vals lerp in Update
         yield return new WaitForSeconds(1.5f);
         audioSource.Stop();
-        cameraTrack.GetComponent<CPC_CameraPath>().StopPath();
+        //cameraTrack.GetComponent<CPC_CameraPath>().StopPath(); STOP CAMERA MOVEMENT
         playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
         endTrackScreen.SetActive(true);
-        endTrackScreen.GetComponent<EndTrackScreenController>().clearedOrFailedTxt.GetComponent<TMP_Text>().text = "Track Failed!";
+        endTrackScreen.GetComponent<EndTrackScreenController>().clearedOrFailedTxt.GetComponent<TMP_Text>().text = "Track Failed";
         yield return new WaitForSeconds(1.5f);
         goToLostVals = false;
     }
@@ -637,7 +637,7 @@ public class RhythmRunner : MonoBehaviour
     void FinishTrack()
     {
         audioSource.Stop();
-        cameraTrack.GetComponent<CPC_CameraPath>().StopPath();
+        //cameraTrack.GetComponent<CPC_CameraPath>().StopPath();
         playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
         endTrackScreen.SetActive(true);
         endTrackScreen.GetComponent<EndTrackScreenController>().clearedOrFailedTxt.GetComponent<TMP_Text>().text = "Track Cleared!";

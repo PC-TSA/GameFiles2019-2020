@@ -12,7 +12,6 @@ using System.IO;
 using SFB;
 using NAudio;
 using NAudio.Wave;
-using OggVorbisEncoder;
 using System.Threading.Tasks;
 
 //Main variable class
@@ -104,6 +103,7 @@ public class RhythmController : MonoBehaviour
         {
             LoadRecording(CrossSceneController.recordingToLoad);
             CrossSceneController.recordingToLoad = "";
+            CrossSceneController.clipToLoad = null;
         }
         else
             currentRecording = new Recording();
@@ -227,7 +227,7 @@ public class RhythmController : MonoBehaviour
 
     void CreateWaveform()
     {
-        Texture2D tex = GetComponent<WaveformVisualizer>().PaintWaveformSpectrum(audioSource.clip, 1, (int) waveformObj.GetComponent<RectTransform>().sizeDelta.x, (int) waveformObj.GetComponent<RectTransform>().sizeDelta.y, Color.yellow);
+        Texture2D tex = GetComponent<WaveformVisualizer>().PaintWaveformSpectrum(audioSource.clip, 1, (int) waveformObj.GetComponent<RectTransform>().sizeDelta.x, (int) waveformObj.GetComponent<RectTransform>().sizeDelta.y, Color.white);
         waveformObj.GetComponent<Image>().sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
         waveformObj.GetComponent<Image>().color = Color.white;
         waveformObj.SetActive(true);

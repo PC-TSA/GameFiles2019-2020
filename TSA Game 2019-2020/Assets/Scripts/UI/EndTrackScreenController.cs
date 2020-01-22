@@ -46,6 +46,7 @@ public class EndTrackScreenController : MonoBehaviour
     public GameObject leaderboardEntriesParent;
     public GameObject leaderboardEntryPrefab;
     public GameObject currentScoreEntry;
+    public GameObject leaderboardUnavailableTxt;
 
     //---------- Leaderboard Variables ----------
     public string leaderboardTable;
@@ -72,8 +73,8 @@ public class EndTrackScreenController : MonoBehaviour
     {
         leaderboard = new List<ScoreEntity>();
         username = PlayerPrefs.GetString("username");
-        //leaderboardTable = rhythmRunner.currentRecording.songArtist + rhythmRunner.XMLRecordingName;
-        leaderboardTable = "gabrieltm8Frame";
+        leaderboardTable = rhythmRunner.currentRecording.songArtist + rhythmRunner.XMLRecordingName;
+        //leaderboardTable = "gabrieltm8Frame";
         currentScore = new ScoreEntity(username, rhythmRunner.score, rhythmRunner.accuracy, rhythmRunner.ranking);
     }
 
@@ -133,49 +134,63 @@ public class EndTrackScreenController : MonoBehaviour
 
     public async void PopulateLeaderboardsTab()
     {
-        leaderboard.AddRange(await leaderboardController.GetLeaderboardTable(leaderboardTable));
-        bool hasBeenUploaded = false;
-        foreach(ScoreEntity e in leaderboard)
+        try
         {
-            if(e.RowKey == username)
+            leaderboard.AddRange(await leaderboardController.GetLeaderboardTable(leaderboardTable));
+            bool hasBeenUploaded = false;
+            foreach (ScoreEntity e in leaderboard)
             {
-                if (float.Parse(currentScore.score) > float.Parse(e.score)) //Only upload score if it is better than the current score saved online for this user
+                if (e.RowKey == username)
                 {
-                    leaderboardController.AddToLeaderboard(leaderboardTable, username, rhythmRunner.score, rhythmRunner.accuracy, rhythmRunner.ranking); //Upload score
-                    leaderboard.Add(currentScore);
-                    highScore = currentScore;
-                    leaderboard.Remove(e);
-                    hasBeenUploaded = true;
-                    break;
+                    if (float.Parse(currentScore.score) > float.Parse(e.score)) //Only upload score if it is better than the current score saved online for this user
+                    {
+                        leaderboardController.AddToLeaderboard(leaderboardTable, username, rhythmRunner.score, rhythmRunner.accuracy, rhythmRunner.ranking); //Upload score
+                        leaderboard.Add(currentScore);
+                        highScore = currentScore;
+                        leaderboard.Remove(e);
+                        hasBeenUploaded = true;
+                        break;
+                    }
+                    else
+                        highScore = e;
                 }
-                else
-                    highScore = e;
             }
-        }
-        if(!hasBeenUploaded)
-        {
-            leaderboardController.AddToLeaderboard(leaderboardTable, username, rhythmRunner.score, rhythmRunner.accuracy, rhythmRunner.ranking); //Upload score
-            leaderboard.Add(currentScore);
-            highScore = currentScore;
-        }
+            if (!hasBeenUploaded)
+            {
+                leaderboardController.AddToLeaderboard(leaderboardTable, username, rhythmRunner.score, rhythmRunner.accuracy, rhythmRunner.ranking); //Upload score
+                leaderboard.Add(currentScore);
+                highScore = currentScore;
+            }
 
-        leaderboard.Sort(delegate (ScoreEntity e1, ScoreEntity e2) { return float.Parse(e1.score).CompareTo(float.Parse(e2.score)); }); //Sorts leaderboard in ascending order
-        int currentScoreRank = leaderboard.Count - leaderboard.IndexOf(highScore);
-        leaderboard.RemoveRange(0, leaderboard.Count - 10);
-        leaderboard.Reverse();
-        for (int i = 0; i < leaderboard.Count; i++)
-        {
-            ScoreEntity e = leaderboard[i];
-            Debug.Log(e.RowKey + " | " + e.score + " | " + e.accuracy + " | " + e.rank);
-            GameObject entry = Instantiate(leaderboardEntryPrefab, leaderboardEntriesParent.transform);
-            entry.transform.localPosition = new Vector3(entry.transform.localPosition.x, entry.transform.localPosition.y - (25 * i), entry.transform.localPosition.z);
-            entry.transform.GetChild(0).GetComponent<TMP_Text>().text = "" + (i + 1);
-            entry.transform.GetChild(1).GetComponent<TMP_Text>().text = e.RowKey;
-            entry.transform.GetChild(2).GetComponent<TMP_Text>().text = e.score;
+            leaderboard.Sort(delegate (ScoreEntity e1, ScoreEntity e2) { return float.Parse(e1.score).CompareTo(float.Parse(e2.score)); }); //Sorts leaderboard in ascending order
+            int currentScoreRank = leaderboard.Count - leaderboard.IndexOf(highScore);
+            leaderboard.RemoveRange(0, leaderboard.Count - 10);
+            leaderboard.Reverse();
+            for (int i = 0; i < leaderboard.Count; i++)
+            {
+                ScoreEntity e = leaderboard[i];
+                Debug.Log(e.RowKey + " | " + e.score + " | " + e.accuracy + " | " + e.rank);
+                GameObject entry = Instantiate(leaderboardEntryPrefab, leaderboardEntriesParent.transform);
+                entry.transform.localPosition = new Vector3(entry.transform.localPosition.x, entry.transform.localPosition.y - (25 * i), entry.transform.localPosition.z);
+                entry.transform.GetChild(0).GetComponent<TMP_Text>().text = "" + (i + 1);
+                entry.transform.GetChild(1).GetComponent<TMP_Text>().text = e.RowKey;
+                entry.transform.GetChild(2).GetComponent<TMP_Text>().text = e.score;
+            }
+            currentScoreEntry.transform.GetChild(0).GetComponent<TMP_Text>().text = "" + currentScoreRank;
+            currentScoreEntry.transform.GetChild(1).GetComponent<TMP_Text>().text = highScore.RowKey;
+            currentScoreEntry.transform.GetChild(2).GetComponent<TMP_Text>().text = highScore.score;
         }
-        currentScoreEntry.transform.GetChild(0).GetComponent<TMP_Text>().text = "" + currentScoreRank;
-        currentScoreEntry.transform.GetChild(1).GetComponent<TMP_Text>().text = highScore.RowKey;
-        currentScoreEntry.transform.GetChild(2).GetComponent<TMP_Text>().text = highScore.score;
+        catch
+        {
+            if(leaderboardEntriesParent.transform.childCount > 0)
+                for(int i = 0; i < leaderboardEntriesParent.transform.childCount; i++)
+                    Destroy(leaderboardEntriesParent.transform.GetChild(0));
+
+            currentScoreEntry.SetActive(false);
+            leaderboardUnavailableTxt.SetActive(true);
+            Debug.LogError("Leaderboard loading failed");
+            throw;
+        }
     }
 
     private void Update()
