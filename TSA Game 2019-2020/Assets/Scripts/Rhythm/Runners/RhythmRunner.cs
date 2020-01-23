@@ -134,7 +134,8 @@ public class RhythmRunner : MonoBehaviour
             songs.Add(CrossSceneController.clipToLoad);
             StartCoroutine(DelayedStart(1, XMLRecordingPath));
 
-            rhythmMakerButton.SetActive(true);
+            if(CrossSceneController.previousScene == "RhythmMaker")
+                rhythmMakerButton.SetActive(true);
             endTrackScreen.GetComponent<EndTrackScreenController>().isTestTrack = true;
             Cursor.visible = true;
         }
@@ -188,6 +189,7 @@ public class RhythmRunner : MonoBehaviour
         //notesMissedTxt.GetComponent<TextMeshProUGUI>().text = "Notes Missed: " + notesMissed;
         UpdateDeathCount(i);
         BreakCombo();
+        UpdateAccuracy(accuracy / 2); //Accuracy / 2 to make it less harsh; Set to 0 for harder
     }
 
     public void UpdateMissclicks(int i)
@@ -196,7 +198,7 @@ public class RhythmRunner : MonoBehaviour
         //missClicksTxt.GetComponent<TextMeshProUGUI>().text = "Misclicks: " + missClicks;
         UpdateDeathCount(i);
         BreakCombo();
-        UpdateAccuracy(0);
+        UpdateAccuracy(accuracy / 2); //Accuracy / 2 to make it less harsh; Set to 0 for harder
     }
 
     public void UpdateAccuracy(float i)
@@ -228,7 +230,7 @@ public class RhythmRunner : MonoBehaviour
 
     public void UpdateScore(float multiplier)
     {
-        score += (combo + 1) * multiplier;
+        score += (combo) * multiplier;
         score = Mathf.Round(score * 100) / 100;
         scoreCountTxt.GetComponent<TextMeshProUGUI>().text = "" + score;
     }

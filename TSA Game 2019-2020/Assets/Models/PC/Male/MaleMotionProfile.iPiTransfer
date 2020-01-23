@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<MotionTransferProfile version="2">
+  <RootRotation>
+    <Rotation axis="1.000000 0.000000 0.000000" angle="0.000000" />
+    <Rotation axis="0.000000 1.000000 0.000000" angle="0.000000" />
+    <Rotation axis="0.000000 0.000000 1.000000" angle="0.000000" />
+  </RootRotation>
+  <TPoseAdjustment Legs="1.000000" Arms="1.000000" />
+  <BoneMapping SourceBone="Hip" TargetBone="MaleCharacter_Hips" />
+  <BoneMapping SourceBone="LowerSpine" TargetBone="MaleCharacter_Spine" />
+  <BoneMapping SourceBone="MiddleSpine" TargetBone="MaleCharacter_Spine1" />
+  <BoneMapping SourceBone="Chest" TargetBone="MaleCharacter_Spine2" />
+  <BoneMapping SourceBone="Neck" TargetBone="MaleCharacter_Neck" />
+  <BoneMapping SourceBone="Head" TargetBone="MaleCharacter_Head" />
+  <BoneMapping SourceBone="RClavicle" TargetBone="MaleCharacter_RightShoulder" />
+  <BoneMapping SourceBone="RShoulder" TargetBone="MaleCharacter_RightArm" />
+  <BoneMapping SourceBone="RForearm" TargetBone="MaleCharacter_RightForeArm" />
+  <BoneMapping SourceBone="RHand" TargetBone="MaleCharacter_RightHand" />
+  <BoneMapping SourceBone="LClavicle" TargetBone="MaleCharacter_LeftShoulder" />
+  <BoneMapping SourceBone="LShoulder" TargetBone="MaleCharacter_LeftArm" />
+  <BoneMapping SourceBone="LForearm" TargetBone="MaleCharacter_LeftForeArm" />
+  <BoneMapping SourceBone="LHand" TargetBone="MaleCharacter_LeftHand" />
+  <BoneMapping SourceBone="RThigh" TargetBone="MaleCharacter_RightUpLeg" />
+  <BoneMapping SourceBone="RShin" TargetBone="MaleCharacter_RightLeg" />
+  <BoneMapping SourceBone="RFoot" TargetBone="MaleCharacter_RightFoot" />
+  <BoneMapping SourceBone="LThigh" TargetBone="MaleCharacter_LeftUpLeg" />
+  <BoneMapping SourceBone="LShin" TargetBone="MaleCharacter_LeftLeg" />
+  <BoneMapping SourceBone="LFoot" TargetBone="MaleCharacter_LeftFoot" />
+</MotionTransferProfile>

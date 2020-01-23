@@ -5,11 +5,13 @@ using UnityEngine.SceneManagement;
 
 public static class CrossSceneController 
 {
+    public static string previousScene;
     public static string recordingToLoad = "";
     public static AudioClip clipToLoad;
 
-    public static void MakerToGame(string recordingPath, AudioClip clip) //Triggered from maker, sends current track to game
+    public static void SceneToGame(string recordingPath, AudioClip clip) //Triggered from other scene, sends current track to game
     {
+        previousScene = SceneManager.GetActiveScene().name;
         recordingToLoad = recordingPath;
         if (recordingToLoad.Substring(recordingToLoad.Length - 4) != ".xml")
             recordingToLoad += ".xml";

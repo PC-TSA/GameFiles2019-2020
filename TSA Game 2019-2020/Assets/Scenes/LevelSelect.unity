@@ -384,8 +384,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: ExitWorkshop
+      - m_Target: {fileID: 1331919532}
+        m_MethodName: ExitLevelSelect
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1847,6 +1847,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1184513021}
   m_CullTransparentMesh: 0
+--- !u!1 &1252956963 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1786817432798991567, guid: f9db4bff6fa56b844b386aada8987e69,
+    type: 3}
+  m_PrefabInstance: {fileID: 1593441347}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1276132037
 GameObject:
   m_ObjectHideFlags: 0
@@ -1928,7 +1934,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1331919531}
-  - component: {fileID: 1331919533}
+  - component: {fileID: 1331919532}
   m_Layer: 0
   m_Name: LevelSelect
   m_TagString: Untagged
@@ -1951,7 +1957,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1331919533
+--- !u!114 &1331919532
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1960,11 +1966,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1331919530}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db227ada93c35fa4d9655bd36e8af064, type: 3}
+  m_Script: {fileID: 11500000, guid: 97c244e1513de5d46b3e92aac934dc2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectionString: DefaultEndpointsProtocol=https;AccountName=tritonal;AccountKey=YQVpz7Gxy48K4wVxDtI2jX1kmhUot/J6wH3IKXEWNpNy/Th8JBdpefQ46SQytZRx4eIPyL05HJ0Da6egTfMXJA==;EndpointSuffix=core.windows.net
-  shareName: workshop
+  workshopPath: 
+  trackItemsParent: {fileID: 1601081759}
+  trackItemPrefab: {fileID: 4979057709303653103, guid: 00ab1b5e289ebc14a9f09d15a3e5d19e,
+    type: 3}
+  builtInSongs: []
+  loadingBar: {fileID: 1252956963}
 --- !u!1 &1386401817
 GameObject:
   m_ObjectHideFlags: 0
@@ -2149,6 +2159,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 827994908}
     m_Modifications:
+    - target: {fileID: 1786817432798991567, guid: f9db4bff6fa56b844b386aada8987e69,
+        type: 3}
+      propertyPath: m_Name
+      value: LoadingBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 1786817432798991567, guid: f9db4bff6fa56b844b386aada8987e69,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1786817432248498114, guid: f9db4bff6fa56b844b386aada8987e69,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -2278,16 +2298,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 2.1126995
-      objectReference: {fileID: 0}
-    - target: {fileID: 1786817432798991567, guid: f9db4bff6fa56b844b386aada8987e69,
-        type: 3}
-      propertyPath: m_Name
-      value: LoadingBar
-      objectReference: {fileID: 0}
-    - target: {fileID: 1786817432798991567, guid: f9db4bff6fa56b844b386aada8987e69,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f9db4bff6fa56b844b386aada8987e69, type: 3}

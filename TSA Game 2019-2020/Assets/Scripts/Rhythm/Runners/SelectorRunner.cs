@@ -190,24 +190,24 @@ public class SelectorRunner : MonoBehaviour
         float hitAccuracy = ((Vector3.Distance(slider.transform.position, transform.position) * 100) / transform.GetComponent<RectTransform>().sizeDelta.y) * 1000;
         if (hitAccuracy >= 40) //Hit accuracy = 0-~90
         {
-            sliderAccuracyMultiplier = 0.04f; //Bad hit
+            sliderAccuracyMultiplier = 0.01f; //Bad hit
             rhythmRunner.badHits++;
         }
         else if (hitAccuracy < 40 && hitAccuracy >= 15)
         {
-            sliderAccuracyMultiplier = 0.06f; //Moderate hit
+            sliderAccuracyMultiplier = 0.015f; //Moderate hit
             rhythmRunner.okayHits++;
         }
         else if (hitAccuracy < 15 && hitAccuracy >= 8)
         {
-            sliderAccuracyMultiplier = 0.08f; //Good hit
+            sliderAccuracyMultiplier = 0.02f; //Good hit
             //rhythmRunner.SpawnSplashTitle("Good", Color.cyan);
             rhythmRunner.SpawnSplashImage(splashImages[0]);
             rhythmRunner.goodHits++;
         }
         else if (hitAccuracy < 8)
         {
-            sliderAccuracyMultiplier = 0.1f; //Perfect hit
+            sliderAccuracyMultiplier = 0.25f; //Perfect hit
             //rhythmRunner.SpawnSplashTitle("Perfect", Color.green);
             rhythmRunner.SpawnSplashImage(splashImages[1]);
             rhythmRunner.perfectHits++;

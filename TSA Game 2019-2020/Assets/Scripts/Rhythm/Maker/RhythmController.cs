@@ -750,7 +750,7 @@ public class RhythmController : MonoBehaviour
 
         if (savedRecordingPath.Length != 0)
         {
-            CrossSceneController.MakerToGame(savedRecordingPath, audioSource.clip);
+            CrossSceneController.SceneToGame(savedRecordingPath, audioSource.clip);
             StartCoroutine(LoadAsyncScene("Overworld"));
         }
     }
@@ -816,17 +816,5 @@ public class RhythmController : MonoBehaviour
 
             yield return new WaitForSeconds(0.5f);
         }
-    }
-
-    void RunAsync()
-    {
-        Task.Run(async () => {
-            // Example of long running code.
-            for (int i = 0; i < 10000; i++)
-            {
-                await Task.Delay(1000);
-                Debug.Log(i);
-            }
-        }); 
     }
 }

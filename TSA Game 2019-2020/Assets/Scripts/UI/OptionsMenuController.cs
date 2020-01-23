@@ -27,6 +27,12 @@ public class OptionsMenuController : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
-            gameObject.SetActive(false);
+            Disable();
+    }
+
+    void Disable()
+    {
+        GameObject.FindObjectOfType<MainMenuController>().optionsMenuActive = !GameObject.FindObjectOfType<MainMenuController>().optionsMenuActive;
+        gameObject.SetActive(false);
     }
 }

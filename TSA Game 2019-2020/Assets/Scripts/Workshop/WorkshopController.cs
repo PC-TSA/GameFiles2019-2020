@@ -514,7 +514,6 @@ public class WorkshopController : MonoBehaviour
 
 	public void OpenItem(WorkshopItemController item)
 	{
-
 		DownloadWorkshopItem(item);
 	}
 

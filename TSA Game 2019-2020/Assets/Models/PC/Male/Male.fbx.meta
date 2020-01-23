@@ -1,0 +1,231 @@
+fileFormatVersion: 2
+guid: 4a4461bef86ff1e46bac283223720f1a
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Male:Head
+    100004: Male:Hips
+    100006: Male:LeftArm
+    100008: Male:LeftFoot
+    100010: Male:LeftForeArm
+    100012: Male:LeftHand
+    100014: Male:LeftHandIndex1
+    100016: Male:LeftHandIndex2
+    100018: Male:LeftHandIndex3
+    100020: Male:LeftLeg
+    100022: Male:LeftShoulder
+    100024: Male:LeftToeBase
+    100026: Male:LeftUpLeg
+    100028: Male:Male1
+    100030: Male:Neck
+    100032: Male:RightArm
+    100034: Male:RightFoot
+    100036: Male:RightForeArm
+    100038: Male:RightHand
+    100040: Male:RightHandIndex1
+    100042: Male:RightHandIndex2
+    100044: Male:RightHandIndex3
+    100046: Male:RightLeg
+    100048: Male:RightShoulder
+    100050: Male:RightToeBase
+    100052: Male:RightUpLeg
+    100054: Male:Spine
+    100056: Male:Spine1
+    100058: Male:Spine2
+    100060: MaleCharacter_Head
+    100062: MaleCharacter_Hips
+    100064: MaleCharacter_LeftArm
+    100066: MaleCharacter_LeftFoot
+    100068: MaleCharacter_LeftForeArm
+    100070: MaleCharacter_LeftHand
+    100072: MaleCharacter_LeftLeg
+    100074: MaleCharacter_LeftShoulder
+    100076: MaleCharacter_LeftToeBase
+    100078: MaleCharacter_LeftUpLeg
+    100080: MaleCharacter_Neck
+    100082: MaleCharacter_Reference
+    100084: MaleCharacter_RightArm
+    100086: MaleCharacter_RightFoot
+    100088: MaleCharacter_RightForeArm
+    100090: MaleCharacter_RightHand
+    100092: MaleCharacter_RightLeg
+    100094: MaleCharacter_RightShoulder
+    100096: MaleCharacter_RightToeBase
+    100098: MaleCharacter_RightUpLeg
+    100100: MaleCharacter_Spine
+    100102: MaleCharacter_Spine1
+    100104: MaleCharacter_Spine2
+    400000: //RootNode
+    400002: Male:Head
+    400004: Male:Hips
+    400006: Male:LeftArm
+    400008: Male:LeftFoot
+    400010: Male:LeftForeArm
+    400012: Male:LeftHand
+    400014: Male:LeftHandIndex1
+    400016: Male:LeftHandIndex2
+    400018: Male:LeftHandIndex3
+    400020: Male:LeftLeg
+    400022: Male:LeftShoulder
+    400024: Male:LeftToeBase
+    400026: Male:LeftUpLeg
+    400028: Male:Male1
+    400030: Male:Neck
+    400032: Male:RightArm
+    400034: Male:RightFoot
+    400036: Male:RightForeArm
+    400038: Male:RightHand
+    400040: Male:RightHandIndex1
+    400042: Male:RightHandIndex2
+    400044: Male:RightHandIndex3
+    400046: Male:RightLeg
+    400048: Male:RightShoulder
+    400050: Male:RightToeBase
+    400052: Male:RightUpLeg
+    400054: Male:Spine
+    400056: Male:Spine1
+    400058: Male:Spine2
+    400060: MaleCharacter_Head
+    400062: MaleCharacter_Hips
+    400064: MaleCharacter_LeftArm
+    400066: MaleCharacter_LeftFoot
+    400068: MaleCharacter_LeftForeArm
+    400070: MaleCharacter_LeftHand
+    400072: MaleCharacter_LeftLeg
+    400074: MaleCharacter_LeftShoulder
+    400076: MaleCharacter_LeftToeBase
+    400078: MaleCharacter_LeftUpLeg
+    400080: MaleCharacter_Neck
+    400082: MaleCharacter_Reference
+    400084: MaleCharacter_RightArm
+    400086: MaleCharacter_RightFoot
+    400088: MaleCharacter_RightForeArm
+    400090: MaleCharacter_RightHand
+    400092: MaleCharacter_RightLeg
+    400094: MaleCharacter_RightShoulder
+    400096: MaleCharacter_RightToeBase
+    400098: MaleCharacter_RightUpLeg
+    400100: MaleCharacter_Spine
+    400102: MaleCharacter_Spine1
+    400104: MaleCharacter_Spine2
+    2100000: Male_UpperBody1
+    2100002: Male_LowerBody1
+    2100004: Male_ShirtMat3
+    2100006: Male_ShirtMat4
+    2100008: Male_ShortsMat1
+    4300000: Male:Male1
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: Male:Male1
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Male_LowerBody1
+    second: {fileID: 2100000, guid: f299f9e35d012fa42a681ceed59a9c4c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Male_ShirtMat3
+    second: {fileID: 2100000, guid: 6279edce28317eb48bc986d014dca2b9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Male_ShirtMat4
+    second: {fileID: 2100000, guid: c6f88fbee6bf4cb46ae2f3e87db8cbf6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Male_ShortsMat1
+    second: {fileID: 2100000, guid: b85d430c1fc7a0d47aeca468447fbd7d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Male_UpperBody1
+    second: {fileID: 2100000, guid: 24b426837d6805f478c4854a9c3bf28f, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 2
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 100
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
