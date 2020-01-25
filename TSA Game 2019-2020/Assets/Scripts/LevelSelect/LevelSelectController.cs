@@ -73,12 +73,14 @@ public class LevelSelectController : MonoBehaviour
 
     Sprite GetCover(DownloadedTrack downloadedTrack)
     {
-        byte[] byteArr = File.ReadAllBytes(downloadedTrack.downloadedPath + "\\cover.jpg");
-        Texture2D tex2d = new Texture2D(2, 2); //Create new "empty" texture
         Sprite cover = null;
-        if (tex2d.LoadImage(byteArr)) //Load the imagedata into the texture (size is set automatically)
-            cover = Sprite.Create(tex2d, new Rect(0, 0, tex2d.width, tex2d.height), new Vector2(0, 0), 100, 0, SpriteMeshType.Tight);
-
+        if (File.Exists(downloadedTrack.downloadedPath + "\\cover.jpg"))
+        {
+            byte[] byteArr = File.ReadAllBytes(downloadedTrack.downloadedPath + "\\cover.jpg");
+            Texture2D tex2d = new Texture2D(2, 2); //Create new "empty" texture
+            if (tex2d.LoadImage(byteArr)) //Load the imagedata into the texture (size is set automatically)
+                cover = Sprite.Create(tex2d, new Rect(0, 0, tex2d.width, tex2d.height), new Vector2(0, 0), 100, 0, SpriteMeshType.Tight);
+        }
         return cover;
     }
 

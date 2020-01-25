@@ -44,6 +44,8 @@ public class WorkshopController : MonoBehaviour
 
 	Sprite tempSprite;
 
+	public List<TrackEntity> pulledTracks;
+
 	//---------- Upload UI ----------
 	public string selectedTrackPath;
 	public TMP_Text selectedTrackPathText;
@@ -57,6 +59,20 @@ public class WorkshopController : MonoBehaviour
 
 	public List<string> builtInSongs;
 	public List<DownloadedTrack> downloadedTracks;
+
+	//Right Tab UI
+	public bool tabSelectorMoving;
+	public GameObject tabSelector;
+	public Vector3 tabSelectorGoalPos;
+	public float tabSelectorSpeed;
+
+	//Tabs
+	public GameObject browseTracksTab;
+	public GameObject myTracksTab;
+	public GameObject uploadTab;
+
+	//My Tracks
+	public GameObject myTracksContentObj;
 
 	private void Start()
 	{
@@ -72,6 +88,16 @@ public class WorkshopController : MonoBehaviour
 		PopulateDownloadedTracks();
 
 		OpenWorkshop();
+	}
+
+	private void Update()
+	{
+		if (tabSelectorMoving)
+		{
+			tabSelector.transform.localPosition = Vector3.Lerp(tabSelector.transform.localPosition, tabSelectorGoalPos, Time.deltaTime * tabSelectorSpeed);
+			if (Vector3.Distance(tabSelector.transform.localPosition, tabSelectorGoalPos) < 0.001)
+				tabSelectorMoving = false;
+		}
 	}
 
 	//Populate downloadedTracks list by reading Application.persistentDataPath / DownloadedTracks / DownloadedTracks
@@ -133,10 +159,12 @@ public class WorkshopController : MonoBehaviour
 	void OpenWorkshop()
 	{
 		PopulateWorkshop();
+		PopulateMyTracksTab();
 	}
 
 	async void PopulateWorkshop()
 	{
+		pulledTracks = new List<TrackEntity>();
 		Debug.Log("Clearing and populating workshop...");
 
 		for (int i = 0; i < workshopContentObj.transform.childCount; i++) //Clear content
@@ -212,8 +240,32 @@ public class WorkshopController : MonoBehaviour
 			token = segment.ContinuationToken;
 			foreach (TrackEntity entity in segment)
 			{
-				if(entity.PartitionKey != "TrackCounter") //TrackCounter keeps track of table size
+				if (entity.PartitionKey != "TrackCounter") //TrackCounter keeps track of table 
 					PopulateWorkshop(entity.SongName, entity.SongArtist, entity.XMLArtist, entity.Difficulty, entity.CoverName, entity.RowKey, entity.Mp3Name, int.Parse(entity.PartitionKey));
+			}
+		}
+		while (token != null);
+	}
+
+	private async Task ScanTracksTable(string user)
+	{
+		TableQuery<TrackEntity> partitionScanQuery = new TableQuery<TrackEntity>().Where
+			(TableQuery.GenerateFilterCondition("XMLArtist", QueryComparisons.Equal, user));
+
+		CloudTableClient tableClient = StorageAccount.CreateCloudTableClient();
+		CloudTable table = tableClient.GetTableReference("Tracks");
+
+		TableContinuationToken token = null;
+
+		// Page through the results
+		do
+		{
+			TableQuerySegment<TrackEntity> segment = await table.ExecuteQuerySegmentedAsync(partitionScanQuery, token);
+			token = segment.ContinuationToken;
+			foreach (TrackEntity entity in segment)
+			{
+				if (entity.PartitionKey != "TrackCounter") //TrackCounter keeps track of table 
+					PopulateMyTracks(entity.SongName, entity.SongArtist, entity.XMLArtist, entity.Difficulty, entity.CoverName, entity.RowKey, entity.Mp3Name, int.Parse(entity.PartitionKey));
 			}
 		}
 		while (token != null);
@@ -600,6 +652,45 @@ public class WorkshopController : MonoBehaviour
 		yield return new WaitForSeconds(title.GetComponent<Animation>().clip.length);
 		Destroy(title);
 	}
+
+	public void TabSelector(GameObject tabObj)
+	{
+		tabSelectorGoalPos = new Vector3(tabSelector.transform.localPosition.x, tabObj.transform.localPosition.y, tabSelector.transform.localPosition.z);
+		tabSelectorMoving = true;
+	}
+
+	public void BrowseTracksTab()
+	{
+		browseTracksTab.SetActive(true);
+		myTracksTab.SetActive(false);
+		uploadTab.SetActive(false);
+	}
+
+	public void MyTracksTab()
+	{
+		browseTracksTab.SetActive(false);
+		myTracksTab.SetActive(true);
+		uploadTab.SetActive(false);
+	}
+
+	public void UploadTab()
+	{
+		browseTracksTab.SetActive(false);
+		myTracksTab.SetActive(false);
+		uploadTab.SetActive(true);
+	}
+
+	async void PopulateMyTracksTab()
+	{
+		await ScanTracksTable(PlayerPrefs.GetString("username"));
+	}
+
+	async void PopulateMyTracks(string songName, string songArtist, string xmlArtist, string difficulty, string coverName, string xmlName, string mp3Name, int id)
+	{
+		GameObject item = Instantiate(workshopItemPrefab, myTracksContentObj.transform);
+		Sprite sprite = await GetCoverImage(xmlArtist, songName, coverName);
+		item.GetComponent<WorkshopItemController>().InitializeItem(sprite, songName, songArtist, xmlArtist, difficulty, xmlName, mp3Name, id);
+	}
 }
 
 public class TrackEntity : TableEntity
@@ -610,7 +701,7 @@ public class TrackEntity : TableEntity
 	// Define the PK and RK
 	public TrackEntity(int id, string xmlName, string xmlArtist, string songName, string songArtist, string coverName, string difficulty, string mp3Name)
 	{
-		this.PartitionKey = "" + id;	
+		this.PartitionKey = "" + id;
 		this.RowKey = xmlName;
 		XMLArtist = xmlArtist;
 		SongName = songName;
