@@ -128,16 +128,24 @@ public class LeaderboardController : MonoBehaviour
 
 		TableContinuationToken token = null;
 		// Page through the results
-		do
+		try
 		{
-			TableQuerySegment<ScoreEntity> segment = await table.ExecuteQuerySegmentedAsync(partitionScanQuery, token);
-			token = segment.ContinuationToken;
-			foreach (ScoreEntity entity in segment)
+			do
 			{
-				tempTableResult.Add(entity);
+				TableQuerySegment<ScoreEntity> segment = await table.ExecuteQuerySegmentedAsync(partitionScanQuery, token);
+				token = segment.ContinuationToken;
+				foreach (ScoreEntity entity in segment)
+				{
+					tempTableResult.Add(entity);
+				}
 			}
+			while (token != null);
 		}
-		while (token != null);
+		catch
+		{
+			Debug.LogError("Couldnt pull leaderboard table '" + tableName + "'");
+			throw;
+		}
 	}
 }
 

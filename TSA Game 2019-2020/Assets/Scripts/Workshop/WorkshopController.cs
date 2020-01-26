@@ -325,6 +325,7 @@ public class WorkshopController : MonoBehaviour
 			rec.songName = songName;
 			rec.songArtist = songArtist;
 			rec.trackDifficulty = difficulty;
+			rec.trackArtist = PlayerPrefs.GetString("username");
 
 			if (!builtInSongs.Contains(rec.clipName)) //If the recording is not for a built in song
 				mp3Path = Application.persistentDataPath + "\\" + "Songs" + "\\" + rec.clipName + ".mp3";
