@@ -106,7 +106,10 @@ public class RhythmController : MonoBehaviour
             CrossSceneController.clipToLoad = null;
         }
         else
+        {
             currentRecording = new Recording();
+            currentRecording.trackArtist = PlayerPrefs.GetString("username");
+        }
 
         loadingBar.SetActive(false);
     }
@@ -699,10 +702,17 @@ public class RhythmController : MonoBehaviour
         Debug.Log("Beginning ReGeneration...");
 
         //Make new recording with proper scene settings
+        string temp = "";
+        if (currentRecording.trackArtist != "")
+            temp = currentRecording.trackArtist;
         currentRecording = new Recording();
         currentRecording.clipName = songs[selectedSongID].name;
         currentRecording.scrollSpeed = scrollerController.scrollSpeed;
         currentRecording.laneCount = laneCount;
+        if (temp != "")
+            currentRecording.trackArtist = temp;
+        else
+            currentRecording.trackArtist = PlayerPrefs.GetString("username");
 
         Debug.Log("New Recording generated!");
 

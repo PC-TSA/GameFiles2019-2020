@@ -53,12 +53,26 @@ public class WorkshopController : MonoBehaviour
 	public TMP_Text selectedCoverPathText;
 
 	public TMP_InputField songNameInput;
+	public string songNameTemp;
 	public TMP_InputField songArtistInput;
+	public string songArtistTemp;
 	public TMP_Dropdown difficultyDropdown;
+	public string difficultyTemp;
+
+	public Image previewCover;
+	public TMP_Text previewSongName;
+	public TMP_Text previewSongArtist;
+	public TMP_Text previewUsername;
+	public TMP_Text previewDifficulty;
+
 	//-------------------------------
 
 	public List<string> builtInSongs;
 	public List<DownloadedTrack> downloadedTracks;
+
+	//Top UI
+	public TMP_InputField search;
+	public TMP_Dropdown difficultyFilterDropdown;
 
 	//Right Tab UI
 	public bool tabSelectorMoving;
@@ -124,7 +138,8 @@ public class WorkshopController : MonoBehaviour
 	{
 		GameObject item = Instantiate(workshopItemPrefab, workshopContentObj.transform);	
 		Sprite sprite = await GetCoverImage(xmlArtist, songName, coverName);
-		item.GetComponent<WorkshopItemController>().InitializeItem(sprite, songName, songArtist, xmlArtist, difficulty, xmlName, mp3Name, id); 
+		if(item != null) //Weird, considering it was just created above, but got an error from the line below because it somehow got destroyed
+			item.GetComponent<WorkshopItemController>().InitializeItem(sprite, songName, songArtist, xmlArtist, difficulty, xmlName, mp3Name, id);
 	}
 
 	public async Task<Sprite> GetCoverImage(string username, string songName, string coverName) 
@@ -160,21 +175,86 @@ public class WorkshopController : MonoBehaviour
 	{
 		PopulateWorkshop();
 		PopulateMyTracksTab();
+		PopulateUploadTab();
 	}
 
 	async void PopulateWorkshop()
 	{
 		pulledTracks = new List<TrackEntity>();
-		Debug.Log("Clearing and populating workshop...");
+		Debug.Log("Clearing and populating workshop normally...");
 
 		for (int i = 0; i < workshopContentObj.transform.childCount; i++) //Clear content
 			Destroy(workshopContentObj.transform.GetChild(i).gameObject);
-		await ScanTracksTable();
+
+		if (FiltersActive())
+			PopulateWithFilters();
+		else
+			await ScanTracksTable();
+	}
+
+	void PopulateUploadTab()
+	{
+		previewUsername.text = PlayerPrefs.GetString("username");
 	}
 
 	public void ExitWorkshop()
 	{
 		StartCoroutine(LoadAsyncScene("MainMenu"));
+	}
+
+	bool FiltersActive()
+	{
+		if (search.text.Trim().Length > 0)
+			return true;
+		else if (difficultyFilterDropdown.options[difficultyFilterDropdown.value].text != "Any Difficulty")
+			return true;
+		else
+			return false;
+	}
+
+	public void UpdateWithFilter()
+	{
+		Debug.Log("Clearing and populating workshop with filters...");
+		for (int i = 0; i < workshopContentObj.transform.childCount; i++) //Clear content
+			Destroy(workshopContentObj.transform.GetChild(i).gameObject);
+		PopulateWithFilters();
+	}
+
+	async void PopulateWithFilters()
+	{
+		string searchFilter = search.text.ToLower().Trim();
+		string difficultyFilter = difficultyFilterDropdown.options[difficultyFilterDropdown.value].text;
+
+		TableQuery<TrackEntity> partitionScanQuery = new TableQuery<TrackEntity>();
+
+		CloudTableClient tableClient = StorageAccount.CreateCloudTableClient();
+		CloudTable table = tableClient.GetTableReference("Tracks");
+
+		TableContinuationToken token = null;
+
+		// Page through the results
+		do
+		{
+			TableQuerySegment<TrackEntity> segment = await table.ExecuteQuerySegmentedAsync(partitionScanQuery, token);
+			token = segment.ContinuationToken;
+			foreach (TrackEntity entity in segment)
+			{
+				bool shouldInstantiate = true;
+
+				if (entity.PartitionKey == "TrackCounter") //TrackCounter keeps track of table 
+					shouldInstantiate = false;
+				if (searchFilter.Length > 0)
+					if (!entity.SongName.ToLower().Contains(searchFilter) && !entity.SongArtist.ToLower().Contains(searchFilter) && !entity.XMLArtist.ToLower().Contains(searchFilter)) //Search filter
+						shouldInstantiate = false;
+				if (difficultyFilter != "Any Difficulty") //Difficulty filter
+					if (entity.Difficulty != difficultyFilter)
+						shouldInstantiate = false;
+
+				if(shouldInstantiate)
+					PopulateWorkshop(entity.SongName, entity.SongArtist, entity.XMLArtist, entity.Difficulty, entity.CoverName, entity.RowKey, entity.Mp3Name, int.Parse(entity.PartitionKey));
+			}
+		}
+		while (token != null);
 	}
 
 	public async void ListAll()
@@ -289,9 +369,30 @@ public class WorkshopController : MonoBehaviour
 			new ExtensionFilter("Image Files", "png", "jpg", "jpeg" ), };
 		string[] temp = StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions, false);
 		if (temp.Length != 0 && temp[0].Length != 0)
+		{
 			selectedCoverPath = temp[0];
+			previewCover.sprite = LoadNewSprite(selectedCoverPath);
+		}
 
 		selectedCoverPathText.text = selectedCoverPath;
+	}
+
+	public void UpdateSongName()
+	{
+		songNameTemp = songNameInput.text;
+		previewSongName.text = songNameTemp;
+	}
+
+	public void UpdateSongArtist()
+	{
+		songArtistTemp = songArtistInput.text;
+		previewSongArtist.text = songArtistTemp;
+	}
+
+	public void UpdateSongDifficulty()
+	{
+		difficultyTemp = difficultyDropdown.options[difficultyDropdown.value].text;
+		previewDifficulty.text = difficultyTemp;
 	}
 
 	public void Upload()
@@ -300,9 +401,9 @@ public class WorkshopController : MonoBehaviour
 		uploadBarProgress.text = "Reading xml...";
 		StartCoroutine(StartBar(uploadBar));
 
-		string songName = songNameInput.text;
-		string songArtist = songArtistInput.text;
-		string difficulty = difficultyDropdown.options[difficultyDropdown.value].text;
+		string songName = songNameTemp;
+		string songArtist = songArtistTemp;
+		string difficulty = difficultyTemp;
 		if (selectedTrackPath.Length > 0 && songName.Length > 0 && songArtist.Length > 0) //A path has been picked, song name & song artist have been specified
 		{
 			//Get xml name from path
@@ -597,6 +698,7 @@ public class WorkshopController : MonoBehaviour
 		//Start download bar
 		downloadBar.SetActive(true);
 		downloadBarProgress.text = "Starting download...";
+		downloadBar.GetComponent<Slider>().maxValue = 4;
 		StartCoroutine(StartBar(downloadBar));
 
 		// Create a file client for interacting with the file service.
@@ -613,12 +715,14 @@ public class WorkshopController : MonoBehaviour
 		CloudFileDirectory dir = userDir.GetDirectoryReference(item.songName);
 
 		downloadBarProgress.text = "Downloading XML...";
+		downloadBar.GetComponent<Slider>().value = 1;
 		//Download XML file
 		CloudFile file = dir.GetFileReference(item.xmlName);
 		string path = Application.persistentDataPath + "\\" + "Workshop" + "\\" + item.trackArtist + "\\" + item.songName + "\\" + item.xmlName;
 		await file.DownloadToFileAsync(path, FileMode.CreateNew);
 
 		downloadBarProgress.text = "Saving cover...";
+		downloadBar.GetComponent<Slider>().value = 2;
 		//Save already downloaded cover file
 		byte[] coverBytes = item.coverSprite.texture.EncodeToJPG();
 		path = Application.persistentDataPath + "\\" + "Workshop" + "\\" + item.trackArtist + "\\" + item.songName + "\\" + "cover.jpg";
@@ -631,12 +735,14 @@ public class WorkshopController : MonoBehaviour
 		if (!builtInSongs.Contains(item.mp3Name))
 		{
 			downloadBarProgress.text = "Downloading song...";
+			downloadBar.GetComponent<Slider>().value = 3;
 			file = dir.GetFileReference(item.mp3Name + ".mp3");
 			path = Application.persistentDataPath + "\\" + "Workshop" + "\\" + item.trackArtist + "\\" + item.songName + "\\" + item.mp3Name + ".mp3";
 			await file.DownloadToFileAsync(path, FileMode.CreateNew);
 		}
 
 		downloadBarProgress.text = "--Download Complete--";
+		downloadBar.GetComponent<Slider>().value = 4;
 		StartCoroutine(StopBar(downloadBar, true));
 	}
 

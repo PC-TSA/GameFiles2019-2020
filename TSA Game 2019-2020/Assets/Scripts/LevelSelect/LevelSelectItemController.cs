@@ -21,6 +21,11 @@ public class LevelSelectItemController : MonoBehaviour
     public TMP_Text difficultyText;
     public TMP_Text trackArtistText;
 
+    public GameObject overlayUI;
+    public bool overlayIsLerping;
+    public float overlayLerpGoal;
+    public float overlayLerpSpeed;
+
     public void InitializeItem(Sprite coverSprite, string songName, string songArtist, string trackArtist, string difficulty, string xmlName, string mp3Name, int id)
     {
         if (coverSprite != null)
@@ -44,8 +49,45 @@ public class LevelSelectItemController : MonoBehaviour
         difficultyText.text = difficulty;
     }
 
+    private void Update()
+    {
+        OverlayBackgroundLerp();
+    }
+
+    void OverlayBackgroundLerp()
+    {
+        if (overlayIsLerping)
+        {
+            overlayUI.GetComponent<CanvasGroup>().alpha = Mathf.Lerp(overlayUI.GetComponent<CanvasGroup>().alpha, overlayLerpGoal, overlayLerpSpeed * Time.deltaTime);
+            if (Mathf.Abs(overlayUI.GetComponent<CanvasGroup>().alpha - overlayLerpGoal) < 0.001)
+            {
+                overlayIsLerping = false;
+                if (overlayLerpGoal == 0)
+                    overlayUI.SetActive(false);
+            }
+        }
+    }
+
+    public void EnableOverlayUI()
+    {
+        overlayUI.SetActive(true);
+        overlayIsLerping = true;
+        overlayLerpGoal = 1;
+    }
+
+    public void DisableOverlayUI()
+    {
+        overlayIsLerping = true;
+        overlayLerpGoal = 0;
+    }
+
     public void PlayTrack()
     {
         GameObject.FindObjectOfType<LevelSelectController>().PlayTrack(this);
     } 
+
+    public void DeleteTrack()
+    {
+        GameObject.FindObjectOfType<LevelSelectController>().DeleteTrack(this, gameObject);
+    }
 }

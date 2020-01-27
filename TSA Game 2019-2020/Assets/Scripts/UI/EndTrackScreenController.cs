@@ -28,7 +28,6 @@ public class EndTrackScreenController : MonoBehaviour
 
     public RhythmRunner rhythmRunner;
     public LeaderboardController leaderboardController;
-
     public bool isTestTrack; //If the current game being played is in the Rhythm Maker Test Track function; ENTER will return to rhythm maker instead of main menu
 
     //---------- Details Tab Variables ----------
@@ -195,10 +194,15 @@ public class EndTrackScreenController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return)) //Enter to exit
+        if (Input.GetKeyDown(KeyCode.Return)) //Enter to continue
         {
             if (isTestTrack)
                 rhythmRunner.ToRhythmMaker();
+            else if(CrossSceneController.isCampaign)
+            {
+                CrossSceneController.currentCampaignLevel++;
+                StartCoroutine(CampaignSceneTransition("Campaign" + CrossSceneController.currentCampaignLevel + CrossSceneController.campaignDifficulty));
+            }
             else
                 StartCoroutine(rhythmRunner.LoadAsyncScene("MainMenu"));
         }
@@ -212,5 +216,12 @@ public class EndTrackScreenController : MonoBehaviour
             if (Vector3.Distance(tabHighlightDivider.transform.localPosition, tabHighlightGoalPos) < 0.001)
                 tabHighlightMoving = false;
         }
+    }
+
+    IEnumerator CampaignSceneTransition(string nextScene)
+    {
+        //PLAY TRANSITION ANIMATION
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(rhythmRunner.LoadAsyncScene(nextScene));
     }
 }

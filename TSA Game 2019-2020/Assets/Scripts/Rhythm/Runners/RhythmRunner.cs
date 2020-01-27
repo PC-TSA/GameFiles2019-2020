@@ -125,19 +125,29 @@ public class RhythmRunner : MonoBehaviour
 
         //Set Music volume
         audioSource.volume *= PlayerPrefs.GetFloat("MusicVolume");
-
+        
         if (CrossSceneController.recordingToLoad.Length != 0) //If transfering song from other scene, load from given path instead of predefined file name from build Resources
         {
-            XMLRecordingPath = CrossSceneController.recordingToLoad;
-            string name = XMLRecordingPath.Substring(XMLRecordingPath.LastIndexOf('\\') + 1);
-            XMLRecordingName = name.Remove(name.Length - 4);
-            songs.Add(CrossSceneController.clipToLoad);
-            StartCoroutine(DelayedStart(1, XMLRecordingPath));
+            if (CrossSceneController.isCampaign)
+            {
+                XMLRecordingName = CrossSceneController.recordingToLoad;
+                StartCoroutine(DelayedStart(1));
+            }
+            else
+            {
+                XMLRecordingPath = CrossSceneController.recordingToLoad;
+                string name = XMLRecordingPath.Substring(XMLRecordingPath.LastIndexOf('\\') + 1);
+                XMLRecordingName = name.Remove(name.Length - 4);
+                songs.Add(CrossSceneController.clipToLoad);
+                StartCoroutine(DelayedStart(1, XMLRecordingPath));
+            }
 
             if(CrossSceneController.previousScene == "RhythmMaker")
+            {
+                endTrackScreen.GetComponent<EndTrackScreenController>().isTestTrack = true;
                 rhythmMakerButton.SetActive(true);
-            endTrackScreen.GetComponent<EndTrackScreenController>().isTestTrack = true;
-            Cursor.visible = true;
+                Cursor.visible = true;
+            }
         }
         else
         {
@@ -162,7 +172,7 @@ public class RhythmRunner : MonoBehaviour
             colorGrading.saturation.value = Mathf.Lerp(colorGrading.saturation.value, -30, Time.deltaTime * 3);
             audioSource.volume = Mathf.Lerp(audioSource.volume, 0, Time.deltaTime * 3);
             scrollSpeed = Mathf.Lerp(scrollSpeed, 0, Time.deltaTime * 3);
-            playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().speed = Mathf.Lerp(playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().speed, 0, Time.deltaTime * 3);
+            //playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().speed = Mathf.Lerp(playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().speed, 0, Time.deltaTime * 3);
             playerObj.GetComponent<Animator>().speed = Mathf.Lerp(playerObj.GetComponent<Animator>().speed, 0, Time.deltaTime * 3);
         }
     }
@@ -237,8 +247,10 @@ public class RhythmRunner : MonoBehaviour
 
     public void LoadRecording() //Deserializes xml file and sets it as current recording
     {
-        if(XMLRecordingName.Substring(XMLRecordingName.Length - 4) != ".xml") //If xml file to load doesnt have .xml extension, meaning it is build in Resources instead of a full path, load from resources
+        if (XMLRecordingName.Substring(XMLRecordingName.Length - 4) != ".xml") //If xml file to load doesnt have .xml extension, meaning it is build in Resources instead of a full path, load from resources
             XMLRecordingAsset = Resources.Load<TextAsset>("Recordings/" + XMLRecordingName);
+        else
+            return;
 
         var serializer = new XmlSerializer(typeof(Recording));
         var reader = new System.IO.StringReader(XMLRecordingAsset.text);
@@ -432,7 +444,7 @@ public class RhythmRunner : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         audioSource.Stop();
         //cameraTrack.GetComponent<CPC_CameraPath>().StopPath(); STOP CAMERA MOVEMENT
-        playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
+        //playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = false; STOP PLAYER MOVEMENT
         endTrackScreen.SetActive(true);
         endTrackScreen.GetComponent<EndTrackScreenController>().clearedOrFailedTxt.GetComponent<TMP_Text>().text = "Track Failed";
         yield return new WaitForSeconds(1.5f);
@@ -484,13 +496,13 @@ public class RhythmRunner : MonoBehaviour
                     break;
             }
 
-            //Enable trails & set their color
-            foreach (TrailRenderer tr in trailRenderers)
+            //Enable trails & set their color //TRAIL RENDERERS DISABLED UNTIL FURTHER NOTICE
+            /*foreach (TrailRenderer tr in trailRenderers)
             {
                 tr.emitting = true;
                 tr.colorGradient = comboTrailGradients[comboLvl - 1];
                 //tr.material.SetColor("_EmissionColor", comboTrailGradients[comboLvl - 1].colorKeys[0].color); SETTING MAT COLOR IS BROKEN DUE TO IT BEING OVERRIDEN BY MATERIAL EMISSION, POSSIBLE FIX WITH A LINE LIKE THIS ONE
-            }
+            }*/
         }
     }
 
@@ -498,9 +510,9 @@ public class RhythmRunner : MonoBehaviour
     {
         combo = 0;
         comboLvl = 0;
-        foreach (TrailRenderer tr in trailRenderers)
+        /*foreach (TrailRenderer tr in trailRenderers) //TRAIL RENDERERS DISABLED UNTIL FURTHER NOTICE
             tr.emitting = false;
-        comboTxt.GetComponent<TextMeshProUGUI>().text = "Combo: " + combo;
+        comboTxt.GetComponent<TextMeshProUGUI>().text = "Combo: " + combo;*/
     }
 
     void AnimSpeedUp() //Speeds up character animation briefly to increase impact when note is pressed

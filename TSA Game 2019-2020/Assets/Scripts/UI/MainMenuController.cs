@@ -15,12 +15,21 @@ public class MainMenuController : MonoBehaviour
     public GameObject usernameInput;
 
     public PlayableAsset mainMenuClose; //The timeline animation to slide the main menu back into the bar
+    public PlayableAsset campaignDifficultiesOpen;
+    public PlayableAsset campaignDifficultiesClose;
+    public PlayableAsset campaignDifficultiesCloseToMain;
+
+    public GameObject buttonMenu;
+    public GameObject campaignDifficultyMenu;
 
     public GameObject optionsMenu;
     public bool optionsMenuActive;
 
-    private void Start()
+    private void Awake()
     {
+        CrossSceneController.isCampaign = false;
+        CrossSceneController.recordingToLoad = "";
+
         Cursor.visible = true;
         if (PlayerPrefs.GetInt("FirstRun") == 0)
         {
@@ -33,9 +42,10 @@ public class MainMenuController : MonoBehaviour
         usernameInput.GetComponent<TMP_InputField>().text = PlayerPrefs.GetString("username");
     }
 
-    public void GoToMainGame()
+    public void GoToCampaign()
     {
-        StartCoroutine(LoadAsyncScene("Overworld"));
+        mainMenuCanvas.GetComponent<PlayableDirector>().Play(campaignDifficultiesOpen);
+        StartCoroutine(CampaignDifficultiesMenuOpen());
     }
 
     public void GoToLevelSelect()
@@ -81,10 +91,12 @@ public class MainMenuController : MonoBehaviour
             if(asyncLoad.progress >= 0.9f && !isPlayingAnimOut)
             {
                 isPlayingAnimOut = true;
-                mainMenuCanvas.GetComponent<PlayableDirector>().Play(mainMenuClose);
+                if(campaignDifficultyMenu.activeSelf)
+                    mainMenuCanvas.GetComponent<PlayableDirector>().Play(campaignDifficultiesClose);
+                else
+                    mainMenuCanvas.GetComponent<PlayableDirector>().Play(mainMenuClose);
                 StartCoroutine(MainMenuAnimWait(asyncLoad));
             }
-
             yield return null;
         }
     }
@@ -93,6 +105,20 @@ public class MainMenuController : MonoBehaviour
     {
         yield return new WaitForSeconds(1.5f);
         op.allowSceneActivation = true;
+    }
+
+    IEnumerator CampaignDifficultiesMenuOpen()
+    {
+        yield return new WaitForSeconds(1.2f);
+        campaignDifficultyMenu.SetActive(true);
+        buttonMenu.SetActive(false);
+    }
+
+    IEnumerator CampaignDifficultiesMenuClose()
+    {
+        yield return new WaitForSeconds(1f);
+        campaignDifficultyMenu.SetActive(false);
+        buttonMenu.SetActive(true);
     }
 
     IEnumerator LoadingBar()
@@ -126,5 +152,20 @@ public class MainMenuController : MonoBehaviour
             PlayerPrefs.SetString("username", usernameInput.GetComponent<TMP_InputField>().text);
             Debug.Log("Player prefs username updated: " + PlayerPrefs.GetString("username"));
         }
+    }
+
+    public void CampaignLoader(string difficulty)
+    {
+        CrossSceneController.recordingToLoad = "Campaign1" + difficulty;
+        CrossSceneController.isCampaign = true;
+        CrossSceneController.currentCampaignLevel = 1;
+        CrossSceneController.campaignDifficulty = difficulty;
+        StartCoroutine(LoadAsyncScene("OverworldDay"));
+    }
+
+    public void BackFromCampaignDifficulties()
+    {
+        mainMenuCanvas.GetComponent<PlayableDirector>().Play(campaignDifficultiesCloseToMain);
+        StartCoroutine(CampaignDifficultiesMenuClose());
     }
 }

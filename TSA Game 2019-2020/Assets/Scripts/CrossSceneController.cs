@@ -9,6 +9,10 @@ public static class CrossSceneController
     public static string recordingToLoad = "";
     public static AudioClip clipToLoad;
 
+    public static bool isCampaign;
+    public static int currentCampaignLevel = 1; //1-3
+    public static string campaignDifficulty = "";
+
     public static void SceneToGame(string recordingPath, AudioClip clip) //Triggered from other scene, sends current track to game
     {
         previousScene = SceneManager.GetActiveScene().name;

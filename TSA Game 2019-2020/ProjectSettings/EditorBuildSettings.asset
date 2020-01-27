@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 05caf8c3a75c1d546ae4b99a647982b2
   - enabled: 1
-    path: Assets/Scenes/Overworld.unity
+    path: Assets/Scenes/OverworldDay.unity
     guid: bf21205c68eaf7941a8119f73c6a1268
   - enabled: 1
     path: Assets/Scenes/RhythmMaker.unity

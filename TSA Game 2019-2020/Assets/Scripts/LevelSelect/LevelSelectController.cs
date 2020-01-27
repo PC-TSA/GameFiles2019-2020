@@ -17,14 +17,40 @@ public class LevelSelectController : MonoBehaviour
 
     public List<DownloadedTrack> downloadedTracks;
 
-    public GameObject trackItemsParent;
     public GameObject trackItemPrefab;
 
     public List<string> builtInSongs;
 
     public GameObject loadingBar;
 
-    // Start is called before the first frame update
+    //Right tab UI
+    public bool tabSelectorMoving;
+    public GameObject tabSelector;
+    public Vector3 tabSelectorGoalPos;
+    public float tabSelectorSpeed;
+
+    //Campaign Tab
+    public GameObject campaignTab;
+    public GameObject difficultyPrompt;
+    public TMP_Text promptTrackTxt;
+    public TMP_Text promptSegmentTxt;
+    public string difficulty;
+
+    public bool difficultySelectorMoving;
+    public GameObject difficultySelector;
+    public Vector3 difficultySelectorGoalPos;
+    public float difficultySelectorSpeed;
+
+    public int campaignBeingSelected;
+    public List<List<TextAsset>> campaignLevels; //List of lists; Each level is a list with 3 text assets, easy, medium, hard
+
+    //Downloaded Tracks Tab
+    public GameObject downloadedTracksTab;
+    public GameObject downloadedTracksContentParent;
+
+    //Bonus Tracks Tab
+    public GameObject bonusTracksTab;
+
     void Start()
     {
         System.IO.Directory.CreateDirectory(Application.persistentDataPath + "\\" + "DownloadedTracks");
@@ -36,7 +62,54 @@ public class LevelSelectController : MonoBehaviour
             builtInSongs.Add(o.name);
 
         GetDownloadedTracks();
-        PopulateLevelSelect();
+        PopulateDownloadedTracksTab();
+    }
+
+    private void Update()
+    {
+        if (tabSelectorMoving)
+        {
+            tabSelector.transform.localPosition = Vector3.Lerp(tabSelector.transform.localPosition, tabSelectorGoalPos, Time.deltaTime * tabSelectorSpeed);
+            if (Vector3.Distance(tabSelector.transform.localPosition, tabSelectorGoalPos) < 0.001)
+                tabSelectorMoving = false;
+        }
+
+        if (difficultySelectorMoving)
+        {
+            difficultySelector.transform.localPosition = Vector3.Lerp(difficultySelector.transform.localPosition, difficultySelectorGoalPos, Time.deltaTime * difficultySelectorSpeed);
+            if (Vector3.Distance(difficultySelector.transform.localPosition, difficultySelectorGoalPos) < 0.001)
+                difficultySelectorMoving = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape) && difficultyPrompt.activeSelf)
+            CloseDifficultyPrompt();
+    }
+
+    public void TabSelector(GameObject tabObj)
+    {
+        tabSelectorGoalPos = new Vector3(tabSelector.transform.localPosition.x, tabObj.transform.localPosition.y, tabSelector.transform.localPosition.z);
+        tabSelectorMoving = true;
+    }
+
+    public void CampaignTab()
+    {
+        campaignTab.SetActive(true);
+        downloadedTracksTab.SetActive(false);
+        bonusTracksTab.SetActive(false);
+    }
+
+    public void DownloadedTracksTab()
+    {
+        campaignTab.SetActive(false);
+        downloadedTracksTab.SetActive(true);
+        bonusTracksTab.SetActive(false);
+    }
+
+    public void BonusTracksTab()
+    {
+        campaignTab.SetActive(false);
+        downloadedTracksTab.SetActive(false);
+        bonusTracksTab.SetActive(true);
     }
 
     void GetDownloadedTracks()
@@ -61,11 +134,11 @@ public class LevelSelectController : MonoBehaviour
         }
     }
 
-    void PopulateLevelSelect()
+    void PopulateDownloadedTracksTab()
     {
         foreach(DownloadedTrack track in downloadedTracks)
         {
-            GameObject trackItem = Instantiate(trackItemPrefab, trackItemsParent.transform);
+            GameObject trackItem = Instantiate(trackItemPrefab, downloadedTracksContentParent.transform);
             Sprite cover = GetCover(track);
             trackItem.GetComponent<LevelSelectItemController>().InitializeItem(cover, track.songName, track.songArtist, track.trackArtist, track.difficulty, track.xmlName, track.mp3Name, track.id);
         }
@@ -87,6 +160,24 @@ public class LevelSelectController : MonoBehaviour
     public void PlayTrack(LevelSelectItemController track)
     {
         StartCoroutine(PlayTrackEnum(track));
+    }
+
+    public void DeleteTrack(LevelSelectItemController track, GameObject item)
+    {
+        File.Delete(Application.persistentDataPath + "\\DownloadedTracks\\" + track.xmlName);
+        foreach (DownloadedTrack downloadedTrack in downloadedTracks)
+        {
+            if (downloadedTrack.xmlName == track.xmlName)
+            {
+                downloadedTracks.Remove(downloadedTrack);
+                break;
+            }
+        }
+        DirectoryInfo dir = new DirectoryInfo(workshopPath + "\\" + track.trackArtist + "\\" + track.songName);
+        dir.Delete(true);
+        if (Directory.GetDirectories(workshopPath + "\\" + track.trackArtist).Length == 0) //If the no other tracks remain by this track artist, delete the track artist's folder too
+            Directory.Delete(workshopPath + "\\" + track.trackArtist);
+        Destroy(item); 
     }
 
     IEnumerator PlayTrackEnum(LevelSelectItemController track)
@@ -193,5 +284,56 @@ public class LevelSelectController : MonoBehaviour
     public void ExitLevelSelect()
     {
         StartCoroutine(LoadAsyncScene("MainMenu"));
+    }
+
+    public void CampaignDifficultyPrompt(int track)
+    {
+        difficultyPrompt.SetActive(true);
+        switch(track)
+        {
+            case 1:
+                promptTrackTxt.text = "Tsunami";
+                promptSegmentTxt.text = "Segment 1 - Swim";
+                break;
+            case 2:
+                promptTrackTxt.text = "Chain Drive";
+                promptSegmentTxt.text = "Segment 1 - Bike";
+                break;
+            case 3:
+                promptTrackTxt.text = "Neon Lights";
+                promptSegmentTxt.text = "Segment 1 - Run";
+                break;
+        }
+        difficulty = "Medium";
+        campaignBeingSelected = track;
+    }
+
+    public void CloseDifficultyPrompt()
+    {
+        difficultyPrompt.SetActive(false);
+    }
+
+    public void DifficultySelector(GameObject difficultyObj)
+    {
+        difficultySelectorGoalPos = new Vector3(difficultyObj.transform.localPosition.x, difficultySelector.transform.localPosition.y, difficultySelector.transform.localPosition.z);
+        difficultySelectorMoving = true;
+        difficulty = difficultyObj.GetComponent<TMP_Text>().text;
+    }
+
+    public void PlayCampaignTrack() //Ex: Campaign2Hard = the second campaign level in hard difficulty; There will be equivalently named XML files in resources to be loaded
+    {
+        CrossSceneController.recordingToLoad = "Campaign" + campaignBeingSelected + difficulty;
+        switch (campaignBeingSelected)
+        {
+            case 1:
+                StartCoroutine(LoadAsyncScene("OverworldDay"));
+                break;
+            case 2:
+                StartCoroutine(LoadAsyncScene("OverworldSunset"));
+                break;
+            case 3:
+                StartCoroutine(LoadAsyncScene("OverworldNight"));
+                break;
+        }
     }
 }
