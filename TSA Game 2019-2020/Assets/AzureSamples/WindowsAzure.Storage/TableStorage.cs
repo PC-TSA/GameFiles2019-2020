@@ -43,7 +43,7 @@ public class TableStorage : BaseStorage
 			throw;
 		}
 
-		// Create an instance of a customer entity. See the Model\CustomerEntity.cs for a description of the entity.
+		// Create an instance of a customer entity. See the Model/CustomerEntity.cs for a description of the entity.
 		CustomerEntity customer = new CustomerEntity("Harp", "Walter")
 		{
 			Email = "Walter@contoso.com",

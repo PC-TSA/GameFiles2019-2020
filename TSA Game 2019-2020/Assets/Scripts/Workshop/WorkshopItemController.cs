@@ -26,6 +26,8 @@ public class WorkshopItemController : MonoBehaviour
     public float overlayLerpGoal;
     public float overlayLerpSpeed;
 
+    public TrackEntity entity;
+
     public void InitializeItem(Sprite coverSprite, string songName, string songArtist, string trackArtist, string difficulty, string xmlName, string mp3Name, int id)
     {
         if(coverSprite != null)
@@ -52,6 +54,11 @@ public class WorkshopItemController : MonoBehaviour
     public void OpenItem()
     {
         GameObject.FindObjectOfType<WorkshopController>().OpenItem(this);
+    }
+
+    public void DeleteItem()
+    {
+        GameObject.FindObjectOfType<WorkshopController>().DeleteItem(entity, gameObject);
     }
 
     private void Update()

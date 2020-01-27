@@ -28,6 +28,7 @@ public class WorkshopController : MonoBehaviour
 	public GameObject workshopUI;
 	public GameObject workshopContentObj;
 	public GameObject workshopItemPrefab;
+	public GameObject myTracksItemPrefab;
 	public GameObject workshopUIMisc;
 
 	public NetworkingUtilities networkingUtilities;
@@ -39,6 +40,7 @@ public class WorkshopController : MonoBehaviour
 
 	public TMP_Text uploadBarProgress;
 	public TMP_Text downloadBarProgress;
+	public bool isDownloading;
 
 	public GameObject splashTitlePrefab;
 
@@ -134,12 +136,12 @@ public class WorkshopController : MonoBehaviour
 		}
 	}
 
-	async void PopulateWorkshop(string songName, string songArtist, string xmlArtist, string difficulty, string coverName, string xmlName, string mp3Name, int id)
+	async void PopulateWorkshop(TrackEntity entity)
 	{
-		GameObject item = Instantiate(workshopItemPrefab, workshopContentObj.transform);	
-		Sprite sprite = await GetCoverImage(xmlArtist, songName, coverName);
-		if(item != null) //Weird, considering it was just created above, but got an error from the line below because it somehow got destroyed
-			item.GetComponent<WorkshopItemController>().InitializeItem(sprite, songName, songArtist, xmlArtist, difficulty, xmlName, mp3Name, id);
+		GameObject item = Instantiate(workshopItemPrefab, workshopContentObj.transform);
+		Sprite sprite = await GetCoverImage(entity.XMLArtist, entity.SongName, entity.CoverName);
+		item.GetComponent<WorkshopItemController>().InitializeItem(sprite, entity.SongName, entity.SongArtist, entity.XMLArtist, entity.Difficulty, entity.RowKey, entity.Mp3Name, int.Parse(entity.PartitionKey));
+		item.GetComponent<WorkshopItemController>().entity = entity;
 	}
 
 	public async Task<Sprite> GetCoverImage(string username, string songName, string coverName) 
@@ -162,14 +164,19 @@ public class WorkshopController : MonoBehaviour
 		// Get image file
 		CloudFile file = dir.GetFileReference(coverName);
 
-		byte[] byteArr = new byte[file.StreamWriteSizeInBytes];
-		await file.DownloadToByteArrayAsync(byteArr, 0);
-		Texture2D tex2d = new Texture2D(2, 2);           // Create new "empty" texture
-		Sprite cover = null;
-		if (tex2d.LoadImage(byteArr))         // Load the imagedata into the texture (size is set automatically)
-			cover = Sprite.Create(tex2d, new Rect(0, 0, tex2d.width, tex2d.height), new Vector2(0, 0), 100, 0, SpriteMeshType.Tight);
+		if (await file.ExistsAsync())
+		{
+			byte[] byteArr = new byte[file.StreamWriteSizeInBytes];
+			await file.DownloadToByteArrayAsync(byteArr, 0);
+			Texture2D tex2d = new Texture2D(2, 2);           // Create new "empty" texture
+			Sprite cover = null;
+			if (tex2d.LoadImage(byteArr))         // Load the imagedata into the texture (size is set automatically)
+				cover = Sprite.Create(tex2d, new Rect(0, 0, tex2d.width, tex2d.height), new Vector2(0, 0), 100, 0, SpriteMeshType.Tight);
 
-		return cover;
+			return cover;
+		}
+		else
+			return null;
 	}
 	void OpenWorkshop()
 	{
@@ -251,7 +258,7 @@ public class WorkshopController : MonoBehaviour
 						shouldInstantiate = false;
 
 				if(shouldInstantiate)
-					PopulateWorkshop(entity.SongName, entity.SongArtist, entity.XMLArtist, entity.Difficulty, entity.CoverName, entity.RowKey, entity.Mp3Name, int.Parse(entity.PartitionKey));
+					PopulateWorkshop(entity);
 			}
 		}
 		while (token != null);
@@ -321,7 +328,7 @@ public class WorkshopController : MonoBehaviour
 			foreach (TrackEntity entity in segment)
 			{
 				if (entity.PartitionKey != "TrackCounter") //TrackCounter keeps track of table 
-					PopulateWorkshop(entity.SongName, entity.SongArtist, entity.XMLArtist, entity.Difficulty, entity.CoverName, entity.RowKey, entity.Mp3Name, int.Parse(entity.PartitionKey));
+					PopulateWorkshop(entity);
 			}
 		}
 		while (token != null);
@@ -345,7 +352,7 @@ public class WorkshopController : MonoBehaviour
 			foreach (TrackEntity entity in segment)
 			{
 				if (entity.PartitionKey != "TrackCounter") //TrackCounter keeps track of table 
-					PopulateMyTracks(entity.SongName, entity.SongArtist, entity.XMLArtist, entity.Difficulty, entity.CoverName, entity.RowKey, entity.Mp3Name, int.Parse(entity.PartitionKey));
+					PopulateMyTracks(entity);
 			}
 		}
 		while (token != null);
@@ -671,8 +678,39 @@ public class WorkshopController : MonoBehaviour
 		DownloadWorkshopItem(item);
 	}
 
+	public async void DeleteItem(TrackEntity entity, GameObject item)
+	{
+		CloudTableClient tableClient = StorageAccount.CreateCloudTableClient();
+		CloudTable table = tableClient.GetTableReference("Tracks");
+
+		//Delete from "Tracks" table
+		if (entity == null)
+			throw new ArgumentNullException("deleteItem");
+		TableOperation deleteOperation = TableOperation.Delete(entity);
+		await table.ExecuteAsync(deleteOperation);
+
+		//Delete leaderboard table
+		table = tableClient.GetTableReference(entity.XMLArtist + entity.SongName);
+		await table.DeleteIfExistsAsync();
+
+		//Delete track files in workshop file share + track folder
+		CloudFileClient fileClient = StorageAccount.CreateCloudFileClient();
+		CloudFileShare share = fileClient.GetShareReference(shareName);
+		CloudFileDirectory dir = share.GetRootDirectoryReference().GetDirectoryReference(entity.XMLArtist).GetDirectoryReference(entity.SongName);
+		await dir.GetFileReference(entity.RowKey).DeleteIfExistsAsync();
+		await dir.GetFileReference(entity.CoverName).DeleteIfExistsAsync();
+		await dir.GetFileReference(entity.Mp3Name + ".mp3").DeleteIfExistsAsync();
+		await dir.DeleteIfExistsAsync();
+
+		//Destroy workshop UI item
+		Destroy(item);
+	}
+
 	async void DownloadWorkshopItem(WorkshopItemController item)
 	{
+		if (isDownloading)
+			return;
+
 		//If this track has already been downloaded, exit with warning
 		DownloadedTrack track = new DownloadedTrack(item);
 		foreach (DownloadedTrack t in downloadedTracks)
@@ -684,6 +722,13 @@ public class WorkshopController : MonoBehaviour
 			}
 		}
 
+		//Start download bar
+		downloadBar.SetActive(true);
+		downloadBarProgress.text = "Starting download...";
+		downloadBar.GetComponent<Slider>().maxValue = 4;
+		StartCoroutine(StartBar(downloadBar));
+		isDownloading = true;
+
 		//Save and serialize downloadedTrack xml
 		downloadedTracks.Add(track);
 		var serializer = new XmlSerializer(typeof(DownloadedTrack));
@@ -694,12 +739,6 @@ public class WorkshopController : MonoBehaviour
 		//Create directories
 		System.IO.Directory.CreateDirectory(Application.persistentDataPath + "\\Workshop\\" + item.trackArtist);
 		System.IO.Directory.CreateDirectory(Application.persistentDataPath + "\\Workshop\\" + item.trackArtist + "\\" + item.songName);
-
-		//Start download bar
-		downloadBar.SetActive(true);
-		downloadBarProgress.text = "Starting download...";
-		downloadBar.GetComponent<Slider>().maxValue = 4;
-		StartCoroutine(StartBar(downloadBar));
 
 		// Create a file client for interacting with the file service.
 		CloudFileClient fileClient = StorageAccount.CreateCloudFileClient();
@@ -744,6 +783,7 @@ public class WorkshopController : MonoBehaviour
 		downloadBarProgress.text = "--Download Complete--";
 		downloadBar.GetComponent<Slider>().value = 4;
 		StartCoroutine(StopBar(downloadBar, true));
+		isDownloading = false;
 	}
 
 	public void SpawnSplashTitle(string titleText, Color titleColor)
@@ -792,11 +832,12 @@ public class WorkshopController : MonoBehaviour
 		await ScanTracksTable(PlayerPrefs.GetString("username"));
 	}
 
-	async void PopulateMyTracks(string songName, string songArtist, string xmlArtist, string difficulty, string coverName, string xmlName, string mp3Name, int id)
+	async void PopulateMyTracks(TrackEntity entity)
 	{
-		GameObject item = Instantiate(workshopItemPrefab, myTracksContentObj.transform);
-		Sprite sprite = await GetCoverImage(xmlArtist, songName, coverName);
-		item.GetComponent<WorkshopItemController>().InitializeItem(sprite, songName, songArtist, xmlArtist, difficulty, xmlName, mp3Name, id);
+		GameObject item = Instantiate(myTracksItemPrefab, myTracksContentObj.transform);
+		Sprite sprite = await GetCoverImage(entity.XMLArtist, entity.SongName, entity.CoverName);
+		item.GetComponent<WorkshopItemController>().InitializeItem(sprite, entity.SongName, entity.SongArtist, entity.XMLArtist, entity.Difficulty, entity.RowKey, entity.Mp3Name, int.Parse(entity.PartitionKey));
+		item.GetComponent<WorkshopItemController>().entity = entity;
 	}
 }
 
