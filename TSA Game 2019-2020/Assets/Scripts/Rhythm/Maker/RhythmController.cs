@@ -135,7 +135,7 @@ public class RhythmController : MonoBehaviour
     IEnumerator RunLoadAudioFiles()
     {
         loadingBar.transform.GetChild(3).GetComponent<TMP_Text>().text = 0 + "/" + filesToAdd.Count;
-        for (int i = 0; i < loadAudioFilesToRun; i++)
+        for (int i = 0; i < loadAudioFilesToRun - 1; i++)
         {
             loadAudioFilesRunning = true;
             StartCoroutine(LoadAudioFileStart(filesToAdd[i]));
@@ -269,7 +269,7 @@ public class RhythmController : MonoBehaviour
         //Making sure all vals are set
         currentRecording.clipName = songs[selectedSongID].name;
         currentRecording.scrollSpeed = scrollerController.scrollSpeed;
-        if (currentRecording.songName.Length == 0)
+        if (currentRecording.songName != null && currentRecording.songName.Length == 0)
             currentRecording.songName = audioSource.clip.name;
 
         var serializer = new XmlSerializer(typeof(Recording));
