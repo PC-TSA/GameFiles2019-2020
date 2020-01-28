@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
 public class TableStorage : BaseStorage
@@ -37,7 +36,7 @@ public class TableStorage : BaseStorage
 				WriteLine(string.Format("Table {0} already exists", TableName));
 			}
 		}
-		catch (StorageException)
+		catch (Exception)
 		{
 			WriteLine("If you are running with the default configuration please make sure you have started the storage emulator. Press the Windows key and type Azure Storage to select and run it from the list of applications - then restart the sample.");
 			throw;

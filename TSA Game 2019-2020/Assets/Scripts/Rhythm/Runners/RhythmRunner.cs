@@ -107,6 +107,8 @@ public class RhythmRunner : MonoBehaviour
 
     public GameObject endTrackScreen;
 
+    public GameObject fireworksParent;
+
     public Slider deathCountSlider;
 
     public bool hasLost;
@@ -655,6 +657,7 @@ public class RhythmRunner : MonoBehaviour
         playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
         endTrackScreen.SetActive(true);
         endTrackScreen.GetComponent<EndTrackScreenController>().clearedOrFailedTxt.GetComponent<TMP_Text>().text = "Track Cleared!";
+        fireworksParent.SetActive(true);
     }
 
     IEnumerator LoadAudioFileStart(string path)

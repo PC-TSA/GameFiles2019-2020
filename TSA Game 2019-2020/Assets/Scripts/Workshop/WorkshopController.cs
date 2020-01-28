@@ -104,6 +104,7 @@ public class WorkshopController : MonoBehaviour
 		PopulateDownloadedTracks();
 
 		OpenWorkshop();
+
 	}
 
 	private void Update()
@@ -691,7 +692,7 @@ public class WorkshopController : MonoBehaviour
 
 		//Delete leaderboard table
 		table = tableClient.GetTableReference(entity.XMLArtist + entity.SongName);
-		await table.DeleteIfExistsAsync();
+		await table.DeleteIfExistsAsync(); //Doesnt currently work due to unkown format exception 
 
 		//Delete track files in workshop file share + track folder
 		CloudFileClient fileClient = StorageAccount.CreateCloudFileClient();
@@ -703,6 +704,14 @@ public class WorkshopController : MonoBehaviour
 		await dir.DeleteIfExistsAsync();
 
 		//Destroy workshop UI item
+		for(int i = 0; i < workshopContentObj.transform.childCount; i++)
+		{
+			if(workshopContentObj.transform.GetChild(i).GetComponent<WorkshopItemController>().id == item.GetComponent<WorkshopItemController>().id)
+			{
+				Destroy(workshopContentObj.transform.GetChild(i));
+				break;
+			}
+		}
 		Destroy(item);
 	}
 
