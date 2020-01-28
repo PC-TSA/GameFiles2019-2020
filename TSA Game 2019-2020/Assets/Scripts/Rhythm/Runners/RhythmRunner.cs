@@ -117,6 +117,14 @@ public class RhythmRunner : MonoBehaviour
 
     public List<Sprite> splashImages;
 
+    //Tutorial UI
+    public AudioClip tutorialSong;
+    public string tutorialXML;
+    public GameObject tutorialUI;
+    public TMP_Text tutorialTitleText;
+    public TMP_Text tutorialMainText;
+    public bool isTutorialActive;
+
     private void Start()
     {
         originalPos = scrollerObj.transform.localPosition;
@@ -128,7 +136,15 @@ public class RhythmRunner : MonoBehaviour
         //Set Music volume
         audioSource.volume *= PlayerPrefs.GetFloat("MusicVolume");
         
-        if (CrossSceneController.recordingToLoad.Length != 0) //If transfering song from other scene, load from given path instead of predefined file name from build Resources
+        if(SceneManager.GetActiveScene().name == "TutorialScene")
+        {
+            XMLRecordingName = tutorialXML;
+            songs.Add(tutorialSong);
+            StartCoroutine(DelayedStart(1));
+            Cursor.visible = false;
+
+        }
+        else if (CrossSceneController.recordingToLoad.Length != 0) //If transfering song from other scene, load from given path instead of predefined file name from build Resources
         {
             if (CrossSceneController.isCampaign)
             {
