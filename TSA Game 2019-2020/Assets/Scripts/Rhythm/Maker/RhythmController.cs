@@ -84,6 +84,7 @@ public class RhythmController : MonoBehaviour
 
     private void Start()
     {
+        Cursor.visible = true;
         audioSource.volume *= PlayerPrefs.GetFloat("MusicVolume");
 
         StartCoroutine(LoadingBar());
