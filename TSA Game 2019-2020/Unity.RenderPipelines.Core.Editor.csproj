@@ -5,9 +5,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{98E6A528-B49D-CB97-1467-E065899B54C7}</ProjectGuid>
+    <ProjectGuid>{A1B3D246-CBF8-5C7A-7D07-73F07D9A0972}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AssemblyName>PathCreatorEditor</AssemblyName>
+    <AssemblyName>Unity.RenderPipelines.Core.Editor</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
@@ -675,16 +675,33 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="PathCreator.csproj">
-      <Project>{C65DCEA7-7BF0-46E5-D789-F86320419355}</Project>
-      <Name>PathCreator</Name>
+    <ProjectReference Include="Unity.RenderPipelines.Core.Runtime.csproj">
+      <Project>{DF88BCE8-B64F-969D-3C39-F0C65EF04F6B}</Project>
+      <Name>Unity.RenderPipelines.Core.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\PathCreator\Core\Editor\Helper\MouseUtility.cs" />
-    <Compile Include="Assets\PathCreator\Core\Editor\Helper\PathHandle.cs" />
-    <Compile Include="Assets\PathCreator\Core\Editor\Helper\ScreenSpacePolyLine.cs" />
-    <Compile Include="Assets\PathCreator\Core\Editor\PathEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\CoreEditorDrawers.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\CoreEditorStyles.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\CoreEditorUtils.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\ExpandedState.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\FilterWindow.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\MaterialUpgrader.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\PropertyFetcher.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\SettingsDisableScope.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Shadow\ShadowCascadeSplitGUI.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\Drawers\ColorParameterDrawer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\Drawers\FloatParameterDrawer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\Drawers\IntParameterDrawer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\Drawers\Vector4ParameterDrawer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\SerializedDataParameter.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeComponentEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeComponentListEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeComponentProvider.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeParameterDrawer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeProfileEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.core\Editor\Volume\VolumeProfileFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ARTnGAME\SunShaftsSRP\Install Instructions\Install Instructions.txt" />

@@ -5,16 +5,16 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{98E6A528-B49D-CB97-1467-E065899B54C7}</ProjectGuid>
+    <ProjectGuid>{49FCAFB7-7D0A-B3F6-2171-B4248A94EC21}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AssemblyName>PathCreatorEditor</AssemblyName>
+    <AssemblyName>Unity.Postprocessing.Runtime</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <TargetFrameworkProfile></TargetFrameworkProfile>
     <CompilerResponseFile></CompilerResponseFile>
-    <UnityProjectType>Editor:5</UnityProjectType>
+    <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2018.4.15f1</UnityVersion>
     <RootNamespace></RootNamespace>
@@ -156,9 +156,6 @@
     </Reference>
     <Reference Include="Managed/UnityEngine/UnityEngine.SharedInternalsModule">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2018.4.15f1\Editor\Data\Managed/UnityEngine/UnityEngine.SharedInternalsModule.dll</HintPath>
-    </Reference>
-    <Reference Include="Managed/UnityEngine/UnityEngine.SpatialTrackingModule">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2018.4.15f1\Editor\Data\Managed/UnityEngine/UnityEngine.SpatialTrackingModule.dll</HintPath>
     </Reference>
     <Reference Include="Managed/UnityEngine/UnityEngine.SpriteMaskModule">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2018.4.15f1\Editor\Data\Managed/UnityEngine/UnityEngine.SpriteMaskModule.dll</HintPath>
@@ -675,16 +672,62 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="PathCreator.csproj">
-      <Project>{C65DCEA7-7BF0-46E5-D789-F86320419355}</Project>
-      <Name>PathCreator</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Assets\PathCreator\Core\Editor\Helper\MouseUtility.cs" />
-    <Compile Include="Assets\PathCreator\Core\Editor\Helper\PathHandle.cs" />
-    <Compile Include="Assets\PathCreator\Core\Editor\Helper\ScreenSpacePolyLine.cs" />
-    <Compile Include="Assets\PathCreator\Core\Editor\PathEditor.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Attributes\DisplayNameAttribute.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Attributes\MaxAttribute.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Attributes\MinAttribute.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Attributes\MinMaxAttribute.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Attributes\PostProcessAttribute.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Attributes\TrackballAttribute.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Effects\AmbientOcclusion.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Effects\AutoExposure.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Effects\Bloom.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Effects\ChromaticAberration.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Effects\ColorGrading.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Effects\DepthOfField.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Effects\Dithering.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Effects\FastApproximateAntialiasing.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Effects\Fog.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Effects\Grain.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Effects\LensDistortion.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Effects\MotionBlur.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Effects\MultiScaleVO.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Effects\ScalableAO.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Effects\ScreenSpaceReflections.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Effects\SubpixelMorphologicalAntialiasing.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Effects\TemporalAntialiasing.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Effects\Vignette.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Monitors\HistogramMonitor.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Monitors\LightMeterMonitor.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Monitors\Monitor.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Monitors\VectorscopeMonitor.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Monitors\WaveformMonitor.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\ParameterOverride.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\PostProcessBundle.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\PostProcessDebug.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\PostProcessDebugLayer.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\PostProcessEffectRenderer.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\PostProcessEffectSettings.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\PostProcessEvent.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\PostProcessLayer.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\PostProcessManager.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\PostProcessProfile.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\PostProcessRenderContext.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\PostProcessResources.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\PostProcessVolume.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Utils\ColorUtilities.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Utils\HableCurve.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Utils\HaltonSeq.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Utils\LogHistogram.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Utils\MeshUtilities.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Utils\PropertySheet.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Utils\PropertySheetFactory.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Utils\RuntimeUtilities.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Utils\ShaderIDs.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Utils\Spline.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Utils\TargetPool.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Utils\TextureFormatUtilities.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Utils\TextureLerper.cs" />
+    <Compile Include="Packages\com.unity.postprocessing\PostProcessing\Runtime\Utils\XRSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ARTnGAME\SunShaftsSRP\Install Instructions\Install Instructions.txt" />

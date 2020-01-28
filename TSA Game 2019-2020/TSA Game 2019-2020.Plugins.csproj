@@ -5,16 +5,16 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{98E6A528-B49D-CB97-1467-E065899B54C7}</ProjectGuid>
+    <ProjectGuid>{CA35A1A5-D157-0F79-BA81-5D23384EA457}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AssemblyName>PathCreatorEditor</AssemblyName>
+    <AssemblyName>Assembly-CSharp-firstpass</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <TargetFrameworkProfile></TargetFrameworkProfile>
     <CompilerResponseFile></CompilerResponseFile>
-    <UnityProjectType>Editor:5</UnityProjectType>
+    <UnityProjectType>GamePlugins:3</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2018.4.15f1</UnityVersion>
     <RootNamespace></RootNamespace>
@@ -157,9 +157,6 @@
     <Reference Include="Managed/UnityEngine/UnityEngine.SharedInternalsModule">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2018.4.15f1\Editor\Data\Managed/UnityEngine/UnityEngine.SharedInternalsModule.dll</HintPath>
     </Reference>
-    <Reference Include="Managed/UnityEngine/UnityEngine.SpatialTrackingModule">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2018.4.15f1\Editor\Data\Managed/UnityEngine/UnityEngine.SpatialTrackingModule.dll</HintPath>
-    </Reference>
     <Reference Include="Managed/UnityEngine/UnityEngine.SpriteMaskModule">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2018.4.15f1\Editor\Data\Managed/UnityEngine/UnityEngine.SpriteMaskModule.dll</HintPath>
     </Reference>
@@ -259,47 +256,17 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.15f1/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.UI">
-      <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.15f1/Editor/Data/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.Timeline">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.15f1/Editor/Data/UnityExtensions/Unity/Timeline/RuntimeEditor/UnityEngine.Timeline.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.Timeline">
-      <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.15f1/Editor/Data/UnityExtensions/Unity/Timeline/Editor/UnityEditor.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Networking">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.15f1/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.Networking">
-      <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.15f1/Editor/Data/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.GoogleAudioSpatializer">
-      <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.15f1/Editor/Data/UnityExtensions/Unity/UnityGoogleAudioSpatializer/Editor/UnityEditor.GoogleAudioSpatializer.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.GoogleAudioSpatializer">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.15f1/Editor/Data/UnityExtensions/Unity/UnityGoogleAudioSpatializer/RuntimeEditor/UnityEngine.GoogleAudioSpatializer.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.SpatialTracking">
-      <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.15f1/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/Editor/UnityEditor.SpatialTracking.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.SpatialTracking">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.15f1/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.VR">
-      <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.15f1/Editor/Data/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.Graphs">
-      <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.15f1/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.LinuxStandalone.Extensions">
-      <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.15f1/Editor/Data/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.WindowsStandalone.Extensions">
-      <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.15f1/Editor/Data/PlaybackEngines/windowsstandalonesupport/UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.OSXStandalone.Extensions">
-      <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.15f1/Editor/Data/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Storage">
       <HintPath>Assets/Plugins/Microsoft.WindowsAzure.Storage.dll</HintPath>
@@ -675,16 +642,86 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Unity.RenderPipelines.Core.Editor.csproj">
+      <Project>{A1B3D246-CBF8-5C7A-7D07-73F07D9A0972}</Project>
+      <Name>Unity.RenderPipelines.Core.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.RenderPipelines.Core.Runtime.csproj">
+      <Project>{DF88BCE8-B64F-969D-3C39-F0C65EF04F6B}</Project>
+      <Name>Unity.RenderPipelines.Core.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.TextMeshPro.Editor.csproj">
+      <Project>{3A848AB7-9891-EDDA-D555-BF184C2F81F4}</Project>
+      <Name>Unity.TextMeshPro.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.RenderPipelines.Lightweight.Runtime.csproj">
+      <Project>{FCBD67EC-29CD-1CFA-DD5A-DE23C045E679}</Project>
+      <Name>Unity.RenderPipelines.Lightweight.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.RenderPipelines.Lightweight.Editor.csproj">
+      <Project>{EDC54531-1C68-9C68-05EA-89DE05B39F96}</Project>
+      <Name>Unity.RenderPipelines.Lightweight.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.PackageManagerUI.Editor.csproj">
+      <Project>{6877705C-FBD9-0C4F-5AFB-6FB431E5D39D}</Project>
+      <Name>Unity.PackageManagerUI.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Postprocessing.Editor.csproj">
+      <Project>{CBEC4DCB-1B2B-E03B-0387-393C59967E8B}</Project>
+      <Name>Unity.Postprocessing.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="PathCreator.csproj">
       <Project>{C65DCEA7-7BF0-46E5-D789-F86320419355}</Project>
       <Name>PathCreator</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Postprocessing.Runtime.csproj">
+      <Project>{49FCAFB7-7D0A-B3F6-2171-B4248A94EC21}</Project>
+      <Name>Unity.Postprocessing.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.ShaderGraph.Editor.csproj">
+      <Project>{097081EC-B172-781E-F676-D45E858A96D6}</Project>
+      <Name>Unity.ShaderGraph.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.RenderPipelines.Core.ShaderLibrary.csproj">
+      <Project>{21FE3B2C-E13B-425A-BFBA-789779C1B460}</Project>
+      <Name>Unity.RenderPipelines.Core.ShaderLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.TextMeshPro.csproj">
+      <Project>{07A21C90-D344-AE1A-8456-9910C203B41A}</Project>
+      <Name>Unity.TextMeshPro</Name>
+    </ProjectReference>
+    <ProjectReference Include="PathCreatorEditor.csproj">
+      <Project>{98E6A528-B49D-CB97-1467-E065899B54C7}</Project>
+      <Name>PathCreatorEditor</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\PathCreator\Core\Editor\Helper\MouseUtility.cs" />
-    <Compile Include="Assets\PathCreator\Core\Editor\Helper\PathHandle.cs" />
-    <Compile Include="Assets\PathCreator\Core\Editor\Helper\ScreenSpacePolyLine.cs" />
-    <Compile Include="Assets\PathCreator\Core\Editor\PathEditor.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Samples\Scripts\CameraToggleBeamVisibility.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Samples\Scripts\CheckIfInsideBeam.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Samples\Scripts\FeaturesNotSupportedMessage.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Samples\Scripts\FreeCameraController.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Samples\Scripts\LightGenerator.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Samples\Scripts\Rotater.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\BeamGeometry.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\CachedLightProperties.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\Config.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\ConfigOverride.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\Consts.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\DynamicOcclusion.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\Enums.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\GlobalMesh.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\GpuInstancing.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\HighlightNullAttribute.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\MaterialKeywordSRP.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\MaterialManager.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\MeshGenerator.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\Noise3D.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\ShaderProperties.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\TriggerZone.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\Utils.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\Version.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\VolumetricDustParticles.cs" />
+    <Compile Include="Assets\Plugins\VolumetricLightBeam\Scripts\VolumetricLightBeam.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ARTnGAME\SunShaftsSRP\Install Instructions\Install Instructions.txt" />

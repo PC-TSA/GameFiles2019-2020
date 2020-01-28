@@ -5,16 +5,16 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{98E6A528-B49D-CB97-1467-E065899B54C7}</ProjectGuid>
+    <ProjectGuid>{FCBD67EC-29CD-1CFA-DD5A-DE23C045E679}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AssemblyName>PathCreatorEditor</AssemblyName>
+    <AssemblyName>Unity.RenderPipelines.Lightweight.Runtime</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <TargetFrameworkProfile></TargetFrameworkProfile>
     <CompilerResponseFile></CompilerResponseFile>
-    <UnityProjectType>Editor:5</UnityProjectType>
+    <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2018.4.15f1</UnityVersion>
     <RootNamespace></RootNamespace>
@@ -156,9 +156,6 @@
     </Reference>
     <Reference Include="Managed/UnityEngine/UnityEngine.SharedInternalsModule">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2018.4.15f1\Editor\Data\Managed/UnityEngine/UnityEngine.SharedInternalsModule.dll</HintPath>
-    </Reference>
-    <Reference Include="Managed/UnityEngine/UnityEngine.SpatialTrackingModule">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2018.4.15f1\Editor\Data\Managed/UnityEngine/UnityEngine.SpatialTrackingModule.dll</HintPath>
     </Reference>
     <Reference Include="Managed/UnityEngine/UnityEngine.SpriteMaskModule">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2018.4.15f1\Editor\Data\Managed/UnityEngine/UnityEngine.SpriteMaskModule.dll</HintPath>
@@ -675,16 +672,58 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="PathCreator.csproj">
-      <Project>{C65DCEA7-7BF0-46E5-D789-F86320419355}</Project>
-      <Name>PathCreator</Name>
+    <ProjectReference Include="Unity.Postprocessing.Runtime.csproj">
+      <Project>{49FCAFB7-7D0A-B3F6-2171-B4248A94EC21}</Project>
+      <Name>Unity.Postprocessing.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.RenderPipelines.Core.Runtime.csproj">
+      <Project>{DF88BCE8-B64F-969D-3C39-F0C65EF04F6B}</Project>
+      <Name>Unity.RenderPipelines.Core.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\PathCreator\Core\Editor\Helper\MouseUtility.cs" />
-    <Compile Include="Assets\PathCreator\Core\Editor\Helper\PathHandle.cs" />
-    <Compile Include="Assets\PathCreator\Core\Editor\Helper\ScreenSpacePolyLine.cs" />
-    <Compile Include="Assets\PathCreator\Core\Editor\PathEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Data\LightweightRenderPipelineAsset.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Data\LightweightRenderPipelineEditorResources.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Data\LightweightRenderPipelineResources.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\DefaultRendererSetup.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\IAfterDepthPrePass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\IAfterOpaquePass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\IAfterOpaquePostProcess.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\IAfterRender.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\IAfterSkyboxPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\IAfterTransparentPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\IBeforeRender.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\IRendererSetup.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\LightweightRenderPipeline.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\LightweightRenderPipelineCore.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\LWRPAdditionalCameraData.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\LWRPAdditionalLightData.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\MaterialHandle.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\AdditionalLightsShadowCasterPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\BeginXRRenderingPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\CopyColorPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\CopyDepthPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\CreateLightweightRenderTexturesPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\DepthOnlyPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\DrawSkyboxPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\EndXRRenderingPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\FinalBlitPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\MainLightShadowCasterPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\OpaquePostProcessPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\RenderOpaqueForwardPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\RenderTransparentForwardPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\SceneViewDepthCopy.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\ScreenSpaceShadowResolvePass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\ScriptableRenderPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\SetupForwardRenderingPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\SetupLightweightConstanstPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\Passes\TransparentPostProcessPass.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\RenderTargetHandle.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\SampleCount.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\SceneViewDrawMode.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\ScriptableRenderer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\ShaderUtils.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Runtime\ShadowUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ARTnGAME\SunShaftsSRP\Install Instructions\Install Instructions.txt" />

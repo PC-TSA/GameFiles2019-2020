@@ -5,9 +5,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{98E6A528-B49D-CB97-1467-E065899B54C7}</ProjectGuid>
+    <ProjectGuid>{EDC54531-1C68-9C68-05EA-89DE05B39F96}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AssemblyName>PathCreatorEditor</AssemblyName>
+    <AssemblyName>Unity.RenderPipelines.Lightweight.Editor</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
@@ -675,16 +675,48 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="PathCreator.csproj">
-      <Project>{C65DCEA7-7BF0-46E5-D789-F86320419355}</Project>
-      <Name>PathCreator</Name>
+    <ProjectReference Include="Unity.RenderPipelines.Lightweight.Runtime.csproj">
+      <Project>{FCBD67EC-29CD-1CFA-DD5A-DE23C045E679}</Project>
+      <Name>Unity.RenderPipelines.Lightweight.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Postprocessing.Runtime.csproj">
+      <Project>{49FCAFB7-7D0A-B3F6-2171-B4248A94EC21}</Project>
+      <Name>Unity.Postprocessing.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Postprocessing.Editor.csproj">
+      <Project>{CBEC4DCB-1B2B-E03B-0387-393C59967E8B}</Project>
+      <Name>Unity.Postprocessing.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.RenderPipelines.Core.Runtime.csproj">
+      <Project>{DF88BCE8-B64F-969D-3C39-F0C65EF04F6B}</Project>
+      <Name>Unity.RenderPipelines.Core.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.RenderPipelines.Core.Editor.csproj">
+      <Project>{A1B3D246-CBF8-5C7A-7D07-73F07D9A0972}</Project>
+      <Name>Unity.RenderPipelines.Core.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.ShaderGraph.Editor.csproj">
+      <Project>{097081EC-B172-781E-F676-D45E858A96D6}</Project>
+      <Name>Unity.ShaderGraph.Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\PathCreator\Core\Editor\Helper\MouseUtility.cs" />
-    <Compile Include="Assets\PathCreator\Core\Editor\Helper\PathHandle.cs" />
-    <Compile Include="Assets\PathCreator\Core\Editor\Helper\ScreenSpacePolyLine.cs" />
-    <Compile Include="Assets\PathCreator\Core\Editor\PathEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Editor\LightExplorer.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Editor\LightweightRenderPipelineAssetEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Editor\LightweightRenderPipelineCameraEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Editor\LightweightRenderPipelineLightEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Editor\LightweightRenderPipelineMaterialUpgrader.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Editor\LWRPAdditionalCameraDataEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Editor\LWRPAdditionalLightDataEditor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Editor\ShaderGraph\LightWeightPBRSubShader.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Editor\ShaderGraph\LightWeightUnlitSubShader.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Editor\ShaderGUI\BaseShaderGUI.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Editor\ShaderGUI\LitShaderGUI.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Editor\ShaderGUI\ParticlesLitShaderGUI.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Editor\ShaderGUI\SimpleLitShaderGUI.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Editor\ShaderGUI\UnlitShaderGUI.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Editor\ShaderPreprocessor.cs" />
+    <Compile Include="Packages\com.unity.render-pipelines.lightweight\Editor\UpgradeCommon.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ARTnGAME\SunShaftsSRP\Install Instructions\Install Instructions.txt" />

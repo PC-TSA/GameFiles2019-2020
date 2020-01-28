@@ -1,0 +1,269 @@
+fileFormatVersion: 2
+guid: 5daa5e90a4f65a444a0ebf587af0f1aa
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: BackWheel
+    100002: BigGear
+    100004: //RootNode
+    100006: Bike5
+    100008: Bike6
+    100010: Body
+    100012: FrontWheel
+    100014: Handles1
+    100016: pCube214
+    100018: pCube214 1
+    100020: pCube215
+    100022: pCube215 1
+    100024: pCube216
+    100026: pCube216 1
+    100028: pCube217
+    100030: pCube217 1
+    100032: pCube218
+    100034: pCube218 1
+    100036: pCube219
+    100038: pCube219 1
+    100040: pCube220
+    100042: pCube220 1
+    100044: pCube221
+    100046: pCube221 1
+    100048: pCube222
+    100050: pCube222 1
+    100052: pCube223
+    100054: pCube223 1
+    100056: pCube228
+    100058: pCylinder34
+    100060: pCylinder35
+    100062: pCylinder36
+    100064: pCylinder38
+    100066: pCylinder39
+    100068: pCylinder39 1
+    100070: pCylinder41
+    100072: pCylinder41 1
+    100074: pCylinder42
+    100076: pCylinder43
+    100078: pCylinder44
+    100080: pCylinder45
+    100082: pCylinder50
+    100084: pCylinder51
+    100086: PedalAxleGroup
+    100088: Seat
+    100090: SmallGear
+    100092: transform769
+    100094: transform770
+    100096: transform771
+    100098: transform772
+    100100: transform773
+    100102: transform774
+    100104: transform775
+    100106: transform776
+    100108: transform777
+    100110: transform778
+    100112: transform779
+    100114: transform780
+    100116: transform781
+    100118: transform782
+    100120: transform783
+    100122: transform784
+    100124: transform785
+    100126: transform786
+    100128: transform787
+    100130: transform788
+    100132: transform789
+    100134: transform790
+    100136: transform791
+    100138: transform792
+    100140: transform793
+    100142: transform794
+    100144: transform795
+    100146: transform796
+    100148: transform797
+    100150: transform798
+    100152: transform799
+    100154: transform800
+    100156: transform801
+    100158: transform802
+    100160: transform803
+    100162: transform804
+    100164: transform805
+    100166: transform806
+    100168: transform807
+    400000: BackWheel
+    400002: BigGear
+    400004: //RootNode
+    400006: Bike5
+    400008: Bike6
+    400010: Body
+    400012: FrontWheel
+    400014: Handles1
+    400016: pCube214
+    400018: pCube214 1
+    400020: pCube215
+    400022: pCube215 1
+    400024: pCube216
+    400026: pCube216 1
+    400028: pCube217
+    400030: pCube217 1
+    400032: pCube218
+    400034: pCube218 1
+    400036: pCube219
+    400038: pCube219 1
+    400040: pCube220
+    400042: pCube220 1
+    400044: pCube221
+    400046: pCube221 1
+    400048: pCube222
+    400050: pCube222 1
+    400052: pCube223
+    400054: pCube223 1
+    400056: pCube228
+    400058: pCylinder34
+    400060: pCylinder35
+    400062: pCylinder36
+    400064: pCylinder38
+    400066: pCylinder39
+    400068: pCylinder39 1
+    400070: pCylinder41
+    400072: pCylinder41 1
+    400074: pCylinder42
+    400076: pCylinder43
+    400078: pCylinder44
+    400080: pCylinder45
+    400082: pCylinder50
+    400084: pCylinder51
+    400086: PedalAxleGroup
+    400088: Seat
+    400090: SmallGear
+    400092: transform769
+    400094: transform770
+    400096: transform771
+    400098: transform772
+    400100: transform773
+    400102: transform774
+    400104: transform775
+    400106: transform776
+    400108: transform777
+    400110: transform778
+    400112: transform779
+    400114: transform780
+    400116: transform781
+    400118: transform782
+    400120: transform783
+    400122: transform784
+    400124: transform785
+    400126: transform786
+    400128: transform787
+    400130: transform788
+    400132: transform789
+    400134: transform790
+    400136: transform791
+    400138: transform792
+    400140: transform793
+    400142: transform794
+    400144: transform795
+    400146: transform796
+    400148: transform797
+    400150: transform798
+    400152: transform799
+    400154: transform800
+    400156: transform801
+    400158: transform802
+    400160: transform803
+    400162: transform804
+    400164: transform805
+    400166: transform806
+    400168: transform807
+    2100000: White1
+    2100002: TireBlack
+    2100004: lambert1
+    2100006: WindowAqua
+    2100008: GrayWhite
+    2300000: Bike6
+    3300000: Bike6
+    4300000: Bike6
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
