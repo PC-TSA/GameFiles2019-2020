@@ -25,6 +25,9 @@ public class MainMenuController : MonoBehaviour
     public GameObject optionsMenu;
     public bool optionsMenuActive;
 
+    public GameObject howToPlayMenu;
+    public bool howToPlayActive;
+
     private void Awake()
     {
         CrossSceneController.isCampaign = false;
@@ -37,6 +40,7 @@ public class MainMenuController : MonoBehaviour
             PlayerPrefs.SetInt("FirstRun", 1);
             PlayerPrefs.SetFloat("MusicVolume", 1);
             PlayerPrefs.SetFloat("SFXVolume", 1);
+            PlayerPrefs.SetString("username", "Player");
         }
 
         usernameInput.GetComponent<TMP_InputField>().text = PlayerPrefs.GetString("username");
@@ -61,6 +65,20 @@ public class MainMenuController : MonoBehaviour
     public void GoToWorkshop()
     {
         StartCoroutine(LoadAsyncScene("Workshop"));
+    }
+
+    public void HowToPlay()
+    {
+        howToPlayActive = !howToPlayActive;
+        if (howToPlayActive)
+            howToPlayMenu.SetActive(true);
+        else
+            howToPlayMenu.SetActive(false);
+    }
+
+    public void PlayTutorial()
+    {
+        StartCoroutine(LoadAsyncScene("TutorialScene"));
     }
 
     public void ToggleOptionsMenu()
@@ -98,6 +116,18 @@ public class MainMenuController : MonoBehaviour
                 StartCoroutine(MainMenuAnimWait(asyncLoad));
             }
             yield return null;
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (howToPlayActive)
+            {
+                howToPlayMenu.SetActive(false);
+                howToPlayActive = false;
+            }
         }
     }
 

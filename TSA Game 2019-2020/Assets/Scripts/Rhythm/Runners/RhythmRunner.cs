@@ -119,11 +119,16 @@ public class RhythmRunner : MonoBehaviour
 
     //Tutorial UI
     public AudioClip tutorialSong;
-    public string tutorialXML;
     public GameObject tutorialUI;
     public TMP_Text tutorialTitleText;
     public TMP_Text tutorialMainText;
     public bool isTutorialActive;
+    public List<GameObject> tutorialPages;
+    public List<float> tutorialTimeouts;
+    public int currentTutorialPage;
+    public float tutorialTargetAlpha;
+    public float tutorialFadeSpeed;
+    public bool fadeTutorial;
 
     private void Start()
     {
@@ -138,9 +143,10 @@ public class RhythmRunner : MonoBehaviour
         
         if(SceneManager.GetActiveScene().name == "TutorialScene")
         {
-            XMLRecordingName = tutorialXML;
+            isTutorialActive = true;
             songs.Add(tutorialSong);
             StartCoroutine(DelayedStart(1));
+            StartCoroutine(TutorialPageCycle());
             Cursor.visible = false;
 
         }
@@ -190,8 +196,23 @@ public class RhythmRunner : MonoBehaviour
             colorGrading.saturation.value = Mathf.Lerp(colorGrading.saturation.value, -30, Time.deltaTime * 3);
             audioSource.volume = Mathf.Lerp(audioSource.volume, 0, Time.deltaTime * 3);
             scrollSpeed = Mathf.Lerp(scrollSpeed, 0, Time.deltaTime * 3);
-            //playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().speed = Mathf.Lerp(playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().speed, 0, Time.deltaTime * 3);
-            playerObj.GetComponent<Animator>().speed = Mathf.Lerp(playerObj.GetComponent<Animator>().speed, 0, Time.deltaTime * 3);
+            if (playerObj != null)
+            {
+                playerObj.transform.GetComponent<PathCreation.Examples.PathFollower>().speed = Mathf.Lerp(playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().speed, 0, Time.deltaTime * 3);
+                playerObj.GetComponent<Animator>().speed = Mathf.Lerp(playerObj.GetComponent<Animator>().speed, 0, Time.deltaTime * 3);
+            }
+        }
+
+        if(isTutorialActive)
+        {
+            if (Input.GetKeyDown(KeyCode.Return))
+                tutorialUI.SetActive(false);
+            if (fadeTutorial)
+            {
+                tutorialUI.GetComponent<CanvasGroup>().alpha = Mathf.Lerp(tutorialUI.GetComponent<CanvasGroup>().alpha, tutorialTargetAlpha, tutorialFadeSpeed * Time.deltaTime);
+                if(Mathf.Abs(tutorialUI.GetComponent<CanvasGroup>().alpha - tutorialTargetAlpha) < 0.01f)
+                    fadeTutorial = false;
+            }
         }
     }
 
@@ -202,13 +223,57 @@ public class RhythmRunner : MonoBehaviour
             scrollerObj.transform.localPosition = new Vector3(scrollerObj.transform.localPosition.x, scrollerObj.transform.localPosition.y - scrollSpeed, scrollerObj.transform.localPosition.z);
     }
 
+    IEnumerator TutorialPageCycle()
+    {
+        yield return new WaitForSeconds(tutorialTimeouts[currentTutorialPage]);
+        tutorialUI.GetComponent<CanvasGroup>().alpha = 0;
+        tutorialUI.SetActive(true);
+        PauseRhythm();
+        if (currentTutorialPage != 0)
+            tutorialPages[currentTutorialPage - 1].SetActive(false);
+        currentTutorialPage++;
+        tutorialPages[currentTutorialPage - 1].SetActive(true);
+        tutorialTargetAlpha = 1;
+        fadeTutorial = true;
+        while (tutorialUI.activeSelf)
+            yield return new WaitForSeconds(0);
+        UnPauseRhythm();
+        if(currentTutorialPage < tutorialPages.Count)
+            StartCoroutine(TutorialPageCycle());
+    }
+
+    void PauseRhythm()
+    {
+        if(playerObj != null)
+        {
+            playerObj.GetComponent<Animator>().speed = 0;
+            playerObj.transform.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
+        }
+        isRunning = false;
+        audioSource.Pause();
+        StopCoroutine(WaitToFinishTrack(audioSource.clip.length));
+    }
+
+    void UnPauseRhythm()
+    {
+        if (playerObj != null)
+        {
+            playerObj.GetComponent<Animator>().speed = 1;
+            playerObj.transform.GetComponent<PathCreation.Examples.PathFollower>().enabled = true;
+        }
+        isRunning = true;
+        audioSource.UnPause();
+        StartCoroutine(WaitToFinishTrack(audioSource.clip.length - audioSource.time));
+    }
+
+
     public void UpdateNotesHit(int i)
     {
         notesHit += i;
         //notesHitTxt.GetComponent<TextMeshProUGUI>().text = "Notes Hit: " + notesHit;
         UpdateDeathCount(-i); //-i because the lower the death count the better and hitting a note is good
         UpdateCombo(i);
-        AnimSpeedUp();
+        //AnimSpeedUp();
     }
 
     public void UpdateNotesMissed(int i)
@@ -276,9 +341,12 @@ public class RhythmRunner : MonoBehaviour
         reader.Close();
 
         //Load song
-        foreach (AudioClip clip in songs)
-            if (clip.name == currentRecording.clipName)
-                audioSource.clip = clip;
+        if(audioSource.clip == null)
+        {
+            foreach (AudioClip clip in songs)
+                if (clip.name == currentRecording.clipName)
+                    audioSource.clip = clip;
+        }
         audioSource.time = 0;
 
         //Reset scroller
@@ -330,9 +398,12 @@ public class RhythmRunner : MonoBehaviour
             stream.Close();
 
             //Load song
-            foreach (AudioClip clip in songs)
-                if (clip.name == currentRecording.clipName)
-                    audioSource.clip = clip;
+            if (audioSource.clip == null)
+            {
+                foreach (AudioClip clip in songs)
+                    if (clip.name == currentRecording.clipName)
+                        audioSource.clip = clip;
+            }
             audioSource.time = 0;
 
             //Reset scroller
@@ -462,7 +533,8 @@ public class RhythmRunner : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         audioSource.Stop();
         //cameraTrack.GetComponent<CPC_CameraPath>().StopPath(); STOP CAMERA MOVEMENT
-        //playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = false; STOP PLAYER MOVEMENT
+        if (playerObj != null)
+            playerObj.transform.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
         endTrackScreen.SetActive(true);
         endTrackScreen.GetComponent<EndTrackScreenController>().clearedOrFailedTxt.GetComponent<TMP_Text>().text = "Track Failed";
         yield return new WaitForSeconds(1.5f);
@@ -537,7 +609,8 @@ public class RhythmRunner : MonoBehaviour
     {
         if(comboLvl >= 0 && !isAnimSpeedupRunning)
         {
-            playerObj.GetComponent<Animator>().speed = 1f;
+            if(playerObj != null)
+                playerObj.GetComponent<Animator>().speed = 1f;
             StartCoroutine(AnimSpeedUpTimer());
         }
     }
@@ -670,7 +743,8 @@ public class RhythmRunner : MonoBehaviour
     {
         audioSource.Stop();
         //cameraTrack.GetComponent<CPC_CameraPath>().StopPath();
-        playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
+        if (playerObj != null)
+            playerObj.transform.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
         endTrackScreen.SetActive(true);
         endTrackScreen.GetComponent<EndTrackScreenController>().clearedOrFailedTxt.GetComponent<TMP_Text>().text = "Track Cleared!";
         fireworksParent.SetActive(true);

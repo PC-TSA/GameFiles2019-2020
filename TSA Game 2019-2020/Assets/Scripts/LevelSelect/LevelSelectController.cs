@@ -220,7 +220,7 @@ public class LevelSelectController : MonoBehaviour
         }
 
         CrossSceneController.SceneToGame(path + track.xmlName, clip);
-        StartCoroutine(LoadAsyncScene("Overworld"));
+        StartCoroutine(LoadAsyncScene("PlayTrackScene"));
     }
 
     public void Mp3ToWav(string mp3File, string outputFile)

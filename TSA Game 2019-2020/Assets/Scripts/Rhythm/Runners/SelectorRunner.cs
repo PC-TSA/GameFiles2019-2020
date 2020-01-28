@@ -85,51 +85,54 @@ public class SelectorRunner : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(key))
+        if(rhythmRunner.isRunning)
         {
-            GetComponent<Image>().sprite = pressSprite;
-
-            bool somethingClicked = false; //If false by the end of this if, this click counts as a misclick
-            if (selectableNotes.Count != 0)
+            if (Input.GetKeyDown(key))
             {
-                if(selectableNotes[0] != null)
+                GetComponent<Image>().sprite = pressSprite;
+
+                bool somethingClicked = false; //If false by the end of this if, this click counts as a misclick
+                if (selectableNotes.Count != 0)
                 {
-                    somethingClicked = true;
-                    rhythmRunner.UpdateNotesHit(1);
-                    NoteHitAccuracy(selectableNotes[0]); //Updates score based on accuracy of note hit
+                    if (selectableNotes[0] != null)
+                    {
+                        somethingClicked = true;
+                        rhythmRunner.UpdateNotesHit(1);
+                        NoteHitAccuracy(selectableNotes[0]); //Updates score based on accuracy of note hit
 
-                    //Removes oldest note in the selectable notes list
-                    selectableNotes[0].GetComponent<NoteController>().Hit();
-                    selectableNotes.RemoveAt(0);
+                        //Removes oldest note in the selectable notes list
+                        selectableNotes[0].GetComponent<NoteController>().Hit();
+                        selectableNotes.RemoveAt(0);
+                    }
+                    else
+                        selectableNotes.RemoveAt(0);
                 }
-                else
-                    selectableNotes.RemoveAt(0);
+
+                if (selectableSlider != null && selectableSlider.GetComponent<SliderController>().canBeHit && !selectableSlider.GetComponent<SliderController>().hasBeenHit) //If there is a selectableSlider that can be hit and hasnt been hit yet
+                {
+                    selectableSlider.GetComponent<SliderController>().hasBeenHit = true;
+                    somethingClicked = true;
+                    noteHitParticle.Play();
+                    selectableSliderBeingHit = true;
+                    SliderHitAccuracy(selectableSlider.GetComponent<SliderController>().arrowSpriteChild);
+                }
+
+                if (!somethingClicked)
+                    rhythmRunner.UpdateMissclicks(1);
             }
-            
-            if(selectableSlider != null && selectableSlider.GetComponent<SliderController>().canBeHit && !selectableSlider.GetComponent<SliderController>().hasBeenHit) //If there is a selectableSlider that can be hit and hasnt been hit yet
+
+            if (Input.GetKeyUp(key))
             {
-                selectableSlider.GetComponent<SliderController>().hasBeenHit = true;
-                somethingClicked = true;
-                noteHitParticle.Play();
-                selectableSliderBeingHit = true;
-                SliderHitAccuracy(selectableSlider.GetComponent<SliderController>().arrowSpriteChild);
-            }
+                GetComponent<Image>().sprite = normalSprite;
 
-            if (!somethingClicked)
-                rhythmRunner.UpdateMissclicks(1);
-        }
-
-        if (Input.GetKeyUp(key))
-        {
-            GetComponent<Image>().sprite = normalSprite;
-
-            //If you stop hitting a slider mid way
-            if (selectableSlider != null && selectableSlider.GetComponent<SliderController>().hasBeenHit)
-            {
-                noteHitParticle.Stop();
-                selectableSlider.GetComponent<SliderController>().incompleteHit = true;
-                selectableSliderBeingHit = false;
-                rhythmRunner.UpdateNotesMissed(1);
+                //If you stop hitting a slider mid way
+                if (selectableSlider != null && selectableSlider.GetComponent<SliderController>().hasBeenHit)
+                {
+                    noteHitParticle.Stop();
+                    selectableSlider.GetComponent<SliderController>().incompleteHit = true;
+                    selectableSliderBeingHit = false;
+                    rhythmRunner.UpdateNotesMissed(1);
+                }
             }
         }
     }

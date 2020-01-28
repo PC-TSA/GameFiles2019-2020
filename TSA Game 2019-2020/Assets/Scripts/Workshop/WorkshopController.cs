@@ -14,6 +14,9 @@ using System.Collections;
 using System.Xml;
 using System.Xml.Serialization;
 using SFB;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 public class WorkshopController : MonoBehaviour
 {
@@ -104,7 +107,6 @@ public class WorkshopController : MonoBehaviour
 		PopulateDownloadedTracks();
 
 		OpenWorkshop();
-
 	}
 
 	private void Update()
@@ -145,9 +147,9 @@ public class WorkshopController : MonoBehaviour
 		item.GetComponent<WorkshopItemController>().entity = entity;
 	}
 
-	public async Task<Sprite> GetCoverImage(string username, string songName, string coverName) 
+	public async Task<Sprite> GetCoverImage(string username, string songName, string coverName)
 	{
-		if(coverName == "")
+		if (coverName == "")
 			return null;
 
 		// Create a file client for interacting with the file service.
@@ -258,7 +260,7 @@ public class WorkshopController : MonoBehaviour
 					if (entity.Difficulty != difficultyFilter)
 						shouldInstantiate = false;
 
-				if(shouldInstantiate)
+				if (shouldInstantiate)
 					PopulateWorkshop(entity);
 			}
 		}
@@ -359,7 +361,7 @@ public class WorkshopController : MonoBehaviour
 		while (token != null);
 	}
 
-	public void PickRecording() 
+	public void PickRecording()
 	{
 		var extensions = new[] {
 			new ExtensionFilter("XML", "xml" ), };
@@ -541,11 +543,11 @@ public class WorkshopController : MonoBehaviour
 		{
 			throw;
 		}
-		
+
 		//Get current table size by retrieving entity with partitionKey & rowKey "TrackCounter" 
 		TableOperation retrieve = TableOperation.Retrieve<TrackCounter>("TrackCounter", "TrackCounter");
 		TableResult result = await table.ExecuteAsync(retrieve);
-		TrackCounter trackCounter = (TrackCounter) result.Result;
+		TrackCounter trackCounter = (TrackCounter)result.Result;
 		//Gets table count & adds 1 for new track being uploaded
 		trackCounter.TrackCount++;
 		//Inserts new track counter value
@@ -597,7 +599,7 @@ public class WorkshopController : MonoBehaviour
 		bar.SetActive(true);
 		int periodIndex = 0;
 		List<GameObject> loadingTextPeriods = new List<GameObject>();
-		for(int i = 0; i < bar.transform.GetChild(0).childCount; i ++) //Populate loading text periods from bar's children
+		for (int i = 0; i < bar.transform.GetChild(0).childCount; i++) //Populate loading text periods from bar's children
 			loadingTextPeriods.Add(bar.transform.GetChild(0).GetChild(i).gameObject);
 
 		while (bar.activeSelf) //While the bar is active, animate loading text periods
@@ -692,7 +694,7 @@ public class WorkshopController : MonoBehaviour
 
 		//Delete leaderboard table
 		table = tableClient.GetTableReference(entity.XMLArtist + entity.SongName);
-		await table.DeleteIfExistsAsync(); //Doesnt currently work due to unkown format exception 
+		await table.DeleteIfExistsAsync(); //Doesnt currently work due to unknown format exception
 
 		//Delete track files in workshop file share + track folder
 		CloudFileClient fileClient = StorageAccount.CreateCloudFileClient();
@@ -704,9 +706,9 @@ public class WorkshopController : MonoBehaviour
 		await dir.DeleteIfExistsAsync();
 
 		//Destroy workshop UI item
-		for(int i = 0; i < workshopContentObj.transform.childCount; i++)
+		for (int i = 0; i < workshopContentObj.transform.childCount; i++)
 		{
-			if(workshopContentObj.transform.GetChild(i).GetComponent<WorkshopItemController>().id == item.GetComponent<WorkshopItemController>().id)
+			if (workshopContentObj.transform.GetChild(i).GetComponent<WorkshopItemController>().id == item.GetComponent<WorkshopItemController>().id)
 			{
 				Destroy(workshopContentObj.transform.GetChild(i));
 				break;

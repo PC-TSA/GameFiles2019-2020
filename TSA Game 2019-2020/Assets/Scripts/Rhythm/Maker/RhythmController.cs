@@ -126,7 +126,9 @@ public class RhythmController : MonoBehaviour
         loadAudioFilesToRun = files.Length;
 
         foreach (string filePath in files)
-            filesToAdd.Add(filePath);
+            if (filePath.Substring(filePath.Length - 4, 4) == ".mp3")
+                filesToAdd.Add(filePath);
+
         StartCoroutine(RunLoadAudioFiles());
     }
 
@@ -267,6 +269,8 @@ public class RhythmController : MonoBehaviour
         //Making sure all vals are set
         currentRecording.clipName = songs[selectedSongID].name;
         currentRecording.scrollSpeed = scrollerController.scrollSpeed;
+        if (currentRecording.songName.Length == 0)
+            currentRecording.songName = audioSource.clip.name;
 
         var serializer = new XmlSerializer(typeof(Recording));
 
@@ -761,7 +765,7 @@ public class RhythmController : MonoBehaviour
         if (savedRecordingPath.Length != 0)
         {
             CrossSceneController.SceneToGame(savedRecordingPath, audioSource.clip);
-            StartCoroutine(LoadAsyncScene("Overworld"));
+            StartCoroutine(LoadAsyncScene("PlayTrackScene"));
         }
     }
 
