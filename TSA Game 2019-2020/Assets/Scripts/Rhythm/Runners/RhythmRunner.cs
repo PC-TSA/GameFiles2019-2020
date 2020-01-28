@@ -163,6 +163,7 @@ public class RhythmRunner : MonoBehaviour
                 string name = XMLRecordingPath.Substring(XMLRecordingPath.LastIndexOf('\\') + 1);
                 XMLRecordingName = name.Remove(name.Length - 4);
                 songs.Add(CrossSceneController.clipToLoad);
+                audioSource.clip = CrossSceneController.clipToLoad;
                 StartCoroutine(DelayedStart(1, XMLRecordingPath));
             }
 
@@ -198,8 +199,10 @@ public class RhythmRunner : MonoBehaviour
             scrollSpeed = Mathf.Lerp(scrollSpeed, 0, Time.deltaTime * 3);
             if (playerObj != null)
             {
-                playerObj.transform.GetComponent<PathCreation.Examples.PathFollower>().speed = Mathf.Lerp(playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().speed, 0, Time.deltaTime * 3);
-                playerObj.GetComponent<Animator>().speed = Mathf.Lerp(playerObj.GetComponent<Animator>().speed, 0, Time.deltaTime * 3);
+                if(playerObj.GetComponent<PathCreation.Examples.PathFollower>() != null)
+                    playerObj.transform.GetComponent<PathCreation.Examples.PathFollower>().speed = Mathf.Lerp(playerObj.transform.GetComponent<PathCreation.Examples.PathFollower>().speed, 0, Time.deltaTime * 3);
+                if (playerObj.GetComponent<Animator>() != null)
+                    playerObj.GetComponent<Animator>().speed = Mathf.Lerp(playerObj.GetComponent<Animator>().speed, 0, Time.deltaTime * 3);
             }
         }
 
