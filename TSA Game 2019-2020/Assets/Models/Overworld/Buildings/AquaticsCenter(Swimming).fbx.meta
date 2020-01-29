@@ -1,14 +1,17 @@
 fileFormatVersion: 2
-guid: b570124a271e78d40982a3f28dc31855
+guid: 0bd025e96871a874ab02382ee2f270fb
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
     2100000: lambert1
+    2100002: White
+    2100004: LightBlue
+    2100006: DarkBlue
     2300000: //RootNode
     3300000: //RootNode
-    4300000: pCube4680
+    4300000: AquaticsCenter
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -40,7 +43,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 800
+    globalScale: 35
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
