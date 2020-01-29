@@ -36,7 +36,7 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 10
+    value: 8
   threshold:
     overrideState: 1
     value: 0.95
@@ -1478,7 +1478,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b14251571769e7f48b2512a534f6cac2, type: 3}
   m_Name: SunShaftsHDRP
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
@@ -1501,13 +1501,13 @@ MonoBehaviour:
     value: {r: 1, g: 0.93050873, b: 0.8820755, a: 1}
   sunShaftBlurRadius:
     overrideState: 1
-    value: 1.56
+    value: -4.54
   sunShaftIntensity:
     overrideState: 1
-    value: 1.95
+    value: 2.43
   maxRadius:
     overrideState: 1
-    value: 5.01
+    value: 5.15
   useDepthTexture:
     overrideState: 0
     value: 0

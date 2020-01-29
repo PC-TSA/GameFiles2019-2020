@@ -71,6 +71,7 @@ public class RhythmRunner : MonoBehaviour
     public List<Sprite> arrowSprites; //0 = right, 1 = up, 2 = left, 3 = down
 
     public AudioSource audioSource;
+    public List<AudioSource> sfxSources;
 
     public float scrollSpeed;
 
@@ -130,6 +131,13 @@ public class RhythmRunner : MonoBehaviour
     public float tutorialFadeSpeed;
     public bool fadeTutorial;
 
+    public GameObject pauseMenu;
+    public bool isPaused;
+
+    public GameObject optionsMenu;
+    public Slider musicVolumeSlider;
+    public Slider sfxVolumeSlider;
+
     private void Start()
     {
         originalPos = scrollerObj.transform.localPosition;
@@ -138,10 +146,16 @@ public class RhythmRunner : MonoBehaviour
         postProcessingVolume.profile.TryGetSettings(out vignette);
         postProcessingVolume.profile.TryGetSettings(out colorGrading);
 
-        //Set Music volume
+        //Set music/sfx volumes
         audioSource.volume *= PlayerPrefs.GetFloat("MusicVolume");
-        
-        if(SceneManager.GetActiveScene().name == "TutorialScene")
+        foreach (AudioSource source in sfxSources)
+            source.volume = sfxVolumeSlider.value;
+
+        //Set options menu
+        musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume");
+        sfxVolumeSlider.value = PlayerPrefs.GetFloat("SFXVolume");
+
+        if (SceneManager.GetActiveScene().name == "TutorialScene")
         {
             isTutorialActive = true;
             songs.Add(tutorialSong);
@@ -199,14 +213,17 @@ public class RhythmRunner : MonoBehaviour
             scrollSpeed = Mathf.Lerp(scrollSpeed, 0, Time.deltaTime * 3);
             if (playerObj != null)
             {
-                if(playerObj.GetComponent<PathCreation.Examples.PathFollower>() != null)
-                    playerObj.transform.GetComponent<PathCreation.Examples.PathFollower>().speed = Mathf.Lerp(playerObj.transform.GetComponent<PathCreation.Examples.PathFollower>().speed, 0, Time.deltaTime * 3);
+                if(playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>() != null)
+                    playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().speed = Mathf.Lerp(playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().speed, 0, Time.deltaTime * 3);
                 if (playerObj.GetComponent<Animator>() != null)
                     playerObj.GetComponent<Animator>().speed = Mathf.Lerp(playerObj.GetComponent<Animator>().speed, 0, Time.deltaTime * 3);
             }
         }
 
-        if(isTutorialActive)
+        if (Input.GetKeyDown(KeyCode.Escape) && !optionsMenu.activeSelf)
+            TogglePause(true);
+
+        if (isTutorialActive)
         {
             if (Input.GetKeyDown(KeyCode.Return))
                 tutorialUI.SetActive(false);
@@ -231,7 +248,7 @@ public class RhythmRunner : MonoBehaviour
         yield return new WaitForSeconds(tutorialTimeouts[currentTutorialPage]);
         tutorialUI.GetComponent<CanvasGroup>().alpha = 0;
         tutorialUI.SetActive(true);
-        PauseRhythm();
+        PauseRhythm(false);
         if (currentTutorialPage != 0)
             tutorialPages[currentTutorialPage - 1].SetActive(false);
         currentTutorialPage++;
@@ -240,35 +257,54 @@ public class RhythmRunner : MonoBehaviour
         fadeTutorial = true;
         while (tutorialUI.activeSelf)
             yield return new WaitForSeconds(0);
-        UnPauseRhythm();
+        UnPauseRhythm(false);
         if(currentTutorialPage < tutorialPages.Count)
             StartCoroutine(TutorialPageCycle());
     }
 
-    void PauseRhythm()
+    void TogglePause(bool useMenu)
     {
+        isPaused = !isPaused;
+        if (isPaused)
+            PauseRhythm(useMenu);
+        else
+            UnPauseRhythm(useMenu);
+    }
+
+    public void PauseRhythm(bool useMenu)
+    {
+        if (useMenu)
+            pauseMenu.SetActive(true);
+
         if(playerObj != null)
         {
             playerObj.GetComponent<Animator>().speed = 0;
-            playerObj.transform.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
+            playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
         }
         isRunning = false;
         audioSource.Pause();
         StopCoroutine(WaitToFinishTrack(audioSource.clip.length));
     }
 
-    void UnPauseRhythm()
+    public void UnPauseRhythm(bool useMenu)
     {
+        if (useMenu)
+            pauseMenu.SetActive(false);
+
         if (playerObj != null)
         {
             playerObj.GetComponent<Animator>().speed = 1;
-            playerObj.transform.GetComponent<PathCreation.Examples.PathFollower>().enabled = true;
+            playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = true;
         }
         isRunning = true;
         audioSource.UnPause();
         StartCoroutine(WaitToFinishTrack(audioSource.clip.length - audioSource.time));
     }
 
+    public void ToMainMenu()
+    {
+        StartCoroutine(LoadAsyncScene("MainMenu"));
+    }
 
     public void UpdateNotesHit(int i)
     {
@@ -537,7 +573,7 @@ public class RhythmRunner : MonoBehaviour
         audioSource.Stop();
         //cameraTrack.GetComponent<CPC_CameraPath>().StopPath(); STOP CAMERA MOVEMENT
         if (playerObj != null)
-            playerObj.transform.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
+            playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
         endTrackScreen.SetActive(true);
         endTrackScreen.GetComponent<EndTrackScreenController>().clearedOrFailedTxt.GetComponent<TMP_Text>().text = "Track Failed";
         yield return new WaitForSeconds(1.5f);
@@ -747,7 +783,7 @@ public class RhythmRunner : MonoBehaviour
         audioSource.Stop();
         //cameraTrack.GetComponent<CPC_CameraPath>().StopPath();
         if (playerObj != null)
-            playerObj.transform.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
+            playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
         endTrackScreen.SetActive(true);
         endTrackScreen.GetComponent<EndTrackScreenController>().clearedOrFailedTxt.GetComponent<TMP_Text>().text = "Track Cleared!";
         fireworksParent.SetActive(true);
@@ -772,5 +808,30 @@ public class RhythmRunner : MonoBehaviour
                 songs.Add(clip);
             }
         }
+    }
+
+    public void UpdateMusicVolume()
+    {
+        PlayerPrefs.SetFloat("MusicVolume", musicVolumeSlider.value);
+        audioSource.volume = musicVolumeSlider.value;
+    }
+
+    public void UpdateSFXVolume()
+    {
+        PlayerPrefs.SetFloat("SFXVolume", sfxVolumeSlider.value);
+        foreach (AudioSource source in sfxSources)
+            source.volume = sfxVolumeSlider.value;
+    }
+
+    public void OpenOptionsMenu()
+    {
+        optionsMenu.SetActive(true);
+        pauseMenu.SetActive(false);
+    }
+
+    public void CloseOptionsMenu()
+    {
+        optionsMenu.SetActive(false);
+        pauseMenu.SetActive(true);
     }
 }

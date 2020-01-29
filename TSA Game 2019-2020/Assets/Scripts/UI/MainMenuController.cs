@@ -7,7 +7,9 @@ using UnityEngine.Playables;
 using TMPro;
 
 public class MainMenuController : MonoBehaviour
-{ 
+{
+    public AudioSource audioSource;
+
     public GameObject loadingBar;
     public List<GameObject> loadingTextPeriods;
 
@@ -27,11 +29,16 @@ public class MainMenuController : MonoBehaviour
 
     public GameObject howToPlayMenu;
     public bool howToPlayActive;
+    public GameObject tutorialPrompt;
 
     private void Awake()
     {
         CrossSceneController.isCampaign = false;
         CrossSceneController.recordingToLoad = "";
+
+        System.IO.Directory.CreateDirectory(Application.persistentDataPath + "\\" + "Workshop");
+        System.IO.Directory.CreateDirectory(Application.persistentDataPath + "\\" + "DownloadedTracks");
+        System.IO.Directory.CreateDirectory(Application.persistentDataPath + "\\" + "Songs");
 
         Cursor.visible = true;
         if (PlayerPrefs.GetInt("FirstRun") == 0)
@@ -41,15 +48,25 @@ public class MainMenuController : MonoBehaviour
             PlayerPrefs.SetFloat("MusicVolume", 1);
             PlayerPrefs.SetFloat("SFXVolume", 1);
             PlayerPrefs.SetString("username", "Player");
+            PlayerPrefs.SetInt("showTutorial", 1);
         }
 
         usernameInput.GetComponent<TMP_InputField>().text = PlayerPrefs.GetString("username");
+        audioSource.volume = PlayerPrefs.GetFloat("MusicVolume");
+    }
+
+    private void Start()
+    {
+        if (CrossSceneController.mainThemeTime != 0)
+            audioSource.time = CrossSceneController.mainThemeTime;
     }
 
     public void GoToCampaign()
     {
         mainMenuCanvas.GetComponent<PlayableDirector>().Play(campaignDifficultiesOpen);
         StartCoroutine(CampaignDifficultiesMenuOpen());
+        if (PlayerPrefs.GetInt("showTutorial") == 1)
+            StartCoroutine(FadeObjectCanvasGroup(tutorialPrompt, 1, 5));
     }
 
     public void GoToLevelSelect()
@@ -79,6 +96,7 @@ public class MainMenuController : MonoBehaviour
     public void PlayTutorial()
     {
         StartCoroutine(LoadAsyncScene("TutorialScene"));
+        PlayerPrefs.SetInt("showTutorial", 0);
     }
 
     public void ToggleOptionsMenu()
@@ -90,11 +108,30 @@ public class MainMenuController : MonoBehaviour
             optionsMenu.SetActive(false);
     }
 
+    public void CloseTutorialPrompt()
+    {
+        StartCoroutine(FadeObjectCanvasGroup(tutorialPrompt, 0, 5));
+        PlayerPrefs.SetInt("showTutorial", 0);
+    }
+
     public void Quit()
     {
         Application.Quit();
     }
 
+    IEnumerator FadeObjectCanvasGroup(GameObject obj, float target, float speed)
+    {
+        if (target > 0 && !obj.activeSelf)
+            obj.SetActive(true);
+        while(Mathf.Abs(obj.GetComponent<CanvasGroup>().alpha - target) > 0.01f)
+        {
+            obj.GetComponent<CanvasGroup>().alpha = Mathf.Lerp(obj.GetComponent<CanvasGroup>().alpha, target, speed * Time.deltaTime);
+            yield return new WaitForSeconds(0);
+        }
+        if (target == 0 && obj.activeSelf)
+            obj.SetActive(false);
+    }
+    
     IEnumerator LoadAsyncScene(string scene)
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene);
@@ -113,6 +150,8 @@ public class MainMenuController : MonoBehaviour
                     mainMenuCanvas.GetComponent<PlayableDirector>().Play(campaignDifficultiesClose);
                 else
                     mainMenuCanvas.GetComponent<PlayableDirector>().Play(mainMenuClose);
+                if (scene == "Workshop" || scene == "LevelSelect")
+                    CrossSceneController.mainThemeTime = audioSource.time + 1.5f;
                 StartCoroutine(MainMenuAnimWait(asyncLoad));
             }
             yield return null;

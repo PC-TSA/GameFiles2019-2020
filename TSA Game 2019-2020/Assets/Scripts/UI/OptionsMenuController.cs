@@ -7,6 +7,7 @@ public class OptionsMenuController : MonoBehaviour
 {
     public Slider musicVolumeSlider;
     public Slider sfxVolumeSlider;
+    public MainMenuController mainMenuController;
 
     private void Start()
     {
@@ -17,6 +18,7 @@ public class OptionsMenuController : MonoBehaviour
     public void UpdateMusicVolume()
     {
         PlayerPrefs.SetFloat("MusicVolume", musicVolumeSlider.value);
+        mainMenuController.audioSource.volume = musicVolumeSlider.value;
     }
 
     public void UpdateSFXVolume()

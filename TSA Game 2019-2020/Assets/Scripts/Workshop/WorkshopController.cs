@@ -20,6 +20,8 @@ using System.Net.Http.Headers;
 
 public class WorkshopController : MonoBehaviour
 {
+	public AudioSource audioSource;
+
 	public string shareName = "workshop";
 
 	public string username;
@@ -96,7 +98,6 @@ public class WorkshopController : MonoBehaviour
 	private void Start()
 	{
 		StorageAccount = networkingUtilities.SetStorageAccount();
-		System.IO.Directory.CreateDirectory(Application.persistentDataPath + "\\" + "Workshop");
 		username = PlayerPrefs.GetString("username");
 
 		//Read all audioclips in the Resources/Songs folder and add them to the 'builtInSongs' list
@@ -104,8 +105,11 @@ public class WorkshopController : MonoBehaviour
 		foreach (UnityEngine.Object o in temp)
 			builtInSongs.Add(o.name);
 
-		PopulateDownloadedTracks();
+		if (CrossSceneController.mainThemeTime != 0)
+			audioSource.time = CrossSceneController.mainThemeTime;
+		Debug.Log(CrossSceneController.mainThemeTime);
 
+		PopulateDownloadedTracks();
 		OpenWorkshop();
 	}
 
@@ -126,7 +130,7 @@ public class WorkshopController : MonoBehaviour
 
 		foreach (string file in System.IO.Directory.GetFiles(Application.persistentDataPath + "\\" + "DownloadedTracks"))
 		{
-			if (file.Substring(file.Length - 3) == "xml")
+			if (file.Substring(file.Length - 4) == ".xml")
 			{
 				var serializer = new XmlSerializer(typeof(DownloadedTrack));
 				var stream = new FileStream(file, FileMode.Open);
@@ -516,7 +520,8 @@ public class WorkshopController : MonoBehaviour
 		AddToTracksTable(xmlName, songName, songArtist, coverName, difficulty, mp3Name);
 
 		//Make leaderboard table
-		networkingUtilities.NewLeaderboard(username + xmlName);
+		string leaderboardName = username + xmlName;
+		networkingUtilities.NewLeaderboard(leaderboardName.Replace(" ", string.Empty));
 
 		uploadBarProgress.text = "--Upload Complete--";
 		uploadBar.GetComponent<Slider>().value++;
@@ -585,11 +590,15 @@ public class WorkshopController : MonoBehaviour
 	IEnumerator LoadAsyncScene(string scene)
 	{
 		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene);
+		asyncLoad.allowSceneActivation = false;
 		StartCoroutine(StartBar(loadingBar));
 		// Wait until the asynchronous scene fully loads
 		while (!asyncLoad.isDone)
 		{
 			loadingBar.GetComponent<Slider>().value = asyncLoad.progress;
+			if(scene == "MainMenu")
+				CrossSceneController.mainThemeTime = audioSource.time;
+			asyncLoad.allowSceneActivation = true;
 			yield return null;
 		}
 	}
@@ -703,7 +712,24 @@ public class WorkshopController : MonoBehaviour
 		await dir.GetFileReference(entity.RowKey).DeleteIfExistsAsync();
 		await dir.GetFileReference(entity.CoverName).DeleteIfExistsAsync();
 		await dir.GetFileReference(entity.Mp3Name + ".mp3").DeleteIfExistsAsync();
+		CloudFileDirectory artistDir = dir.Parent;
 		await dir.DeleteIfExistsAsync();
+
+		//Delete parent folder if it is now empty
+		if(await artistDir.ExistsAsync())
+		{
+			List<IListFileItem> results = new List<IListFileItem>();
+			FileContinuationToken token = null;
+			do
+			{
+				FileResultSegment resultSegment = await share.GetRootDirectoryReference().ListFilesAndDirectoriesSegmentedAsync(token);
+				results.AddRange(resultSegment.Results);
+				token = resultSegment.ContinuationToken;
+			}
+			while (token != null);
+			if (results.Count == 0)
+				await artistDir.DeleteAsync();
+		}
 
 		//Destroy workshop UI item
 		for (int i = 0; i < workshopContentObj.transform.childCount; i++)
@@ -846,7 +872,9 @@ public class WorkshopController : MonoBehaviour
 	async void PopulateMyTracks(TrackEntity entity)
 	{
 		GameObject item = Instantiate(myTracksItemPrefab, myTracksContentObj.transform);
-		Sprite sprite = await GetCoverImage(entity.XMLArtist, entity.SongName, entity.CoverName);
+		Sprite sprite = null;
+		if (entity.CoverName != null && entity.CoverName.Length > 0)
+			sprite = await GetCoverImage(entity.XMLArtist, entity.SongName, entity.CoverName);
 		item.GetComponent<WorkshopItemController>().InitializeItem(sprite, entity.SongName, entity.SongArtist, entity.XMLArtist, entity.Difficulty, entity.RowKey, entity.Mp3Name, int.Parse(entity.PartitionKey));
 		item.GetComponent<WorkshopItemController>().entity = entity;
 	}

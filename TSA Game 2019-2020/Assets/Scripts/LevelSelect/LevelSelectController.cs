@@ -13,6 +13,8 @@ using UnityEngine.SceneManagement;
 
 public class LevelSelectController : MonoBehaviour
 {
+    public AudioSource audioSource;
+
     public string workshopPath;
 
     public List<DownloadedTrack> downloadedTracks;
@@ -60,6 +62,9 @@ public class LevelSelectController : MonoBehaviour
         UnityEngine.Object[] temp = Resources.LoadAll("Songs", typeof(AudioClip));
         foreach (UnityEngine.Object o in temp)
             builtInSongs.Add(o.name);
+
+        if (CrossSceneController.mainThemeTime != 0)
+            audioSource.time = CrossSceneController.mainThemeTime;
 
         GetDownloadedTracks();
         PopulateDownloadedTracksTab();
@@ -234,11 +239,15 @@ public class LevelSelectController : MonoBehaviour
     IEnumerator LoadAsyncScene(string scene)
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene);
+        asyncLoad.allowSceneActivation = false;
         StartCoroutine(StartBar(loadingBar));
         // Wait until the asynchronous scene fully loads
         while (!asyncLoad.isDone)
         {
             loadingBar.GetComponent<Slider>().value = asyncLoad.progress;
+            if (scene == "MainMenu")
+                CrossSceneController.mainThemeTime = audioSource.time;
+            asyncLoad.allowSceneActivation = true;
             yield return null;
         }
     }

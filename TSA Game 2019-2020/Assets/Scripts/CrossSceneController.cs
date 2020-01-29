@@ -13,6 +13,8 @@ public static class CrossSceneController
     public static int currentCampaignLevel = 1; //1-3
     public static string campaignDifficulty = "";
 
+    public static float mainThemeTime; //Used by UIs to continue the main theme where the previous menu left off
+
     public static void SceneToGame(string recordingPath, AudioClip clip) //Triggered from other scene, sends current track to game
     {
         previousScene = SceneManager.GetActiveScene().name;

@@ -73,6 +73,7 @@ public class EndTrackScreenController : MonoBehaviour
         leaderboard = new List<ScoreEntity>();
         username = PlayerPrefs.GetString("username");
         leaderboardTable = rhythmRunner.currentRecording.trackArtist + rhythmRunner.XMLRecordingName;
+        leaderboardTable = leaderboardTable.Replace(" ", string.Empty);
         //leaderboardTable = "gabrieltm8Frame"; HARD CODED LEADERBOARD
         currentScore = new ScoreEntity(username, rhythmRunner.score, rhythmRunner.accuracy, rhythmRunner.ranking);
     }
