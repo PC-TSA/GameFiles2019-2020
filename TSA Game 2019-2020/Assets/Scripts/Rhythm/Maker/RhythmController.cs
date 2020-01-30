@@ -267,6 +267,17 @@ public class RhythmController : MonoBehaviour
 
     public void SaveRecording() //Serializes recording to xml file
     {
+        if (noteCount == 0 && sliderCount == 0 && spaceCount == 0)
+        {
+            SpawnSplashTitle("Empty Track", Color.red);
+            return;
+        }
+        if (audioSource.clip == null)
+        {
+            SpawnSplashTitle("No Track Song", Color.red);
+            return;
+        }
+
         //Making sure all vals are set
         currentRecording.clipName = songs[selectedSongID].name;
         currentRecording.scrollSpeed = scrollerController.scrollSpeed;

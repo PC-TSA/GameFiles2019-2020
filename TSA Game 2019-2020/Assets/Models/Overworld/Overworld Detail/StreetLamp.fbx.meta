@@ -22,7 +22,17 @@ ModelImporter:
     2300000: StreetLamo2
     3300000: StreetLamo2
     4300000: StreetLamo2
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShinyBrown
+    second: {fileID: 2100000, guid: ed3f89f13376ec44581fc438209cc909, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WhiteLight
+    second: {fileID: 2100000, guid: 6fcea67e91f7d0c4eb25968f8c92e638, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
