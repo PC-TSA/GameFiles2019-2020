@@ -21,7 +21,22 @@ ModelImporter:
     2300000: pCylinder86
     3300000: pCylinder86
     4300000: pCylinder86
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SmoothYellow
+    second: {fileID: 2100000, guid: b157bbb9b3a13cb449a6a31f7d0e09a9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WhiteLight
+    second: {fileID: 2100000, guid: 0de4f3b6d8599da4ab22e987408d88ac, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood
+    second: {fileID: 2100000, guid: bfd5732f53020f940a3828b3eebbe08a, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
