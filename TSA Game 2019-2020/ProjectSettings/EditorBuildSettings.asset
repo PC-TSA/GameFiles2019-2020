@@ -6,19 +6,19 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
+    path: Assets/Scenes/UIs/MainMenu.unity
     guid: 05caf8c3a75c1d546ae4b99a647982b2
   - enabled: 1
     path: Assets/Scenes/OverworldDay.unity
     guid: bf21205c68eaf7941a8119f73c6a1268
   - enabled: 1
-    path: Assets/Scenes/RhythmMaker.unity
+    path: Assets/Scenes/UIs/RhythmMaker.unity
     guid: 5f4bf76a776f21744bbd5d18ddf13649
   - enabled: 1
-    path: Assets/Scenes/Workshop.unity
+    path: Assets/Scenes/UIs/Workshop.unity
     guid: d5e90a656d321234aab0aa5f835b983d
   - enabled: 1
-    path: Assets/Scenes/LevelSelect.unity
+    path: Assets/Scenes/UIs/LevelSelect.unity
     guid: dbb2e876268ac8d4abf597ec95b2ed9e
   - enabled: 1
     path: Assets/Scenes/TutorialScene.unity
