@@ -41,7 +41,7 @@ public class SelectorRunner : MonoBehaviour
 
     private void OnTriggerExit(Collider collision)
     {
-        if (collision.gameObject != null && collision.tag == "Note" && !collision.GetComponent<NoteController>().hasBeenHit)
+        if (collision != null && collision.tag == "Note" && !collision.GetComponent<NoteController>().hasBeenHit)
         {
             selectableNotes.Remove(collision.gameObject);
             collision.GetComponent<NoteController>().StartDeathFade();

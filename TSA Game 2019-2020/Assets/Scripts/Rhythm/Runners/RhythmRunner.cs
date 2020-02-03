@@ -101,8 +101,6 @@ public class RhythmRunner : MonoBehaviour
     public GameObject splashTitlePrefab;
     public GameObject splashImagePrefab;
 
-    public GameObject rhythmMakerButton;
-
     public GameObject loadingBar;
     public List<GameObject> loadingTextPeriods;
 
@@ -184,7 +182,6 @@ public class RhythmRunner : MonoBehaviour
             if(CrossSceneController.previousScene == "RhythmMaker")
             {
                 endTrackScreen.GetComponent<EndTrackScreenController>().isTestTrack = true;
-                rhythmMakerButton.SetActive(true);
                 Cursor.visible = true;
             }
         }
@@ -338,7 +335,7 @@ public class RhythmRunner : MonoBehaviour
         totalAccuracy += i;
         accuracyTimesAdded++;
         accuracy = totalAccuracy / accuracyTimesAdded;
-        accuracy = Mathf.Round(accuracy * 10) / 10;
+        accuracy = Mathf.Clamp((Mathf.Round(accuracy * 10) / 10), 0, 100);
         UpdateRanking();
         accuracyTxt.GetComponent<TMP_Text>().text = accuracy + "%";
     }
