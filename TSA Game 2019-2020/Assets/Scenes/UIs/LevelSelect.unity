@@ -1342,7 +1342,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 222076423}
   m_HorizontalScrollbar: {fileID: 765984140}
   m_VerticalScrollbar: {fileID: 660365825}
@@ -1485,7 +1485,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 482742409}
   m_HorizontalScrollbar: {fileID: 1440783694}
   m_VerticalScrollbar: {fileID: 46540178}
@@ -5125,7 +5125,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

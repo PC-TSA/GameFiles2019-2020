@@ -66,6 +66,8 @@ public class LevelSelectController : MonoBehaviour
         if (CrossSceneController.mainThemeTime != 0)
             audioSource.time = CrossSceneController.mainThemeTime;
 
+        Cursor.visible = true;
+
         GetDownloadedTracks();
         PopulateDownloadedTracksTab();
     }

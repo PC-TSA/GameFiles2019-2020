@@ -89,6 +89,9 @@ public class RhythmRunner : MonoBehaviour
     public float vignetteNewVal;
     public float vignetteLerpSpeed;
 
+    public GameObject rhythmMakerButton;
+    public GameObject levelSelectButton;
+
     public float customSpeed;
 
     public Color selectorColor;
@@ -179,11 +182,14 @@ public class RhythmRunner : MonoBehaviour
                 StartCoroutine(DelayedStart(1, XMLRecordingPath));
             }
 
-            if(CrossSceneController.previousScene == "RhythmMaker")
+            if (CrossSceneController.previousScene == "RhythmMaker")
             {
                 endTrackScreen.GetComponent<EndTrackScreenController>().isTestTrack = true;
+                rhythmMakerButton.SetActive(true);
                 Cursor.visible = true;
             }
+            else if (CrossSceneController.previousScene == "LevelSelect")
+                levelSelectButton.SetActive(true);
         }
         else
         {
@@ -711,6 +717,20 @@ public class RhythmRunner : MonoBehaviour
     {
         CrossSceneController.GameToMaker(XMLRecordingPath);
         StartCoroutine(LoadAsyncScene("RhythmMaker"));
+    }
+
+    public void ToLevelSelect()
+    {
+        StartCoroutine(LoadAsyncScene("LevelSelect"));
+    }
+
+    public void PauseMenuExit()
+    {
+        string scene = CrossSceneController.previousScene;
+        if (scene == "RhythmMaker")
+            CrossSceneController.GameToMaker(XMLRecordingPath);
+
+        StartCoroutine(LoadAsyncScene(scene));
     }
 
     public void SpawnSplashTitle(string titleText, Color titleColor)

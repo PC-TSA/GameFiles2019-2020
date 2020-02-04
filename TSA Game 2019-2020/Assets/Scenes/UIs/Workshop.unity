@@ -3313,14 +3313,14 @@ MonoBehaviour:
   m_VerticalScrollbar: {fileID: 0}
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
+  m_ContentType: 5
   m_InputType: 0
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 5
   m_RegexValue: 
   m_GlobalPointSize: 14
   m_CharacterLimit: 0
@@ -4184,7 +4184,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 179918643}
   m_HorizontalScrollbar: {fileID: 1642484931}
   m_VerticalScrollbar: {fileID: 427334280}
@@ -6845,6 +6845,8 @@ MonoBehaviour:
   workshopContentObj: {fileID: 1601081759}
   workshopItemPrefab: {fileID: 4647792407399442678, guid: 3ed6fa29c09d26f428abd1961a88bcd5,
     type: 3}
+  defaultWorkshopItemCover: {fileID: 21300000, guid: c95fae804f60b2546bb8553f5551ffb2,
+    type: 3}
   myTracksItemPrefab: {fileID: 4647792407399442678, guid: c97edd39db53e2247bf0d7abc4ae8002,
     type: 3}
   workshopUIMisc: {fileID: 1160929105}
@@ -6911,7 +6913,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -8446,14 +8448,14 @@ MonoBehaviour:
   m_VerticalScrollbar: {fileID: 0}
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
+  m_ContentType: 5
   m_InputType: 0
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 5
   m_RegexValue: 
   m_GlobalPointSize: 14
   m_CharacterLimit: 0
@@ -8638,7 +8640,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 1909291194}
   m_HorizontalScrollbar: {fileID: 890498574}
   m_VerticalScrollbar: {fileID: 2013359656}

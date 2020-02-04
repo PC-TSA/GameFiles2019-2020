@@ -72,12 +72,12 @@ public class NetworkingUtilities : MonoBehaviour
 		try
 		{
 			await table.CreateIfNotExistsAsync();
+			Debug.Log("--New Table Created--");
 		}
 		catch (StorageException)
 		{
+			Debug.Log("--Table Creation Failed--");
 			throw;
 		}
-
-		Debug.Log("--New Table Created--");
 	}
 }

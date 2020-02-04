@@ -17,6 +17,7 @@ using SFB;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 
 public class WorkshopController : MonoBehaviour
 {
@@ -33,6 +34,7 @@ public class WorkshopController : MonoBehaviour
 	public GameObject workshopUI;
 	public GameObject workshopContentObj;
 	public GameObject workshopItemPrefab;
+	public Sprite defaultWorkshopItemCover;
 	public GameObject myTracksItemPrefab;
 	public GameObject workshopUIMisc;
 
@@ -393,13 +395,15 @@ public class WorkshopController : MonoBehaviour
 
 	public void UpdateSongName()
 	{
-		songNameTemp = songNameInput.text;
+		songNameTemp = RemoveSpecialCharacters(songNameInput.text);
+		songNameInput.text = songNameTemp;
 		previewSongName.text = songNameTemp;
 	}
 
 	public void UpdateSongArtist()
 	{
-		songArtistTemp = songArtistInput.text;
+		songArtistTemp = RemoveSpecialCharacters(songArtistInput.text);
+		songArtistInput.text = songArtistTemp;
 		previewSongArtist.text = songArtistTemp;
 	}
 
@@ -407,6 +411,19 @@ public class WorkshopController : MonoBehaviour
 	{
 		difficultyTemp = difficultyDropdown.options[difficultyDropdown.value].text;
 		previewDifficulty.text = difficultyTemp;
+	}
+
+	public string RemoveSpecialCharacters(string str)
+	{
+		StringBuilder sb = new StringBuilder();
+		foreach (char c in str)
+		{
+			if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == ' ')
+			{
+				sb.Append(c);
+			}
+		}
+		return sb.ToString();
 	}
 
 	public void Upload()
@@ -523,13 +540,13 @@ public class WorkshopController : MonoBehaviour
 		string leaderboardName = username + xmlName;
 		networkingUtilities.NewLeaderboard(leaderboardName.Replace(" ", string.Empty));
 
+		PopulateWorkshop();
+
 		uploadBarProgress.text = "--Upload Complete--";
 		uploadBar.GetComponent<Slider>().value++;
 		StartCoroutine(StopBar(uploadBar, true));
 
 		Debug.Log("--Upload Complete--");
-
-		PopulateWorkshop();
 	}
 
 	//XML name | xml artist | song name | song artist
@@ -797,15 +814,18 @@ public class WorkshopController : MonoBehaviour
 		string path = Application.persistentDataPath + "\\" + "Workshop" + "\\" + item.trackArtist + "\\" + item.songName + "\\" + item.xmlName;
 		await file.DownloadToFileAsync(path, FileMode.CreateNew);
 
-		downloadBarProgress.text = "Saving cover...";
-		downloadBar.GetComponent<Slider>().value = 2;
 		//Save already downloaded cover file
-		byte[] coverBytes = item.coverSprite.texture.EncodeToJPG();
-		path = Application.persistentDataPath + "\\" + "Workshop" + "\\" + item.trackArtist + "\\" + item.songName + "\\" + "cover.jpg";
-		var coverFile = File.Open(path, FileMode.Create);
-		var writer = new BinaryWriter(coverFile);
-		writer.Write(coverBytes);
-		coverFile.Close();
+		if(item.coverSprite != null && item.coverSprite != defaultWorkshopItemCover)
+		{
+			downloadBarProgress.text = "Saving cover...";
+			downloadBar.GetComponent<Slider>().value = 2;
+			byte[] coverBytes = item.coverSprite.texture.EncodeToJPG();
+			path = Application.persistentDataPath + "\\" + "Workshop" + "\\" + item.trackArtist + "\\" + item.songName + "\\" + "cover.jpg";
+			var coverFile = File.Open(path, FileMode.Create);
+			var writer = new BinaryWriter(coverFile);
+			writer.Write(coverBytes);
+			coverFile.Close();
+		}
 
 		//Download music file (if not a built in song)
 		if (!builtInSongs.Contains(item.mp3Name))
