@@ -37,12 +37,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: WhiteLight
-    second: {fileID: 2100000, guid: c5610adff8c535440b5672617fa597a7, type: 2}
+    second: {fileID: 2100000, guid: 03865185a4844b743a1a679c94c2d11c, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Wood
-    second: {fileID: 2100000, guid: 110a05dc559636c4886aa38dd77e104d, type: 2}
+    second: {fileID: 2100000, guid: 94a9da02d31dcbc40a423abc9df870ce, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

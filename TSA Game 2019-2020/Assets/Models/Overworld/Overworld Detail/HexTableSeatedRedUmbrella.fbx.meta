@@ -78,7 +78,27 @@ ModelImporter:
     2300000: HexTableSeatedRedUmbrella
     3300000: HexTableSeatedRedUmbrella
     4300000: HexTableSeatedRedUmbrella
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Beigeish
+    second: {fileID: 2100000, guid: 868d25b1bbb0b3143aa20e2b31744acf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SmoothRed
+    second: {fileID: 2100000, guid: ad7049ed8ea27fe4c88874654c525783, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WhiteLight
+    second: {fileID: 2100000, guid: 03865185a4844b743a1a679c94c2d11c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood
+    second: {fileID: 2100000, guid: 94a9da02d31dcbc40a423abc9df870ce, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

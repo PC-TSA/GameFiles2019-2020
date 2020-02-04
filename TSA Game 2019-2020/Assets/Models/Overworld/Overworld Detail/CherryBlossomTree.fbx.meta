@@ -27,7 +27,17 @@ ModelImporter:
     4300002: pCube7
     4300004: pPlatonic13
     4300006: pPlatonic12
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: CherryBlossoms
+    second: {fileID: 2100000, guid: 37c5ae500e16f7943a9b5947d81eea3a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood
+    second: {fileID: 2100000, guid: 52ce702c43c2a7f40a639bb25f1b8f9f, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
