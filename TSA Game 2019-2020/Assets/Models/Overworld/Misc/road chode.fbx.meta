@@ -32,7 +32,17 @@ ModelImporter:
     2300000: pCylinder3
     3300000: pCylinder3
     4300000: pCylinder3
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: blinn2
+    second: {fileID: 2100000, guid: e6d21f435ad02554cbf6185836fcb775, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert2
+    second: {fileID: 2100000, guid: bd90311a49108d748a22fab3ed9a952d, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
