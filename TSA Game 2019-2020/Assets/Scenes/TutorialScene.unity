@@ -14971,9 +14971,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: UnPauseRhythm
-        m_Mode: 6
+      - m_Target: {fileID: 90242893}
+        m_MethodName: PauseMenuExit
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -21682,7 +21682,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 90242893}
         m_MethodName: UpdateSFXVolume
         m_Mode: 1
         m_Arguments:
@@ -30743,7 +30743,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 90242893}
         m_MethodName: UpdateMusicVolume
         m_Mode: 1
         m_Arguments:
@@ -43110,8 +43110,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: PauseMenuExit
+      - m_Target: {fileID: 90242893}
+        m_MethodName: ToMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -48962,7 +48962,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 90242893}
         m_MethodName: OpenOptionsMenu
         m_Mode: 1
         m_Arguments:
@@ -49099,6 +49099,7 @@ MonoBehaviour:
   currentScoreEntry: {fileID: 3041481900445993092}
   leaderboardUnavailableTxt: {fileID: 1243777222}
   leaderboardTable: 
+  enterToExitTxt: {fileID: 0}
 --- !u!225 &1590647533
 CanvasGroup:
   m_ObjectHideFlags: 0

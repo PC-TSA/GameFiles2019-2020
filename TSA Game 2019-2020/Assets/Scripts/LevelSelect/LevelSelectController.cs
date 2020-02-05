@@ -334,6 +334,7 @@ public class LevelSelectController : MonoBehaviour
     public void PlayCampaignTrack() //Ex: Campaign2Hard = the second campaign level in hard difficulty; There will be equivalently named XML files in resources to be loaded
     {
         CrossSceneController.recordingToLoad = "Campaign" + campaignBeingSelected + difficulty;
+        CrossSceneController.isCampaign = true;
         switch (campaignBeingSelected)
         {
             case 1:

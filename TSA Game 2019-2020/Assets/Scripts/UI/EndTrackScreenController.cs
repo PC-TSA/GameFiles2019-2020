@@ -54,6 +54,8 @@ public class EndTrackScreenController : MonoBehaviour
     public ScoreEntity highScore;
     public List<ScoreEntity> leaderboard;
 
+    public TMP_Text enterToExitTxt;
+
     private void OnEnable()
     {
         Cursor.visible = true;
@@ -73,9 +75,13 @@ public class EndTrackScreenController : MonoBehaviour
     {
         leaderboard = new List<ScoreEntity>();
         username = PlayerPrefs.GetString("username");
-        leaderboardTable = rhythmRunner.currentRecording.trackArtist + rhythmRunner.currentRecordingID;
-        leaderboardTable = leaderboardTable.Replace(" ", string.Empty);
-        //leaderboardTable = "gabrieltm8Frame"; HARD CODED LEADERBOARD
+        if(CrossSceneController.isCampaign)
+            leaderboardTable = rhythmRunner.XMLRecordingName;
+        else
+        {
+            leaderboardTable = rhythmRunner.currentRecording.trackArtist + rhythmRunner.currentRecordingID;
+            leaderboardTable = leaderboardTable.Replace(" ", string.Empty);
+        }
         currentScore = new ScoreEntity(username, rhythmRunner.score, rhythmRunner.accuracy, rhythmRunner.ranking);
     }
 
@@ -135,11 +141,16 @@ public class EndTrackScreenController : MonoBehaviour
 
     public async void PopulateLeaderboardsTab()
     {
-        if(SceneManager.GetActiveScene().name == "TutorialScene")
+        if (SceneManager.GetActiveScene().name == "TutorialScene")
         {
             currentScoreEntry.SetActive(false);
             leaderboardUnavailableTxt.SetActive(true);
             return;
+        }
+        else
+        {
+            currentScoreEntry.SetActive(true);
+            leaderboardUnavailableTxt.SetActive(false);
         }
 
         try
@@ -209,10 +220,12 @@ public class EndTrackScreenController : MonoBehaviour
         {
             if (isTestTrack)
                 rhythmRunner.ToRhythmMaker();
-            else if(CrossSceneController.isCampaign)
+            else if(CrossSceneController.isCampaign && !rhythmRunner.hasLost && CrossSceneController.currentCampaignLevel != 3)
             {
                 CrossSceneController.currentCampaignLevel++;
-                StartCoroutine(CampaignSceneTransition("Campaign" + CrossSceneController.currentCampaignLevel + CrossSceneController.campaignDifficulty));
+                CrossSceneController.recordingToLoad = "Campaign" + CrossSceneController.currentCampaignLevel + CrossSceneController.campaignDifficulty;
+                StartCoroutine(CampaignSceneTransition(CrossSceneController.currentCampaignLevel));
+                Debug.Log(CrossSceneController.recordingToLoad);
             }
             else
                 StartCoroutine(rhythmRunner.LoadAsyncScene("MainMenu"));
@@ -229,10 +242,19 @@ public class EndTrackScreenController : MonoBehaviour
         }
     }
 
-    IEnumerator CampaignSceneTransition(string nextScene)
+    IEnumerator CampaignSceneTransition(int nextSceneID)
     {
         //PLAY TRANSITION ANIMATION
         yield return new WaitForSeconds(0.5f);
-        StartCoroutine(rhythmRunner.LoadAsyncScene(nextScene));
+        switch(nextSceneID)
+        {
+            case 2:
+                StartCoroutine(rhythmRunner.LoadAsyncScene("OverworldSunset"));
+
+                break;
+            case 3:
+                StartCoroutine(rhythmRunner.LoadAsyncScene("OverworldNight"));
+                break;
+        }
     }
 }

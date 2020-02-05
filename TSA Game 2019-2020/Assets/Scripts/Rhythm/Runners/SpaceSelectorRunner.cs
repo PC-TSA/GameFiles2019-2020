@@ -57,25 +57,34 @@ public class SpaceSelectorRunner : MonoBehaviour
 
     public void SpaceHitAccuracy(GameObject space)
     {
-        float hitAccuracy = ((Vector3.Distance(space.transform.position, transform.position) * 100) / transform.GetComponent<RectTransform>().sizeDelta.y) * 1000;
-        if (hitAccuracy >= 50) //Hit accuracy = 0-~90
+        if (space != null)
         {
-            rhythmRunner.UpdateScore(0.4f); //Bad hit
-            //rhythmRunner.SpawnSplashTitle("Bad", Color.red);
-        }
-        else if (hitAccuracy < 50 && hitAccuracy >= 15)
-            rhythmRunner.UpdateScore(0.6f); //Moderate hit
-        else if (hitAccuracy < 15 && hitAccuracy >= 8)
-        {
-            rhythmRunner.UpdateScore(0.8f); //Good hit
-            //rhythmRunner.SpawnSplashTitle("Good", Color.cyan);
-            rhythmRunner.SpawnSplashImage(splashImages[0]);
-        }
-        else if (hitAccuracy < 8)
-        {
-            rhythmRunner.UpdateScore(1); //Perfect hit
-            //rhythmRunner.SpawnSplashTitle("Perfect", Color.green);
-            rhythmRunner.SpawnSplashImage(splashImages[1]);
+            float hitAccuracy = ((Vector3.Distance(space.transform.position, transform.position) * 100) / transform.GetComponent<RectTransform>().sizeDelta.y) * 1000;
+            if (hitAccuracy >= 40) //Hit accuracy = 0-~90
+            {
+                rhythmRunner.UpdateScore(0.4f); //Bad hit
+                rhythmRunner.badHits++;
+            }
+            else if (hitAccuracy < 40 && hitAccuracy >= 15)
+            {
+                rhythmRunner.UpdateScore(0.6f); //Okay hit
+                rhythmRunner.okayHits++;
+            }
+            else if (hitAccuracy < 15 && hitAccuracy >= 8)
+            {
+                rhythmRunner.UpdateScore(0.8f); //Good hit
+                //rhythmRunner.SpawnSplashTitle("Good", Color.cyan);
+                rhythmRunner.SpawnSplashImage(splashImages[0]);
+                rhythmRunner.goodHits++;
+            }
+            else if (hitAccuracy < 8)
+            {
+                rhythmRunner.UpdateScore(1); //Perfect hit
+                //rhythmRunner.SpawnSplashTitle("Perfect", Color.green);
+                rhythmRunner.SpawnSplashImage(splashImages[1]);
+                rhythmRunner.perfectHits++;
+            }
+            rhythmRunner.UpdateAccuracy(100 - hitAccuracy);
         }
     }
 }

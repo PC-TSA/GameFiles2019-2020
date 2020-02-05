@@ -242,6 +242,8 @@ public class RhythmRunner : MonoBehaviour
         
         if(isRunning)
             CheckForFinish();
+
+        GabeCode();
     }
 
     private void FixedUpdate()
@@ -307,6 +309,7 @@ public class RhythmRunner : MonoBehaviour
         }
         isRunning = false;
         audioSource.Pause();
+        Cursor.visible = true;
     }
 
     public void UnPauseRhythm(bool useMenu)
@@ -321,6 +324,7 @@ public class RhythmRunner : MonoBehaviour
         }
         isRunning = true;
         audioSource.UnPause();
+        Cursor.visible = false;
     }
 
     public void ToMainMenu()
@@ -768,6 +772,7 @@ public class RhythmRunner : MonoBehaviour
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene);
         StartCoroutine(LoadingBar());
+        Debug.Log("Loading scene " + scene);
         // Wait until the asynchronous scene fully loads
         while (!asyncLoad.isDone)
         {
@@ -799,6 +804,21 @@ public class RhythmRunner : MonoBehaviour
         }
     }
 
+    void GabeCode() //Cheat codes haha
+    {
+        //Kill all notes
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.LeftAlt) && Input.GetKey(KeyCode.G))
+        {
+            for(int i = 0; i < scrollerObj.transform.childCount; i++)
+            {
+                for(int k = 0; k < scrollerObj.transform.GetChild(i).childCount; k++)
+                {
+                    Destroy(scrollerObj.transform.GetChild(i).GetChild(k).gameObject);
+                }
+            }
+        }
+    }
+
     void FinishTrack()
     {
         isRunning = false;
@@ -811,6 +831,8 @@ public class RhythmRunner : MonoBehaviour
                 playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
             endTrackScreen.SetActive(true);
             endTrackScreen.GetComponent<EndTrackScreenController>().clearedOrFailedTxt.GetComponent<TMP_Text>().text = "Track Cleared!";
+            if (CrossSceneController.isCampaign && CrossSceneController.currentCampaignLevel != 3)
+                endTrackScreen.GetComponent<EndTrackScreenController>().enterToExitTxt.text = "Press ENTER to Continue";
         }
     }
 

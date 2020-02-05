@@ -12,14 +12,20 @@ EditorBuildSettings:
     path: Assets/Scenes/OverworldDay.unity
     guid: bf21205c68eaf7941a8119f73c6a1268
   - enabled: 1
+    path: Assets/Scenes/OverworldSunset.unity
+    guid: 5cd3399155a9e1d4d8a2ee596a8d58cd
+  - enabled: 1
+    path: Assets/Scenes/OverworldNight.unity
+    guid: 603595d7befd35e448f18d361f7b7034
+  - enabled: 1
+    path: Assets/Scenes/UIs/LevelSelect.unity
+    guid: dbb2e876268ac8d4abf597ec95b2ed9e
+  - enabled: 1
     path: Assets/Scenes/UIs/RhythmMaker.unity
     guid: 5f4bf76a776f21744bbd5d18ddf13649
   - enabled: 1
     path: Assets/Scenes/UIs/Workshop.unity
     guid: d5e90a656d321234aab0aa5f835b983d
-  - enabled: 1
-    path: Assets/Scenes/UIs/LevelSelect.unity
-    guid: dbb2e876268ac8d4abf597ec95b2ed9e
   - enabled: 1
     path: Assets/Scenes/TutorialScene.unity
     guid: 11783092a037efb4084e68718f80e85e
