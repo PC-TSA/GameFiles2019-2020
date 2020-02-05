@@ -616,6 +616,7 @@ public class RhythmRunner : MonoBehaviour
         //cameraTrack.GetComponent<CPC_CameraPath>().StopPath(); STOP CAMERA MOVEMENT
         if (playerObj != null)
             playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
+        cameraTrack.SetActive(false);
         endTrackScreen.SetActive(true);
         endTrackScreen.GetComponent<EndTrackScreenController>().clearedOrFailedTxt.GetComponent<TMP_Text>().text = "Track Failed";
         yield return new WaitForSeconds(1.5f);
