@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <Recording xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <songName>Tsunami Easy V1</songName>
-  <songArtist>peter</songArtist>
-  <trackArtist>Player</trackArtist>
-  <trackDifficulty />
-  <clipName>Swim_Theme_Short (online-audio-converter.com)</clipName>
+  <songName>Tsunami</songName>
+  <songArtist>Tuna Bandit Studios</songArtist>
+  <trackArtist>TBS</trackArtist>
+  <trackDifficulty>Medium</trackDifficulty>
+  <clipName>Tsunami</clipName>
   <scrollSpeed>4</scrollSpeed>
   <laneCount>3</laneCount>
   <notes>

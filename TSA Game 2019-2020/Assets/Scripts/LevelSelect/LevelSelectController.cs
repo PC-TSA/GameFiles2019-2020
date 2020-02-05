@@ -308,11 +308,11 @@ public class LevelSelectController : MonoBehaviour
                 break;
             case 2:
                 promptTrackTxt.text = "Chain Drive";
-                promptSegmentTxt.text = "Segment 1 - Bike";
+                promptSegmentTxt.text = "Segment 2 - Bike";
                 break;
             case 3:
                 promptTrackTxt.text = "Neon Lights";
-                promptSegmentTxt.text = "Segment 1 - Run";
+                promptSegmentTxt.text = "Segment 3 - Run";
                 break;
         }
         difficulty = "Medium";
@@ -335,6 +335,7 @@ public class LevelSelectController : MonoBehaviour
     {
         CrossSceneController.recordingToLoad = "Campaign" + campaignBeingSelected + difficulty;
         CrossSceneController.isCampaign = true;
+        CrossSceneController.previousScene = "LevelSelect";
         switch (campaignBeingSelected)
         {
             case 1:

@@ -8,6 +8,8 @@ public class SelectorRunner : MonoBehaviour
     public int laneNumber; //0 = left lane, 1 = mid lane, 2 = right lane; defines it's keycode
     public KeyCode key;
 
+    public Vector3 initialPos;
+
     public List<GameObject> selectableNotes = new List<GameObject>();
     public GameObject selectableSlider;
     public bool selectableSliderBeingHit;
@@ -27,6 +29,7 @@ public class SelectorRunner : MonoBehaviour
     {
         //KEY HARD CODED IN INSPECTOR ON SELECTOR IN NEW MULTI-LANE SYSTEM
         //key = rhythmRunner.laneKeycodes[laneNumber]; //Gets this selector's keycode from it's lane index & the keycode list in RhythmController.cs
+        initialPos = transform.localPosition;
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -85,6 +88,8 @@ public class SelectorRunner : MonoBehaviour
 
     private void Update()
     {
+        if (transform.localPosition != initialPos)
+            transform.localPosition = initialPos;
         if(rhythmRunner.isRunning)
         {
             if (Input.GetKeyDown(key))
@@ -123,7 +128,7 @@ public class SelectorRunner : MonoBehaviour
 
             if (Input.GetKeyUp(key))
             {
-                GetComponent<Image>().sprite = normalSprite;
+                SetRegularSprite();
 
                 //If you stop hitting a slider mid way
                 if (selectableSlider != null && selectableSlider.GetComponent<SliderController>().hasBeenHit)
@@ -135,6 +140,11 @@ public class SelectorRunner : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void SetRegularSprite()
+    {
+        GetComponent<Image>().sprite = normalSprite;
     }
 
     private void FixedUpdate()

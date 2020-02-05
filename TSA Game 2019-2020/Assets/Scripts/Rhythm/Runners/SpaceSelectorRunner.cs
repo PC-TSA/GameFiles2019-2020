@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class SpaceSelectorRunner : MonoBehaviour
 {
+    public Vector3 originalPos;
+
     public KeyCode key;
 
     public List<GameObject> selectableSpaces = new List<GameObject>();
@@ -15,6 +17,11 @@ public class SpaceSelectorRunner : MonoBehaviour
     public Sprite pressSprite;
 
     public List<Sprite> splashImages;
+
+    private void Start()
+    {
+        originalPos = transform.localPosition;
+    }
 
     private void OnTriggerEnter(Collider collision)
     {
@@ -34,6 +41,8 @@ public class SpaceSelectorRunner : MonoBehaviour
 
     private void Update()
     {
+        if (transform.localPosition != originalPos)
+            transform.localPosition = originalPos;
         if (Input.GetKeyDown(key))
         {
             GetComponent<Image>().sprite = pressSprite;

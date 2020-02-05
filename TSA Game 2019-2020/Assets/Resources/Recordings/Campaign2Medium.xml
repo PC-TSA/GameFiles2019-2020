@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <Recording xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <songName>ChainDrive Medium V1</songName>
-  <songArtist>peter</songArtist>
-  <trackArtist>Player</trackArtist>
-  <trackDifficulty />
+  <songName>Chain Drive</songName>
+  <songArtist>Tuna Bandit Studios</songArtist>
+  <trackArtist>TBS</trackArtist>
+  <trackDifficulty>Medium</trackDifficulty>
   <clipName>Chain Drive</clipName>
   <scrollSpeed>4</scrollSpeed>
   <laneCount>3</laneCount>

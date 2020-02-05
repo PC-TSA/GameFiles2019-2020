@@ -220,7 +220,7 @@ public class EndTrackScreenController : MonoBehaviour
         {
             if (isTestTrack)
                 rhythmRunner.ToRhythmMaker();
-            else if(CrossSceneController.isCampaign && !rhythmRunner.hasLost && CrossSceneController.currentCampaignLevel != 3)
+            else if(CrossSceneController.isCampaign && !rhythmRunner.hasLost && CrossSceneController.currentCampaignLevel != 3 && CrossSceneController.previousScene != "LevelSelect")
             {
                 CrossSceneController.currentCampaignLevel++;
                 CrossSceneController.recordingToLoad = "Campaign" + CrossSceneController.currentCampaignLevel + CrossSceneController.campaignDifficulty;

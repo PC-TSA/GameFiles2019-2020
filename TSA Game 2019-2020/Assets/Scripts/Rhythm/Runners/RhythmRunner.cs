@@ -211,6 +211,9 @@ public class RhythmRunner : MonoBehaviour
         //Smoothly lerps vignette to deathCount / 20 value
         vignette.intensity.value = Mathf.Lerp(vignette.intensity.value, vignetteNewVal, Time.deltaTime * vignetteLerpSpeed);
 
+        if(deathCountSlider.value != health - deathCount)
+            deathCountSlider.value = health - deathCount;
+
         if (goToLostVals)
         {
             colorGrading.saturation.value = Mathf.Lerp(colorGrading.saturation.value, -30, Time.deltaTime * 3);
@@ -231,7 +234,10 @@ public class RhythmRunner : MonoBehaviour
         if (isTutorialActive)
         {
             if (Input.GetKeyDown(KeyCode.Return))
-                tutorialUI.SetActive(false);
+            {
+                if (currentTutorialPage != tutorialPages.Count)
+                    tutorialUI.SetActive(false);
+            }
             if (fadeTutorial)
             {
                 tutorialUI.GetComponent<CanvasGroup>().alpha = Mathf.Lerp(tutorialUI.GetComponent<CanvasGroup>().alpha, tutorialTargetAlpha, tutorialFadeSpeed * Time.deltaTime);
@@ -274,6 +280,8 @@ public class RhythmRunner : MonoBehaviour
             tutorialUI.SetActive(true);
             if (currentTutorialPage != tutorialPages.Count - 1)
                 PauseRhythm(false);
+            else
+                Cursor.visible = true;
             if (currentTutorialPage != 0)
                 tutorialPages[currentTutorialPage - 1].SetActive(false);
             currentTutorialPage++;
@@ -288,7 +296,7 @@ public class RhythmRunner : MonoBehaviour
         }
     }
 
-    void TogglePause(bool useMenu)
+    public void TogglePause(bool useMenu)
     {
         isPaused = !isPaused;
         if (isPaused)
@@ -306,6 +314,9 @@ public class RhythmRunner : MonoBehaviour
         {
             playerObj.GetComponent<Animator>().speed = 0;
             playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
+            if (playerObj.transform.parent.childCount > 1 && playerObj.transform.parent.GetChild(1) != null && playerObj.transform.parent.GetChild(1).name == "Bike")
+                playerObj.transform.parent.GetChild(1).GetComponent<Animator>().enabled = false;
+            cameraTrack.SetActive(false);
         }
         isRunning = false;
         audioSource.Pause();
@@ -321,6 +332,9 @@ public class RhythmRunner : MonoBehaviour
         {
             playerObj.GetComponent<Animator>().speed = 1;
             playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = true;
+            if (playerObj.transform.parent.childCount > 1 && playerObj.transform.parent.GetChild(1) != null && playerObj.transform.parent.GetChild(1).name == "Bike")
+                playerObj.transform.parent.GetChild(1).GetComponent<Animator>().enabled = true;
+            cameraTrack.SetActive(true);
         }
         isRunning = true;
         audioSource.UnPause();
@@ -589,6 +603,8 @@ public class RhythmRunner : MonoBehaviour
         Debug.Log("Track Failed!");
         ranking = "F";
         hasLost = true;
+        foreach(SelectorRunner selector in GameObject.FindObjectsOfType<SelectorRunner>())
+            selector.SetRegularSprite();
         StartCoroutine(GoToLostVals());
     }
 
@@ -831,7 +847,9 @@ public class RhythmRunner : MonoBehaviour
                 playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
             endTrackScreen.SetActive(true);
             endTrackScreen.GetComponent<EndTrackScreenController>().clearedOrFailedTxt.GetComponent<TMP_Text>().text = "Track Cleared!";
-            if (CrossSceneController.isCampaign && CrossSceneController.currentCampaignLevel != 3)
+            foreach (SelectorRunner selector in GameObject.FindObjectsOfType<SelectorRunner>())
+                selector.SetRegularSprite();
+            if (CrossSceneController.isCampaign && CrossSceneController.currentCampaignLevel != 3 && CrossSceneController.previousScene != "LevelSelect")
                 endTrackScreen.GetComponent<EndTrackScreenController>().enterToExitTxt.text = "Press ENTER to Continue";
         }
     }

@@ -1367,7 +1367,7 @@ MonoBehaviour:
     value: 0
   keyValue:
     overrideState: 1
-    value: 0.19
+    value: 0.3
   eyeAdaptation:
     overrideState: 0
     value: 0
@@ -1553,13 +1553,13 @@ MonoBehaviour:
     value: 1
   focusDistance:
     overrideState: 1
-    value: 2
+    value: 0.67
   aperture:
     overrideState: 0
     value: 5.6
   focalLength:
     overrideState: 1
-    value: 34
+    value: 21
   kernelSize:
     overrideState: 0
     value: 1
