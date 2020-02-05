@@ -25,7 +25,11 @@ public class SpaceSelectorRunner : MonoBehaviour
     private void OnTriggerExit(Collider collision)
     {
         if (collision.tag == "Space")
+        {
             selectableSpaces.Remove(collision.gameObject);
+            collision.GetComponent<SpaceController>().StartDeathFade();
+            rhythmRunner.UpdateNotesMissed(1);
+        }
     }
 
     private void Update()

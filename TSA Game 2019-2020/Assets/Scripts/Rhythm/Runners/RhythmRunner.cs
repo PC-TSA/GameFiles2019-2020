@@ -58,6 +58,7 @@ public class RhythmRunner : MonoBehaviour
     public int laneCount; //How many lanes to have (1-5)
 
     public Recording currentRecording;
+    public int currentRecordingID;
 
     public List<GameObject> arrowPrefabs;
     public List<GameObject> sliderPrefabs;
@@ -167,6 +168,7 @@ public class RhythmRunner : MonoBehaviour
         }
         else if (CrossSceneController.recordingToLoad.Length != 0) //If transfering song from other scene, load from given path instead of predefined file name from build Resources
         {
+            currentRecordingID = CrossSceneController.recordingToLoadID;
             if (CrossSceneController.isCampaign)
             {
                 XMLRecordingName = CrossSceneController.recordingToLoad;
@@ -237,6 +239,9 @@ public class RhythmRunner : MonoBehaviour
                     fadeTutorial = false;
             }
         }
+        
+        if(isRunning)
+            CheckForFinish();
     }
 
     private void FixedUpdate()
@@ -246,23 +251,39 @@ public class RhythmRunner : MonoBehaviour
             scrollerObj.transform.localPosition = new Vector3(scrollerObj.transform.localPosition.x, scrollerObj.transform.localPosition.y - scrollSpeed, scrollerObj.transform.localPosition.z);
     }
 
+    void CheckForFinish()
+    {
+        if (scrollerObj.transform.GetChild(0).childCount + scrollerObj.transform.GetChild(1).childCount + scrollerObj.transform.GetChild(2).childCount == 0)
+            FinishTrack();
+    }
+
+    IEnumerator TimeToFinish()
+    {
+        yield return new WaitForSeconds(4);
+        FinishTrack();
+    }
+
     IEnumerator TutorialPageCycle()
     {
         yield return new WaitForSeconds(tutorialTimeouts[currentTutorialPage]);
-        tutorialUI.GetComponent<CanvasGroup>().alpha = 0;
-        tutorialUI.SetActive(true);
-        PauseRhythm(false);
-        if (currentTutorialPage != 0)
-            tutorialPages[currentTutorialPage - 1].SetActive(false);
-        currentTutorialPage++;
-        tutorialPages[currentTutorialPage - 1].SetActive(true);
-        tutorialTargetAlpha = 1;
-        fadeTutorial = true;
-        while (tutorialUI.activeSelf)
-            yield return new WaitForSeconds(0);
-        UnPauseRhythm(false);
-        if(currentTutorialPage < tutorialPages.Count)
-            StartCoroutine(TutorialPageCycle());
+        if(!hasLost)
+        {
+            tutorialUI.GetComponent<CanvasGroup>().alpha = 0;
+            tutorialUI.SetActive(true);
+            if (currentTutorialPage != tutorialPages.Count - 1)
+                PauseRhythm(false);
+            if (currentTutorialPage != 0)
+                tutorialPages[currentTutorialPage - 1].SetActive(false);
+            currentTutorialPage++;
+            tutorialPages[currentTutorialPage - 1].SetActive(true);
+            tutorialTargetAlpha = 1;
+            fadeTutorial = true;
+            while (tutorialUI.activeSelf)
+                yield return new WaitForSeconds(0);
+            UnPauseRhythm(false);
+            if (currentTutorialPage < tutorialPages.Count)
+                StartCoroutine(TutorialPageCycle());
+        }
     }
 
     void TogglePause(bool useMenu)
@@ -286,7 +307,6 @@ public class RhythmRunner : MonoBehaviour
         }
         isRunning = false;
         audioSource.Pause();
-        StopCoroutine(WaitToFinishTrack(audioSource.clip.length));
     }
 
     public void UnPauseRhythm(bool useMenu)
@@ -301,7 +321,6 @@ public class RhythmRunner : MonoBehaviour
         }
         isRunning = true;
         audioSource.UnPause();
-        StartCoroutine(WaitToFinishTrack(audioSource.clip.length - audioSource.time));
     }
 
     public void ToMainMenu()
@@ -323,7 +342,7 @@ public class RhythmRunner : MonoBehaviour
         notesMissed += i;
         //notesMissedTxt.GetComponent<TextMeshProUGUI>().text = "Notes Missed: " + notesMissed;
         UpdateDeathCount(i);
-        BreakCombo();
+        UpdateCombo(-combo); //Break combo
         UpdateAccuracy(accuracy / 2); //Accuracy / 2 to make it less harsh; Set to 0 for harder
     }
 
@@ -332,7 +351,7 @@ public class RhythmRunner : MonoBehaviour
         missClicks += i;
         //missClicksTxt.GetComponent<TextMeshProUGUI>().text = "Misclicks: " + missClicks;
         UpdateDeathCount(i);
-        BreakCombo();
+        UpdateCombo(-combo); //Break combo
         UpdateAccuracy(accuracy / 2); //Accuracy / 2 to make it less harsh; Set to 0 for harder
     }
 
@@ -426,7 +445,6 @@ public class RhythmRunner : MonoBehaviour
             selector.sliderHeightChange = scrollSpeed;
 
         audioSource.Play();
-        StartCoroutine(WaitToFinishTrack(audioSource.clip.length));
         isRunning = true;
     }
 
@@ -566,6 +584,7 @@ public class RhythmRunner : MonoBehaviour
     {
         Debug.Log("Track Failed!");
         ranking = "F";
+        hasLost = true;
         StartCoroutine(GoToLostVals());
     }
 
@@ -636,15 +655,6 @@ public class RhythmRunner : MonoBehaviour
                 //tr.material.SetColor("_EmissionColor", comboTrailGradients[comboLvl - 1].colorKeys[0].color); SETTING MAT COLOR IS BROKEN DUE TO IT BEING OVERRIDEN BY MATERIAL EMISSION, POSSIBLE FIX WITH A LINE LIKE THIS ONE
             }*/
         }
-    }
-
-    void BreakCombo()
-    {
-        combo = 0;
-        comboLvl = 0;
-        /*foreach (TrailRenderer tr in trailRenderers) //TRAIL RENDERERS DISABLED UNTIL FURTHER NOTICE
-            tr.emitting = false;
-        comboTxt.GetComponent<TextMeshProUGUI>().text = "Combo: " + combo;*/
     }
 
     void AnimSpeedUp() //Speeds up character animation briefly to increase impact when note is pressed
@@ -789,21 +799,19 @@ public class RhythmRunner : MonoBehaviour
         }
     }
 
-    IEnumerator WaitToFinishTrack(float songLength)
-    {
-        yield return new WaitForSeconds(songLength);
-        FinishTrack();
-    }
-
     void FinishTrack()
     {
-        audioSource.Stop();
-        //cameraTrack.GetComponent<CPC_CameraPath>().StopPath();
-        if (playerObj != null)
-            playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
-        endTrackScreen.SetActive(true);
-        endTrackScreen.GetComponent<EndTrackScreenController>().clearedOrFailedTxt.GetComponent<TMP_Text>().text = "Track Cleared!";
+        isRunning = false;
         fireworksParent.SetActive(true);
+        if (SceneManager.GetActiveScene().name != "TutorialScene")
+        {
+            audioSource.Stop();
+            //cameraTrack.GetComponent<CPC_CameraPath>().StopPath();
+            if (playerObj != null)
+                playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = false;
+            endTrackScreen.SetActive(true);
+            endTrackScreen.GetComponent<EndTrackScreenController>().clearedOrFailedTxt.GetComponent<TMP_Text>().text = "Track Cleared!";
+        }
     }
 
     IEnumerator LoadAudioFileStart(string path)

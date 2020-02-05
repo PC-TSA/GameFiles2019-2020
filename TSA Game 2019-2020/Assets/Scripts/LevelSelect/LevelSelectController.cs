@@ -226,7 +226,7 @@ public class LevelSelectController : MonoBehaviour
             StopCoroutine(PlayTrackEnum(track));
         }
 
-        CrossSceneController.SceneToGame(path + track.xmlName, clip);
+        CrossSceneController.SceneToGame(path + track.xmlName, clip, track.id);
         StartCoroutine(LoadAsyncScene("PlayTrackScene"));
     }
 

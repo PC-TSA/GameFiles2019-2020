@@ -428,15 +428,23 @@ public class WorkshopController : MonoBehaviour
 
 	public void Upload()
 	{
-		uploadBar.SetActive(true);
-		uploadBarProgress.text = "Reading xml...";
-		StartCoroutine(StartBar(uploadBar));
-
-		string songName = songNameTemp;
-		string songArtist = songArtistTemp;
-		string difficulty = difficultyTemp;
-		if (selectedTrackPath.Length > 0 && songName.Length > 0 && songArtist.Length > 0) //A path has been picked, song name & song artist have been specified
+		try
 		{
+			uploadBar.SetActive(true);
+			uploadBarProgress.text = "Reading xml...";
+			StartCoroutine(StartBar(uploadBar));
+
+			string songName = songNameTemp;
+			string songArtist = songArtistTemp;
+			if (difficultyTemp.Length == 0)
+				difficultyTemp = "Medium";
+			string difficulty = difficultyTemp;
+			if (selectedTrackPath.Length == 0 || songName.Length == 0 || songArtist.Length == 0) //A path has been picked, song name & song artist have been specified
+			{
+				SpawnSplashTitle("Missing Track/Information", Color.red);
+				return;
+			}
+
 			//Get xml name from path
 			string xmlName = selectedTrackPath.Substring(selectedTrackPath.LastIndexOf('\\') + 1);
 
@@ -460,7 +468,14 @@ public class WorkshopController : MonoBehaviour
 			rec.trackArtist = PlayerPrefs.GetString("username");
 
 			if (!builtInSongs.Contains(rec.clipName)) //If the recording is not for a built in song
+			{
 				mp3Path = Application.persistentDataPath + "\\" + "Songs" + "\\" + rec.clipName + ".mp3";
+				if (!File.Exists(mp3Path))
+				{
+					SpawnSplashTitle("Incorrect Song Path", Color.red);
+					return;
+				}
+			}
 
 			//Override XML file with new vals
 			stream = new FileStream(selectedTrackPath, FileMode.Create);
@@ -468,6 +483,12 @@ public class WorkshopController : MonoBehaviour
 			stream.Close();
 
 			UploadRecording(rec, selectedTrackPath, xmlName, songName, songArtist, difficulty, selectedCoverPath, coverName, mp3Path, rec.clipName);
+		}
+		catch
+		{
+			SpawnSplashTitle("Upload Failed!", Color.red);
+			StartCoroutine(StopBar(uploadBar, true));
+			throw;
 		}
 	}
 
@@ -533,12 +554,11 @@ public class WorkshopController : MonoBehaviour
 		uploadBarProgress.text = "Adding to tracks table...";
 		uploadBar.GetComponent<Slider>().value++;
 
+		//Make leaderboard table
+		UploadMakeTable();
+
 		//Add to tracks table
 		AddToTracksTable(xmlName, songName, songArtist, coverName, difficulty, mp3Name);
-
-		//Make leaderboard table
-		string leaderboardName = username + xmlName;
-		networkingUtilities.NewLeaderboard(leaderboardName.Replace(" ", string.Empty));
 
 		PopulateWorkshop();
 
@@ -578,6 +598,38 @@ public class WorkshopController : MonoBehaviour
 
 		TrackEntity trackEntity = new TrackEntity(trackCounter.TrackCount, xmlName, username, songName, songArtist, coverName, difficulty, mp3Name);
 		await InsertOrMergeEntityAsync(table, trackEntity);
+	}
+
+	async void UploadMakeTable()
+	{
+		int trackCount = 0;
+		//Get track count
+		TableQuery<TrackCounter> partitionScanQuery = new TableQuery<TrackCounter>();
+
+		CloudTableClient tableClient = StorageAccount.CreateCloudTableClient();
+		CloudTable table = tableClient.GetTableReference("Tracks");
+
+		TableContinuationToken token = null;
+
+		// Page through the results
+		do
+		{
+			TableQuerySegment<TrackCounter> segment = await table.ExecuteQuerySegmentedAsync(partitionScanQuery, token);
+			token = segment.ContinuationToken;
+			foreach (TrackCounter counter in segment)
+			{
+				if (counter.TrackCount != 0)
+				{
+					trackCount = counter.TrackCount + 1;
+					break;
+				}
+			}
+		}
+		while (token != null);
+
+		string leaderboardName = username + trackCount;
+		Debug.Log(leaderboardName);
+		networkingUtilities.NewLeaderboard(leaderboardName.Replace(" ", string.Empty));
 	}
 
 	async void GetSubs(CloudFileDirectory directory)
@@ -719,16 +771,20 @@ public class WorkshopController : MonoBehaviour
 		await table.ExecuteAsync(deleteOperation);
 
 		//Delete leaderboard table
-		table = tableClient.GetTableReference(entity.XMLArtist + entity.SongName);
-		await table.DeleteIfExistsAsync(); //Doesnt currently work due to unknown format exception
+		/*string temp = entity.XMLArtist + entity.PartitionKey;
+		table = tableClient.GetTableReference(temp);
+		await table.DeleteIfExistsAsync();*/ //Doesnt currently work due to unknown format exception
 
 		//Delete track files in workshop file share + track folder
 		CloudFileClient fileClient = StorageAccount.CreateCloudFileClient();
 		CloudFileShare share = fileClient.GetShareReference(shareName);
 		CloudFileDirectory dir = share.GetRootDirectoryReference().GetDirectoryReference(entity.XMLArtist).GetDirectoryReference(entity.SongName);
-		await dir.GetFileReference(entity.RowKey).DeleteIfExistsAsync();
-		await dir.GetFileReference(entity.CoverName).DeleteIfExistsAsync();
-		await dir.GetFileReference(entity.Mp3Name + ".mp3").DeleteIfExistsAsync();
+		if(entity.RowKey.Length > 0)
+			await dir.GetFileReference(entity.RowKey).DeleteIfExistsAsync();
+		if (entity.CoverName.Length > 0)
+			await dir.GetFileReference(entity.CoverName).DeleteIfExistsAsync();
+		if (entity.Mp3Name.Length > 0)
+			await dir.GetFileReference(entity.Mp3Name + ".mp3").DeleteIfExistsAsync();
 		CloudFileDirectory artistDir = dir.Parent;
 		await dir.DeleteIfExistsAsync();
 
@@ -753,7 +809,7 @@ public class WorkshopController : MonoBehaviour
 		{
 			if (workshopContentObj.transform.GetChild(i).GetComponent<WorkshopItemController>().id == item.GetComponent<WorkshopItemController>().id)
 			{
-				Destroy(workshopContentObj.transform.GetChild(i));
+				Destroy(workshopContentObj.transform.GetChild(i).gameObject);
 				break;
 			}
 		}

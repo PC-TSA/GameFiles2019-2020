@@ -7,6 +7,7 @@ public static class CrossSceneController
 {
     public static string previousScene;
     public static string recordingToLoad = "";
+    public static int recordingToLoadID;
     public static AudioClip clipToLoad;
 
     public static bool isCampaign;
@@ -14,6 +15,16 @@ public static class CrossSceneController
     public static string campaignDifficulty = "";
 
     public static float mainThemeTime; //Used by UIs to continue the main theme where the previous menu left off
+
+    public static void SceneToGame(string recordingPath, AudioClip clip, int id) //Triggered from other scene, sends current track to game
+    {
+        previousScene = SceneManager.GetActiveScene().name;
+        recordingToLoad = recordingPath;
+        if (recordingToLoad.Substring(recordingToLoad.Length - 4) != ".xml")
+            recordingToLoad += ".xml";
+        clipToLoad = clip;
+        recordingToLoadID = id;
+    }
 
     public static void SceneToGame(string recordingPath, AudioClip clip) //Triggered from other scene, sends current track to game
     {

@@ -337,7 +337,7 @@ MonoBehaviour:
   m_text: Press ENTER to Exit
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 07249e64d5ee8ac448a79180896c54e1, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: f8536a5b79803014c8bcfad3083e9d26, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 6b852b5925cd5ab4794d21a83d36d415, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -751,6 +751,7 @@ MonoBehaviour:
   - {fileID: 1487747866}
   - {fileID: 1164490810}
   laneCount: 3
+  currentRecordingID: 0
   arrowPrefabs:
   - {fileID: 5015487083743161523, guid: edd6b76392fb2bb4782e8500724cd024, type: 3}
   - {fileID: 5015487083743161523, guid: 23f1f0e6544c59043b6e58f606068358, type: 3}
@@ -1626,7 +1627,7 @@ MonoBehaviour:
   m_text: Press SPACE to Play Again
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 07249e64d5ee8ac448a79180896c54e1, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: f8536a5b79803014c8bcfad3083e9d26, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 6b852b5925cd5ab4794d21a83d36d415, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

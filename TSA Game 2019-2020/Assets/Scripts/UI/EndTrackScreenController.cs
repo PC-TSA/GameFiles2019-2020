@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class EndTrackScreenController : MonoBehaviour
@@ -72,7 +73,7 @@ public class EndTrackScreenController : MonoBehaviour
     {
         leaderboard = new List<ScoreEntity>();
         username = PlayerPrefs.GetString("username");
-        leaderboardTable = rhythmRunner.currentRecording.trackArtist + rhythmRunner.XMLRecordingName;
+        leaderboardTable = rhythmRunner.currentRecording.trackArtist + rhythmRunner.currentRecordingID;
         leaderboardTable = leaderboardTable.Replace(" ", string.Empty);
         //leaderboardTable = "gabrieltm8Frame"; HARD CODED LEADERBOARD
         currentScore = new ScoreEntity(username, rhythmRunner.score, rhythmRunner.accuracy, rhythmRunner.ranking);
@@ -134,6 +135,13 @@ public class EndTrackScreenController : MonoBehaviour
 
     public async void PopulateLeaderboardsTab()
     {
+        if(SceneManager.GetActiveScene().name == "TutorialScene")
+        {
+            currentScoreEntry.SetActive(false);
+            leaderboardUnavailableTxt.SetActive(true);
+            return;
+        }
+
         try
         {
             leaderboard.AddRange(await leaderboardController.GetLeaderboardTable(leaderboardTable));
@@ -142,6 +150,7 @@ public class EndTrackScreenController : MonoBehaviour
             {
                 if (e.RowKey == username)
                 {
+                    hasBeenUploaded = true;
                     if (float.Parse(currentScore.score) > float.Parse(e.score)) //Only upload score if it is better than the current score saved online for this user
                     {
                         leaderboardController.AddToLeaderboard(leaderboardTable, username, rhythmRunner.score, rhythmRunner.accuracy, rhythmRunner.ranking); //Upload score
@@ -164,7 +173,8 @@ public class EndTrackScreenController : MonoBehaviour
 
             leaderboard.Sort(delegate (ScoreEntity e1, ScoreEntity e2) { return float.Parse(e1.score).CompareTo(float.Parse(e2.score)); }); //Sorts leaderboard in ascending order
             int currentScoreRank = leaderboard.Count - leaderboard.IndexOf(highScore);
-            leaderboard.RemoveRange(0, leaderboard.Count - 10);
+            if(leaderboard.Count > 10)
+                leaderboard.RemoveRange(0, leaderboard.Count - 10);
             leaderboard.Reverse();
             for (int i = 0; i < leaderboard.Count; i++)
             {

@@ -42,7 +42,8 @@ public class LevelSelectItemController : MonoBehaviour
 
     public void UpdateChildren()
     {
-        songCoverImage.sprite = coverSprite;
+        if(coverSprite != null)
+            songCoverImage.sprite = coverSprite;
         songNameText.text = songName;
         songArtistText.text = songArtist;
         trackArtistText.text = trackArtist;

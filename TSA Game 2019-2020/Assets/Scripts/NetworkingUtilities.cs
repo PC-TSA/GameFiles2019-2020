@@ -67,7 +67,7 @@ public class NetworkingUtilities : MonoBehaviour
 		CloudTableClient tableClient = StorageAccount.CreateCloudTableClient();
 
 		// Create a table client for interacting with the table service 
-		CloudTable table = tableClient.GetTableReference(tableName.Substring(0, tableName.Length - 4));
+		CloudTable table = tableClient.GetTableReference(tableName);
 
 		try
 		{
