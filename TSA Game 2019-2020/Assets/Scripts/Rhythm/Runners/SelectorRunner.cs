@@ -7,6 +7,7 @@ public class SelectorRunner : MonoBehaviour
 {
     public int laneNumber; //0 = left lane, 1 = mid lane, 2 = right lane; defines it's keycode
     public KeyCode key;
+    public string button;
 
     public Vector3 initialPos;
 
@@ -90,9 +91,10 @@ public class SelectorRunner : MonoBehaviour
     {
         if (transform.localPosition != initialPos)
             transform.localPosition = initialPos;
-        if(rhythmRunner.isRunning)
+
+        if (rhythmRunner.isRunning)
         {
-            if (Input.GetKeyDown(key))
+            if (Input.GetButtonDown(button))
             {
                 GetComponent<Image>().sprite = pressSprite;
 
@@ -126,7 +128,7 @@ public class SelectorRunner : MonoBehaviour
                     rhythmRunner.UpdateMissclicks(1);
             }
 
-            if (Input.GetKeyUp(key))
+            if (Input.GetButtonUp(button))
             {
                 SetRegularSprite();
 
