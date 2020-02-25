@@ -1,0 +1,220 @@
+fileFormatVersion: 2
+guid: a1d40c20c273a694fa76c65c7e08fafb
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: BackLeftRotor
+    100002: BackRightRotor
+    100004: Camera
+    100006: CameraBox
+    100008: DroneBody
+    100010: FrontLeftRotor
+    100012: FrontRightRotor
+    100014: pCube18
+    100016: pCube18 1
+    100018: pCube18 2
+    100020: pCube18 3
+    100022: pCube4653
+    100024: pCube4653 1
+    100026: pCube4653 2
+    100028: pCube4653 3
+    100030: pCube4654
+    100032: pCube4654 1
+    100034: pCube4654 2
+    100036: pCube4654 3
+    100038: pCube4655
+    100040: pCube4655 1
+    100042: pCube4655 2
+    100044: pCube4655 3
+    100046: pCylinder2
+    100048: pCylinder2 1
+    100050: pCylinder2 2
+    100052: pCylinder2 3
+    100054: //RootNode
+    400000: BackLeftRotor
+    400002: BackRightRotor
+    400004: Camera
+    400006: CameraBox
+    400008: DroneBody
+    400010: FrontLeftRotor
+    400012: FrontRightRotor
+    400014: pCube18
+    400016: pCube18 1
+    400018: pCube18 2
+    400020: pCube18 3
+    400022: pCube4653
+    400024: pCube4653 1
+    400026: pCube4653 2
+    400028: pCube4653 3
+    400030: pCube4654
+    400032: pCube4654 1
+    400034: pCube4654 2
+    400036: pCube4654 3
+    400038: pCube4655
+    400040: pCube4655 1
+    400042: pCube4655 2
+    400044: pCube4655 3
+    400046: pCylinder2
+    400048: pCylinder2 1
+    400050: pCylinder2 2
+    400052: pCylinder2 3
+    400054: //RootNode
+    2100000: lambert1
+    2100002: ToriiRed
+    2100004: LightGray
+    2100006: BlackLambert
+    2300000: Camera
+    2300002: CameraBox
+    2300004: DroneBody
+    2300006: pCube18
+    2300008: pCube18 1
+    2300010: pCube18 2
+    2300012: pCube18 3
+    2300014: pCube4653
+    2300016: pCube4653 1
+    2300018: pCube4653 2
+    2300020: pCube4653 3
+    2300022: pCube4654
+    2300024: pCube4654 1
+    2300026: pCube4654 2
+    2300028: pCube4654 3
+    2300030: pCube4655
+    2300032: pCube4655 1
+    2300034: pCube4655 2
+    2300036: pCube4655 3
+    2300038: pCylinder2
+    2300040: pCylinder2 1
+    2300042: pCylinder2 2
+    2300044: pCylinder2 3
+    3300000: Camera
+    3300002: CameraBox
+    3300004: DroneBody
+    3300006: pCube18
+    3300008: pCube18 1
+    3300010: pCube18 2
+    3300012: pCube18 3
+    3300014: pCube4653
+    3300016: pCube4653 1
+    3300018: pCube4653 2
+    3300020: pCube4653 3
+    3300022: pCube4654
+    3300024: pCube4654 1
+    3300026: pCube4654 2
+    3300028: pCube4654 3
+    3300030: pCube4655
+    3300032: pCube4655 1
+    3300034: pCube4655 2
+    3300036: pCube4655 3
+    3300038: pCylinder2
+    3300040: pCylinder2 1
+    3300042: pCylinder2 2
+    3300044: pCylinder2 3
+    4300000: DroneBody
+    4300002: CameraBox
+    4300004: Camera
+    4300006: pCube18
+    4300008: pCylinder2
+    4300010: pCube4653
+    4300012: pCube4654
+    4300014: pCube4655
+    4300016: pCube18
+    4300018: pCylinder2
+    4300020: pCube4653
+    4300022: pCube4654
+    4300024: pCube4655
+    4300026: pCube18
+    4300028: pCylinder2
+    4300030: pCube4653
+    4300032: pCube4654
+    4300034: pCube4655
+    4300036: pCube18
+    4300038: pCylinder2
+    4300040: pCube4653
+    4300042: pCube4654
+    4300044: pCube4655
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
