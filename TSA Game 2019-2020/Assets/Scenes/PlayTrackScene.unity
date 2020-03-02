@@ -203,6 +203,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   laneNumber: 1
   key: 274
+  button: 
+  initialPos: {x: 0, y: 0, z: 0}
   selectableNotes: []
   selectableSlider: {fileID: 0}
   selectableSliderBeingHit: 0
@@ -745,6 +747,7 @@ MonoBehaviour:
   songs: []
   scrollerObj: {fileID: 191676419}
   isRunning: 0
+  canRun: 0
   lanes:
   - {fileID: 296894096}
   - {fileID: 1404680329}
@@ -917,6 +920,10 @@ MonoBehaviour:
   optionsMenu: {fileID: 1366118129}
   musicVolumeSlider: {fileID: 669460005}
   sfxVolumeSlider: {fileID: 1112489155}
+  rawImage: {fileID: 0}
+  videoPlayer: {fileID: 0}
+  playVideo: 0
+  canEnd: 1
 --- !u!82 &90242894
 AudioSource:
   m_ObjectHideFlags: 0
@@ -7495,13 +7502,13 @@ MonoBehaviour:
   m_margin: {x: -9.23583, y: 5.674602, z: 49.731853, w: 14.143833}
   m_textInfo:
     textComponent: {fileID: 420583467}
-    characterCount: 9
+    characterCount: 0
     spriteCount: 0
-    spaceCount: 2
-    wordCount: 2
+    spaceCount: 0
+    wordCount: 0
     linkCount: 0
-    lineCount: 1
-    pageCount: 1
+    lineCount: 0
+    pageCount: 0
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -13609,13 +13616,13 @@ MonoBehaviour:
   m_margin: {x: 6.518515, y: 5.674602, z: 117.405235, w: 14.143833}
   m_textInfo:
     textComponent: {fileID: 590780120}
-    characterCount: 4
+    characterCount: 0
     spriteCount: 0
     spaceCount: 0
-    wordCount: 1
+    wordCount: 0
     linkCount: 0
-    lineCount: 1
-    pageCount: 1
+    lineCount: 0
+    pageCount: 0
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -25297,6 +25304,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   laneNumber: 1
   key: 273
+  button: 
+  initialPos: {x: 0, y: 0, z: 0}
   selectableNotes: []
   selectableSlider: {fileID: 0}
   selectableSliderBeingHit: 0
@@ -26189,13 +26198,13 @@ MonoBehaviour:
   m_margin: {x: -0.59536195, y: 5.674602, z: 87.407936, w: 14.143833}
   m_textInfo:
     textComponent: {fileID: 1006569414}
-    characterCount: 1
+    characterCount: 0
     spriteCount: 0
     spaceCount: 0
-    wordCount: 1
+    wordCount: 0
     linkCount: 0
-    lineCount: 1
-    pageCount: 1
+    lineCount: 0
+    pageCount: 0
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -26584,6 +26593,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   laneNumber: 1
   key: 275
+  button: 
+  initialPos: {x: 0, y: 0, z: 0}
   selectableNotes: []
   selectableSlider: {fileID: 0}
   selectableSliderBeingHit: 0
@@ -39401,6 +39412,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   laneNumber: 1
   key: 276
+  button: 
+  initialPos: {x: 0, y: 0, z: 0}
   selectableNotes: []
   selectableSlider: {fileID: 0}
   selectableSliderBeingHit: 0
@@ -44847,6 +44860,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15ef443eee2c9a845aa638ff11b3288a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  originalPos: {x: 0, y: 0, z: 0}
   key: 32
   selectableSpaces: []
   rhythmRunner: {fileID: 90242893}
@@ -45010,6 +45024,7 @@ MonoBehaviour:
   currentScoreEntry: {fileID: 3041481900445993092}
   leaderboardUnavailableTxt: {fileID: 1243777222}
   leaderboardTable: 
+  enterToExitTxt: {fileID: 0}
 --- !u!225 &1590647533
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -45521,13 +45536,13 @@ MonoBehaviour:
   m_margin: {x: 59.872627, y: 5.674602, z: 95.254524, w: 14.143833}
   m_textInfo:
     textComponent: {fileID: 1631180086}
-    characterCount: 2
+    characterCount: 0
     spriteCount: 0
     spaceCount: 0
-    wordCount: 1
+    wordCount: 0
     linkCount: 0
-    lineCount: 1
-    pageCount: 1
+    lineCount: 0
+    pageCount: 0
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -53351,7 +53366,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   stopNaNPropagation: 1
-  finalBlitToCameraTarget: 0
   antialiasingMode: 0
   temporalAntialiasing:
     jitterSpread: 0.75

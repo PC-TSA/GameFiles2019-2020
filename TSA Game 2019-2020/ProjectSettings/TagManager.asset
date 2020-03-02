@@ -3,13 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Selector
-  - Note
-  - Space
-  - Slider
-  - SliderArrow
-  - SliderSprite
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -20,7 +14,7 @@ TagManager:
   - 
   - 
   - PostProcessing
-  - Ocean
+  - 
   - 
   - 
   - 
