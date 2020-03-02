@@ -16,6 +16,8 @@ public static class CrossSceneController
 
     public static float mainThemeTime; //Used by UIs to continue the main theme where the previous menu left off
 
+    public static bool isOnline; //If true, online features (leaderboards, workshop, etc) enabled. If false they are disabled; Likely due to choosing "continue offline" instead of logging in
+
     public static void SceneToGame(string recordingPath, AudioClip clip, int id) //Triggered from other scene, sends current track to game
     {
         previousScene = SceneManager.GetActiveScene().name;

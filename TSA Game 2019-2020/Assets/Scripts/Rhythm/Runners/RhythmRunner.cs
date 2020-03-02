@@ -10,6 +10,7 @@ using System.Xml.Serialization;
 using System.IO;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.Networking;
+using UnityEngine.Video;
 
 public class RhythmRunner : MonoBehaviour
 {
@@ -53,6 +54,7 @@ public class RhythmRunner : MonoBehaviour
     public GameObject scrollerObj;
 
     public bool isRunning; //If the rhythm portion is currently running, meaning a song is playing and notes are scrolling
+    public bool canRun; //Set to true after xml is loaded
 
     public List<GameObject> lanes; //The parent objs for each lane; Are disabled/enabled in SetLaneCount when loading the recording
     public int laneCount; //How many lanes to have (1-5)
@@ -140,8 +142,16 @@ public class RhythmRunner : MonoBehaviour
     public Slider musicVolumeSlider;
     public Slider sfxVolumeSlider;
 
+    public RawImage rawImage;
+    public VideoPlayer videoPlayer;
+    public bool playVideo;
+
+    public bool canEnd = true;
+
     private void Start()
     {
+        videoPlayer.Prepare();
+
         originalPos = scrollerObj.transform.localPosition;
 
         //Get vignette from post processing profile
@@ -261,7 +271,7 @@ public class RhythmRunner : MonoBehaviour
 
     void CheckForFinish()
     {
-        if (scrollerObj.transform.GetChild(0).childCount + scrollerObj.transform.GetChild(1).childCount + scrollerObj.transform.GetChild(2).childCount == 0)
+        if (scrollerObj.transform.GetChild(0).childCount + scrollerObj.transform.GetChild(1).childCount + scrollerObj.transform.GetChild(2).childCount == 0 && canEnd)
             FinishTrack();
     }
 
@@ -462,8 +472,7 @@ public class RhythmRunner : MonoBehaviour
         foreach(SelectorRunner selector in FindObjectsOfType<SelectorRunner>())
             selector.sliderHeightChange = scrollSpeed;
 
-        audioSource.Play();
-        isRunning = true;
+        canRun = true;
     }
 
     public void LoadRecording(string path) //Deserializes xml file at path and sets it as current recording
@@ -558,16 +567,30 @@ public class RhythmRunner : MonoBehaviour
         newSpace.GetComponent<BoxCollider>().size = new Vector3(s.width, newSpace.GetComponent<BoxCollider>().size.y, newSpace.GetComponent<BoxCollider>().size.z);
     }
 
+    IEnumerator StartRun()
+    {
+        while (!videoPlayer.isPrepared || !canRun)
+            yield return new WaitForSeconds(0.1f);
+        rawImage.texture = videoPlayer.texture;
+        videoPlayer.Play();
+        audioSource.Play();
+        playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = true;
+        cameraTrack.SetActive(true);
+        isRunning = true;
+    }
+
     IEnumerator DelayedStart(int seconds)
     {
         yield return new WaitForSeconds(seconds);
         LoadRecording();
+        StartCoroutine(StartRun());
     }
 
     IEnumerator DelayedStart(int seconds, string path)
     {
         yield return new WaitForSeconds(seconds);
         LoadRecording(path);
+        StartCoroutine(StartRun());
     }
 
     void UpdateDeathCount(int i)
@@ -833,6 +856,14 @@ public class RhythmRunner : MonoBehaviour
                     Destroy(scrollerObj.transform.GetChild(i).GetChild(k).gameObject);
                 }
             }
+        }
+
+        //Force start run without track
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.LeftAlt) && Input.GetKey(KeyCode.Space))
+        {
+            canRun = true;
+            canEnd = false;
+            StartCoroutine(StartRun());
         }
     }
 

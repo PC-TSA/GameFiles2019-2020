@@ -8,12 +8,15 @@ using TMPro;
 
 public class MainMenuController : MonoBehaviour
 {
+    public GameObject mainUI;
+
     public AudioSource audioSource;
 
     public GameObject loadingBar;
     public List<GameObject> loadingTextPeriods;
 
     public GameObject mainMenuCanvas;
+    public GameObject canvasMisc;
     public GameObject usernameInput;
 
     public PlayableAsset mainMenuClose; //The timeline animation to slide the main menu back into the bar
@@ -30,6 +33,19 @@ public class MainMenuController : MonoBehaviour
     public GameObject howToPlayMenu;
     public bool howToPlayActive;
     public GameObject tutorialPrompt;
+
+    public GameObject splashTitlePrefab;
+
+    public GameObject authMenu;
+    public GameObject authLoginTab;
+    public GameObject authSignUpTab;
+
+    public GameObject tabHighlightDivider;
+    public bool tabHighlightMoving;
+    public float tabHighlightMoveSpeed = 2;
+    public Vector3 tabHighlightGoalPos;
+
+    public TMP_Text loginLogoutButtonText;
 
     private void Awake()
     {
@@ -168,6 +184,13 @@ public class MainMenuController : MonoBehaviour
                 howToPlayActive = false;
             }
         }
+
+        if (tabHighlightMoving)
+        {
+            tabHighlightDivider.transform.localPosition = Vector3.Lerp(tabHighlightDivider.transform.localPosition, tabHighlightGoalPos, Time.deltaTime * tabHighlightMoveSpeed);
+            if (Vector3.Distance(tabHighlightDivider.transform.localPosition, tabHighlightGoalPos) < 0.001)
+                tabHighlightMoving = false;
+        }
     }
 
     IEnumerator MainMenuAnimWait(AsyncOperation op)
@@ -236,5 +259,53 @@ public class MainMenuController : MonoBehaviour
     {
         mainMenuCanvas.GetComponent<PlayableDirector>().Play(campaignDifficultiesCloseToMain);
         StartCoroutine(CampaignDifficultiesMenuClose());
+    }
+
+    public void SpawnSplashTitle(string titleText, Color titleColor)
+    {
+        GameObject newSplashTitle = Instantiate(splashTitlePrefab, canvasMisc.transform);
+        newSplashTitle.GetComponent<TMP_Text>().text = titleText;
+        newSplashTitle.GetComponent<TMP_Text>().color = titleColor;
+        StartCoroutine(KillSplashTitle(newSplashTitle));
+    }
+
+    IEnumerator KillSplashTitle(GameObject title)
+    {
+        yield return new WaitForSeconds(title.GetComponent<Animation>().clip.length);
+        Destroy(title);
+    }
+
+    public void SelectAuthLoginTab(GameObject tabButton)
+    {
+        authLoginTab.SetActive(true);
+        authSignUpTab.SetActive(false);
+
+        tabHighlightGoalPos = new Vector3(tabButton.transform.localPosition.x, tabHighlightDivider.transform.localPosition.y, tabHighlightDivider.transform.localPosition.z);
+        tabHighlightMoving = true;
+    }
+
+    public void SelectAuthSignUpTab(GameObject tabButton)
+    {
+        authLoginTab.SetActive(false);
+        authSignUpTab.SetActive(true);
+
+        tabHighlightGoalPos = new Vector3(tabButton.transform.localPosition.x, tabHighlightDivider.transform.localPosition.y, tabHighlightDivider.transform.localPosition.z);
+        tabHighlightMoving = true;
+    }
+
+    public void LoadMainUI()
+    {
+        authMenu.SetActive(false);
+        mainUI.SetActive(true);
+        if (CrossSceneController.isOnline)
+            loginLogoutButtonText.text = "Log Out";
+        else
+            loginLogoutButtonText.text = "Log In / Sign Up";
+    }
+
+    public void LoadAuthUI()
+    {
+        authMenu.SetActive(true);
+        mainUI.SetActive(false);
     }
 }
