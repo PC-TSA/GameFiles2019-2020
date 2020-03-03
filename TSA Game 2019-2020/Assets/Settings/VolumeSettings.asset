@@ -81,7 +81,7 @@ MonoBehaviour:
   active: 1
   skyType:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 2
   fogType:
     m_OverrideState: 1
     m_Value: 3
@@ -186,7 +186,7 @@ MonoBehaviour:
     showEyeDropper: 1
   meanFreePath:
     m_OverrideState: 1
-    m_Value: 50
+    m_Value: 60
     min: 1
   baseHeight:
     m_OverrideState: 0
