@@ -11,12 +11,27 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: BirchTree4
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Black4
+    second: {fileID: 2100000, guid: 9911fd4a050ecb141b9d39c8176ade46, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Leaves3
+    second: {fileID: 2100000, guid: db43c0e406756ab4a89c46dc7c2c91f0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: White4
+    second: {fileID: 2100000, guid: 8b9dc0e651cb9494395f65b1ea0d6dfe, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
-    materialSearch: 1
-    materialLocation: 1
+    materialSearch: 2
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0

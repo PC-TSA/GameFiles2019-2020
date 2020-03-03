@@ -20,6 +20,7 @@ MonoBehaviour:
   - {fileID: 114237684168779974}
   - {fileID: 114318453667471340}
   - {fileID: 114996346921150232}
+  - {fileID: 114777282769515154}
 --- !u!114 &114068308842107116
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -132,7 +133,7 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 1.25
+    value: 3
   threshold:
     overrideState: 1
     value: 0.9
@@ -210,6 +211,51 @@ MonoBehaviour:
   quality:
     overrideState: 0
     value: 2
+--- !u!114 &114777282769515154
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b14251571769e7f48b2512a534f6cac2, type: 3}
+  m_Name: SunShaftsHDRP
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  blend:
+    overrideState: 1
+    value: 1
+  resolution: 1
+  screenBlendMode: 0
+  sunTransform:
+    overrideState: 1
+    value: {x: 0, y: 0, z: 0}
+  radialBlurIterations:
+    overrideState: 1
+    value: 2
+  sunColor:
+    overrideState: 1
+    value: {r: 0.990566, g: 0.9263194, b: 0.6868548, a: 1}
+  sunThreshold:
+    overrideState: 1
+    value: {r: 0.87, g: 0.74, b: 0.65, a: 1}
+  sunShaftBlurRadius:
+    overrideState: 1
+    value: 3
+  sunShaftIntensity:
+    overrideState: 1
+    value: 3
+  maxRadius:
+    overrideState: 1
+    value: 0.67
+  useDepthTexture:
+    overrideState: 0
+    value: 1
 --- !u!114 &114838964306818558
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -263,7 +309,7 @@ MonoBehaviour:
     value: 1
   temperature:
     overrideState: 1
-    value: 10
+    value: 17
   tint:
     overrideState: 0
     value: 0
@@ -275,7 +321,7 @@ MonoBehaviour:
     value: 0
   saturation:
     overrideState: 1
-    value: 30
+    value: 40
   brightness:
     overrideState: 0
     value: 0
@@ -284,7 +330,7 @@ MonoBehaviour:
     value: -0.2
   contrast:
     overrideState: 1
-    value: 10
+    value: 20
   mixerRedOutRedIn:
     overrideState: 0
     value: 100
@@ -1548,7 +1594,7 @@ MonoBehaviour:
     value: 0
   keyValue:
     overrideState: 1
-    value: 0.7
+    value: 0.75
   eyeAdaptation:
     overrideState: 0
     value: 0

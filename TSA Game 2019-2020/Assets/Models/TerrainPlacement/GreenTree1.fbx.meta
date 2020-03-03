@@ -10,7 +10,17 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: pPlatonic39
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: GreenLeaves
+    second: {fileID: 2100000, guid: aa41f47fa92c51e4b8239115a4417049, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood
+    second: {fileID: 2100000, guid: e873186f2f4e70947952ed8ca39b3b3a, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

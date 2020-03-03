@@ -11,7 +11,12 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: FlowerBush2
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Leaves4
+    second: {fileID: 2100000, guid: aa41f47fa92c51e4b8239115a4417049, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
