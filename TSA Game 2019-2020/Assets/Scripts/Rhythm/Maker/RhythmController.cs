@@ -20,6 +20,7 @@ public class RhythmController : MonoBehaviour
     public AudioSource audioSource;
 
     public List<AudioClip> songs;
+    public List<string> builtInSongs;
     public List<int> songBPMs;
 
     public int laneCount;
@@ -119,7 +120,10 @@ public class RhythmController : MonoBehaviour
     {
         Object[] temp = Resources.LoadAll("Songs", typeof(AudioClip)); //Read all audioclips in the Resources/Songs folder and add them to the 'Songs' list
         foreach (Object o in temp)
+        {
             songs.Add((AudioClip)o);
+            builtInSongs.Add(o.name);
+        }
 
         System.IO.Directory.CreateDirectory(Application.persistentDataPath + "\\" + "Songs");
         string[] files = System.IO.Directory.GetFiles(Application.persistentDataPath + "\\" + "Songs");
@@ -153,7 +157,8 @@ public class RhythmController : MonoBehaviour
     private void Update()
     {
         if (isPlaying) //Update Waveform \/
-            UpdateWaveform();       
+            UpdateWaveform();
+       //songPickerDropdown.transform.GetChild(i).GetChild(3).gameObject.SetActive(false); //Disable delete on built in songs
     }
 
     public void UpdateNoteCount(int i)
@@ -514,6 +519,45 @@ public class RhythmController : MonoBehaviour
         {
             StartCoroutine(LoadAudioFile(path));
         }
+    }
+
+    public void DeleteSong(GameObject entry)
+    {
+        string clipName = entry.GetComponent<TMP_Text>().text;
+        foreach (AudioClip clip in songs)
+        {
+            if(clip.name == clipName)
+            {
+                songs.Remove(clip);
+                break;
+            }
+        }
+        File.Delete(Application.persistentDataPath + "\\" + "Songs" + "\\" + clipName + ".mp3");
+        foreach(TMP_Dropdown.OptionData option in songPickerDropdown.GetComponent<TMP_Dropdown>().options)
+        {
+            if(option.text == clipName)
+            {
+                songPickerDropdown.GetComponent<TMP_Dropdown>().options.Remove(option);
+                break;
+            }
+        }
+        songPickerDropdown.GetComponent<TMP_Dropdown>().Hide();
+    }
+
+    public void DisableDeleteBuiltInSongs()
+    {
+        foreach (TMP_Dropdown.OptionData option in songPickerDropdown.GetComponent<TMP_Dropdown>().options)
+        {
+            if(builtInSongs.Contains(option.text))
+                StartCoroutine(WaitToDisableDeleteBuiltInSongs(builtInSongs.IndexOf(option.text) + 1));
+        }
+    }
+
+    IEnumerator WaitToDisableDeleteBuiltInSongs(int index)
+    {
+        while (songPickerDropdown.transform.childCount < 6)
+            yield return new WaitForSeconds(0.01f);
+        songPickerDropdown.transform.GetChild(5).GetChild(0).GetChild(0).GetChild(index).GetChild(3).gameObject.SetActive(false);
     }
 
     public void AddClipToSongs(AudioClip song)
