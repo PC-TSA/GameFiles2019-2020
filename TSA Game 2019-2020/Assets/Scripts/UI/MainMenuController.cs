@@ -47,6 +47,8 @@ public class MainMenuController : MonoBehaviour
 
     public TMP_Text loginLogoutButtonText;
 
+    public PlayableDirector director;
+
     private void Awake()
     {
         CrossSceneController.isCampaign = false;
@@ -79,7 +81,7 @@ public class MainMenuController : MonoBehaviour
 
     public void GoToCampaign()
     {
-        mainMenuCanvas.GetComponent<PlayableDirector>().Play(campaignDifficultiesOpen);
+        director.Play(campaignDifficultiesOpen);
         StartCoroutine(CampaignDifficultiesMenuOpen());
         if (PlayerPrefs.GetInt("showTutorial") == 1)
             StartCoroutine(FadeObjectCanvasGroup(tutorialPrompt, 1, 5));
@@ -163,9 +165,9 @@ public class MainMenuController : MonoBehaviour
             {
                 isPlayingAnimOut = true;
                 if(campaignDifficultyMenu.activeSelf)
-                    mainMenuCanvas.GetComponent<PlayableDirector>().Play(campaignDifficultiesClose);
+                    director.Play(campaignDifficultiesClose);
                 else
-                    mainMenuCanvas.GetComponent<PlayableDirector>().Play(mainMenuClose);
+                    director.Play(mainMenuClose);
                 if (scene == "Workshop" || scene == "LevelSelect")
                     CrossSceneController.mainThemeTime = audioSource.time + 1.5f;
                 StartCoroutine(MainMenuAnimWait(asyncLoad));
@@ -257,7 +259,7 @@ public class MainMenuController : MonoBehaviour
 
     public void BackFromCampaignDifficulties()
     {
-        mainMenuCanvas.GetComponent<PlayableDirector>().Play(campaignDifficultiesCloseToMain);
+        director.Play(campaignDifficultiesCloseToMain);
         StartCoroutine(CampaignDifficultiesMenuClose());
     }
 

@@ -9,6 +9,8 @@ public class SpaceSelectorRunner : MonoBehaviour
 
     public KeyCode key;
 
+    public string button;
+
     public List<GameObject> selectableSpaces = new List<GameObject>();
 
     public RhythmRunner rhythmRunner;
@@ -43,7 +45,7 @@ public class SpaceSelectorRunner : MonoBehaviour
     {
         if (transform.localPosition != originalPos)
             transform.localPosition = originalPos;
-        if (Input.GetKeyDown(key))
+        if (Input.GetButtonDown(button))
         {
             GetComponent<Image>().sprite = pressSprite;
 
@@ -60,7 +62,7 @@ public class SpaceSelectorRunner : MonoBehaviour
                 rhythmRunner.UpdateMissclicks(1);
         }
 
-        if(Input.GetKeyUp(key))
+        if(Input.GetButtonUp(button))
             GetComponent<Image>().sprite = normalSprite;
     }
 

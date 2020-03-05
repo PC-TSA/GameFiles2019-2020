@@ -203,6 +203,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   laneNumber: 1
   key: 274
+  button: Down
+  initialPos: {x: 0, y: 0, z: 0}
   selectableNotes: []
   selectableSlider: {fileID: 0}
   selectableSliderBeingHit: 0
@@ -745,6 +747,7 @@ MonoBehaviour:
   songs: []
   scrollerObj: {fileID: 191676419}
   isRunning: 0
+  canRun: 0
   lanes:
   - {fileID: 296894096}
   - {fileID: 1404680329}
@@ -917,6 +920,11 @@ MonoBehaviour:
   optionsMenu: {fileID: 1366118129}
   musicVolumeSlider: {fileID: 669460005}
   sfxVolumeSlider: {fileID: 1112489155}
+  rawImage: {fileID: 0}
+  videoPlayer: {fileID: 0}
+  playVideo: 0
+  canEnd: 1
+  shouldUseVideo: 1
 --- !u!82 &90242894
 AudioSource:
   m_ObjectHideFlags: 0
@@ -25297,6 +25305,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   laneNumber: 1
   key: 273
+  button: Up
+  initialPos: {x: 0, y: 0, z: 0}
   selectableNotes: []
   selectableSlider: {fileID: 0}
   selectableSliderBeingHit: 0
@@ -26584,6 +26594,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   laneNumber: 1
   key: 275
+  button: Right
+  initialPos: {x: 0, y: 0, z: 0}
   selectableNotes: []
   selectableSlider: {fileID: 0}
   selectableSliderBeingHit: 0
@@ -39401,6 +39413,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   laneNumber: 1
   key: 276
+  button: Left
+  initialPos: {x: 0, y: 0, z: 0}
   selectableNotes: []
   selectableSlider: {fileID: 0}
   selectableSliderBeingHit: 0
@@ -44847,7 +44861,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15ef443eee2c9a845aa638ff11b3288a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  originalPos: {x: 0, y: 0, z: 0}
   key: 32
+  button: Space
   selectableSpaces: []
   rhythmRunner: {fileID: 90242893}
   normalSprite: {fileID: 21300000, guid: 27272d555da999542ac099e900d7848f, type: 3}
@@ -45010,6 +45026,7 @@ MonoBehaviour:
   currentScoreEntry: {fileID: 3041481900445993092}
   leaderboardUnavailableTxt: {fileID: 1243777222}
   leaderboardTable: 
+  enterToExitTxt: {fileID: 0}
 --- !u!225 &1590647533
 CanvasGroup:
   m_ObjectHideFlags: 0

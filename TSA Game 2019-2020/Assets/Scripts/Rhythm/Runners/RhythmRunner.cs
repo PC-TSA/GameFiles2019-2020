@@ -148,9 +148,14 @@ public class RhythmRunner : MonoBehaviour
 
     public bool canEnd = true;
 
+    public bool shouldUseVideo = true;
+
     private void Start()
     {
-        videoPlayer.Prepare();
+        if (videoPlayer != null && shouldUseVideo)
+            videoPlayer.Prepare();
+        else
+            shouldUseVideo = false;
 
         originalPos = scrollerObj.transform.localPosition;
 
@@ -438,9 +443,6 @@ public class RhythmRunner : MonoBehaviour
         }
         audioSource.time = 0;
 
-        //Reset scroller
-        scrollerObj.transform.localPosition = originalPos;
-
         //Update scroll speed
         scrollSpeed = currentRecording.scrollSpeed;
         FindObjectOfType<SelectorRunner>().sliderHeightChange = scrollSpeed;
@@ -493,9 +495,6 @@ public class RhythmRunner : MonoBehaviour
             }
             audioSource.time = 0;
 
-            //Reset scroller
-            scrollerObj.transform.localPosition = originalPos;
-
             //Update scroll speed
             scrollSpeed = currentRecording.scrollSpeed;
             FindObjectOfType<SelectorRunner>().sliderHeightChange = scrollSpeed;
@@ -527,8 +526,7 @@ public class RhythmRunner : MonoBehaviour
             foreach (SelectorRunner selector in FindObjectsOfType<SelectorRunner>())
                 selector.sliderHeightChange = scrollSpeed;
 
-            audioSource.Play();
-            isRunning = true;
+            canRun = true;
         }
     }
 
@@ -567,16 +565,32 @@ public class RhythmRunner : MonoBehaviour
         newSpace.GetComponent<BoxCollider>().size = new Vector3(s.width, newSpace.GetComponent<BoxCollider>().size.y, newSpace.GetComponent<BoxCollider>().size.z);
     }
 
-    IEnumerator StartRun()
+    IEnumerator StartRun() //Proper start init
     {
-        while (!videoPlayer.isPrepared || !canRun)
-            yield return new WaitForSeconds(0.1f);
-        rawImage.texture = videoPlayer.texture;
-        videoPlayer.Play();
-        audioSource.Play();
-        playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = true;
-        cameraTrack.SetActive(true);
+        //Prepare video
+        if (shouldUseVideo)
+        {
+            while (!videoPlayer.isPrepared || !canRun)
+                yield return new WaitForSeconds(0.1f);
+            rawImage.texture = videoPlayer.texture;
+            videoPlayer.Play();
+        }
+
+        //Adjust scroller obj y + delay song play
+        StartCoroutine(AdjustSongPlay(2.5f));
+
+        if(playerObj != null)
+            playerObj.transform.parent.GetComponent<PathCreation.Examples.PathFollower>().enabled = true;
+        if(cameraTrack != null)
+            cameraTrack.SetActive(true);
         isRunning = true;
+    }
+
+    IEnumerator AdjustSongPlay(float s)
+    {
+        scrollerObj.transform.localPosition = new Vector3(originalPos.x, originalPos.y + (scrollSpeed * 50 * s), originalPos.z);
+        yield return new WaitForSeconds(s);
+        audioSource.Play();
     }
 
     IEnumerator DelayedStart(int seconds)

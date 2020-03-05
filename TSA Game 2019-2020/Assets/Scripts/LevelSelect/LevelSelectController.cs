@@ -10,6 +10,7 @@ using UnityEngine.Networking;
 using NAudio;
 using NAudio.Wave;
 using UnityEngine.SceneManagement;
+using SFB;
 
 public class LevelSelectController : MonoBehaviour
 {
@@ -52,6 +53,9 @@ public class LevelSelectController : MonoBehaviour
 
     //Bonus Tracks Tab
     public GameObject bonusTracksTab;
+
+    public GameObject splashTitlePrefab;
+    public GameObject miscCanvasObj;
 
     void Start()
     {
@@ -223,10 +227,71 @@ public class LevelSelectController : MonoBehaviour
         else
         {
             Debug.LogError("Couldn't load song for xml " + track.xmlName);
-            StopCoroutine(PlayTrackEnum(track));
+            yield break;
         }
 
         CrossSceneController.SceneToGame(path + track.xmlName, clip, track.id);
+        StartCoroutine(LoadAsyncScene("PlayTrackScene"));
+    }
+
+    public void PickXMLToPlay()
+    {
+        var extensions = new[] {
+            new ExtensionFilter("XML", "xml" ), };
+
+        string[] temp = StandaloneFileBrowser.OpenFilePanel("Pick XML File", "", extensions, false);
+        if (temp.Length != 0)
+            StartCoroutine(PlayXMLEnum(temp[0]));
+    }
+
+    IEnumerator PlayXMLEnum(string path)
+    {
+        var serializer = new XmlSerializer(typeof(Recording));
+
+        if (path.Length == 0)
+        {
+            SpawnSplashTitle("No File Picked", Color.red);
+            yield break;
+        }
+
+        var stream = new FileStream(path, FileMode.Open);
+        Recording recording = serializer.Deserialize(stream) as Recording;
+        stream.Close();
+
+        // ---------- Get Clip 
+        AudioClip clip = null;
+
+        if (builtInSongs.Contains(recording.clipName))
+        {
+            clip = Resources.Load("Songs/" + recording.clipName) as AudioClip;
+        }
+        else if (File.Exists(path + recording.clipName + ".mp3"))
+        {
+            UnityWebRequest AudioFiles = null;
+
+            Mp3ToWav(path + recording.clipName + ".mp3", path + "temp.wav");
+
+            AudioFiles = UnityWebRequestMultimedia.GetAudioClip(path + "temp.wav", AudioType.WAV);
+            if (AudioFiles != null)
+            {
+                yield return AudioFiles.SendWebRequest();
+                if (AudioFiles.isNetworkError)
+                    Debug.Log(AudioFiles.error);
+                else
+                {
+                    clip = DownloadHandlerAudioClip.GetContent(AudioFiles);
+                    clip.name = recording.clipName;
+                }
+            }
+            File.Delete(path + "temp.wav");
+        }
+        else
+        {
+            SpawnSplashTitle("Couldnt Load Song's MP3", Color.red);
+            yield break;
+        }
+
+        CrossSceneController.SceneToGame(path, clip);
         StartCoroutine(LoadAsyncScene("PlayTrackScene"));
     }
 
@@ -348,5 +413,19 @@ public class LevelSelectController : MonoBehaviour
                 StartCoroutine(LoadAsyncScene("OverworldNight"));
                 break;
         }
+    }
+
+    public void SpawnSplashTitle(string titleText, Color titleColor)
+    {
+        GameObject newSplashTitle = Instantiate(splashTitlePrefab, miscCanvasObj.transform);
+        newSplashTitle.GetComponent<TMP_Text>().text = titleText;
+        newSplashTitle.GetComponent<TMP_Text>().color = titleColor;
+        StartCoroutine(KillSplashTitle(newSplashTitle));
+    }
+
+    IEnumerator KillSplashTitle(GameObject title)
+    {
+        yield return new WaitForSeconds(title.GetComponent<Animation>().clip.length);
+        Destroy(title);
     }
 }

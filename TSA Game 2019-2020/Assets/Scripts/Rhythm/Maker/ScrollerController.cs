@@ -160,7 +160,23 @@ public class ScrollerController : MonoBehaviour
     public void ChangeScrollSpeed()
     {
         string temp = speedPickerInputField.GetComponent<TMP_InputField>().text;
-        if(temp.Length > 0) //If is not null
+        float oldSpeed = scrollSpeed;
+        if (temp.Length > 0) //If is not null
+        {
             scrollSpeed = float.Parse(temp);
+            if (rhythmController.noteCount > 0 || rhythmController.sliderCount > 0 || rhythmController.spaceCount > 0)
+                ShiftNotesNewSpeed(oldSpeed);
+        }
+    }
+
+    public void ShiftNotesNewSpeed(float oldSpeed)
+    {
+        float multiplier = scrollSpeed / oldSpeed;
+        foreach (GameObject obj in rhythmController.noteGameObjects) //Shift notes
+            obj.transform.localPosition = new Vector3(obj.transform.localPosition.x, ((obj.transform.localPosition.y - selectors[0].transform.localPosition.y) * multiplier) + selectors[0].transform.localPosition.y, obj.transform.localPosition.z);
+        foreach (GameObject obj in rhythmController.sliderGameObjects) //Shift sliders
+            obj.transform.localPosition = new Vector3(obj.transform.localPosition.x, ((obj.transform.localPosition.y - selectors[0].transform.localPosition.y) * multiplier) + selectors[0].transform.localPosition.y, obj.transform.localPosition.z);
+        foreach (GameObject obj in rhythmController.spaceGameObjects) //Shift spaces
+            obj.transform.localPosition = new Vector3(obj.transform.localPosition.x, ((obj.transform.localPosition.y - selectors[0].transform.localPosition.y) * multiplier) + selectors[0].transform.localPosition.y, obj.transform.localPosition.z);
     }
 }
