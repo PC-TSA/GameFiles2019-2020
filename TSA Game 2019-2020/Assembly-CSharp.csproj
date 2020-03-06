@@ -151,6 +151,7 @@
     <Compile Include="Assets\Scripts\LevelSelect\LevelSelectController.cs" />
     <Compile Include="Assets\Scripts\LevelSelect\LevelSelectItemController.cs" />
     <Compile Include="Assets\Scripts\NetworkingUtilities.cs" />
+    <Compile Include="Assets\Scripts\ObjDragRotate.cs" />
     <Compile Include="Assets\Scripts\PrefabReplacer.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Maker\BeatGenController.cs" />
     <Compile Include="Assets\Scripts\Rhythm\Maker\RhythmController.cs" />
