@@ -148,6 +148,7 @@
     <Compile Include="Assets\Scripts\CrossSceneController.cs" />
     <Compile Include="Assets\Scripts\Customize\CustomizeController.cs" />
     <Compile Include="Assets\Scripts\Customize\InvItemController.cs" />
+    <Compile Include="Assets\Scripts\Customize\TestScript.cs" />
     <Compile Include="Assets\Scripts\FPSDisplay.cs" />
     <Compile Include="Assets\Scripts\Leaderboards\LeaderboardController.cs" />
     <Compile Include="Assets\Scripts\LevelSelect\LevelSelectController.cs" />
