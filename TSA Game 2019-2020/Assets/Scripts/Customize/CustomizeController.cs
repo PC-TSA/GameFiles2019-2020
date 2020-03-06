@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class CustomizeController : MonoBehaviour
 {
+    public AccountManager accMan;
+
     //Right tab UI
     public bool tabSelectorMoving;
     public GameObject tabSelector;
@@ -24,6 +26,9 @@ public class CustomizeController : MonoBehaviour
     public GameObject storeTab;
     public GameObject tradeTab;
 
+    public GameObject inventoryContentObj;
+    public GameObject inventoryItemPrefab;
+
     // Update is called once per frame
     void Update()
     {
@@ -33,6 +38,11 @@ public class CustomizeController : MonoBehaviour
             if (Vector3.Distance(tabSelector.transform.localPosition, tabSelectorGoalPos) < 0.001)
                 tabSelectorMoving = false;
         }
+
+        if (Input.GetKeyDown(KeyCode.X))
+            accMan.RemoveInvItem("gabrieltm8", 3);
+        if (Input.GetKeyDown(KeyCode.Z))
+            accMan.AddInvItem("gabrieltm8", 3);
     }
 
     public void SpawnSplashTitle(string titleText, Color titleColor)

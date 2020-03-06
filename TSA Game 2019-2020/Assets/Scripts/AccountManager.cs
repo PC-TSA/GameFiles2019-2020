@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -42,6 +43,85 @@ public class AccountManager : MonoBehaviour
     {
         mainMenuController.SpawnSplashTitle("Online Features Disabled", Color.red);
         mainMenuController.LoadMainUI();
+    }
+
+    public async void AddInvItem(string username, int itemID)
+    {
+        Debug.Log("Adding item: " + itemID + " to username " + username);
+        CloudTableClient tableClient = StorageAccount.CreateCloudTableClient();
+
+        // Create a table client for interacting with the table service 
+        CloudTable table = tableClient.GetTableReference("AccountData");
+
+        //Update current inventory by adding this id to the end of the string
+        TableOperation retrieve = TableOperation.Retrieve<AccountData>(username, username);
+        TableResult result = await table.ExecuteAsync(retrieve);
+        AccountData dat = (AccountData)result.Result;
+        if (dat.inventory == null || dat.inventory.Length == 0)
+            dat.inventory += itemID;
+        else
+            dat.inventory += "_" + itemID;
+        Debug.Log("New inventory: " + dat.inventory);
+        TableOperation replace = TableOperation.InsertOrReplace(dat);
+        await table.ExecuteAsync(replace);
+    }
+
+    public async void RemoveInvItem(string username, int itemID)
+    {
+        Debug.Log("Removing item: " + itemID + " from username " + username);
+        CloudTableClient tableClient = StorageAccount.CreateCloudTableClient();
+
+        // Create a table client for interacting with the table service 
+        CloudTable table = tableClient.GetTableReference("AccountData");
+
+        TableOperation retrieve = TableOperation.Retrieve<AccountData>(username, username);
+        TableResult result = await table.ExecuteAsync(retrieve);
+        AccountData dat = (AccountData)result.Result;
+
+        List<int> inv = InvToInt(dat.inventory);
+        inv.Remove(itemID);
+        dat.inventory = InvToString(inv);
+
+        Debug.Log("New inventory: " + dat.inventory);
+        TableOperation replace = TableOperation.InsertOrReplace(dat);
+        await table.ExecuteAsync(replace);
+    }
+
+    public async void GetInventory(string username)
+    {
+        Debug.Log("Pulling inventory from: " + username);
+        CloudTableClient tableClient = StorageAccount.CreateCloudTableClient();
+
+        // Create a table client for interacting with the table service 
+        CloudTable table = tableClient.GetTableReference("AccountData");
+
+        TableOperation retrieve = TableOperation.Retrieve<AccountData>(username, username);
+        TableResult result = await table.ExecuteAsync(retrieve);
+        AccountData dat = (AccountData)result.Result;
+
+        Debug.Log("Inventory: " + dat.inventory);
+    }
+
+    List<int> InvToInt(string inv)
+    {
+        List<int> list = new List<int>();
+        string[] c = inv.Split('_');
+        foreach (string s in c)
+            list.Add(int.Parse(s));
+        return list;
+    }
+
+    string InvToString(List<int> inv)
+    {
+        string newInvStr = "";
+        foreach (int i in inv)
+        {
+            if (newInvStr.Length == 0)
+                newInvStr += i;
+            else
+                newInvStr += "_" + i;
+        }
+        return newInvStr;
     }
 
     async void RunLogin(string username, string password)
@@ -139,18 +219,18 @@ public class AccountManager : MonoBehaviour
 
         // Create a table client for interacting with the table service 
         CloudTable table = tableClient.GetTableReference("Users");
-        try
-        {
-            await table.CreateIfNotExistsAsync();
-        }
-        catch (StorageException)
-        {
-            throw;
-        }
 
         //Get current table size by retrieving entity with partitionKey & rowKey "TrackCounter" 
         User newUser = new User(username, hash);
         TableOperation insert = TableOperation.Insert(newUser);
+        await table.ExecuteAsync(insert);
+
+        // Create a table client for interacting with the table service 
+        table = tableClient.GetTableReference("AccountData");
+
+        //Get current table size by retrieving entity with partitionKey & rowKey "TrackCounter" 
+        AccountData newData = new AccountData(username);
+        insert = TableOperation.Insert(newData);
         await table.ExecuteAsync(insert);
 
         PlayerPrefs.SetString("username", username);
@@ -171,4 +251,26 @@ public class User : TableEntity
         this.PartitionKey = username;
         this.RowKey = passwordHash;
     }
+}
+
+public class AccountData : TableEntity
+{
+    // Your entity type must expose a parameter-less constructor
+    public AccountData() { }
+
+    public AccountData(string username)
+    {
+        this.PartitionKey = username;
+        this.RowKey = username;
+    }
+
+    public AccountData(string username, string inventory)
+    {
+        this.PartitionKey = username;
+        this.RowKey = username;
+        this.inventory = inventory;
+    }
+
+    public string inventory { get; set; }
+    public bool isFemale { get; set; }
 }
