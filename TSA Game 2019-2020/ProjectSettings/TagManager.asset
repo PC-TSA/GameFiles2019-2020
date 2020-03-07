@@ -10,6 +10,7 @@ TagManager:
   - Slider
   - SliderArrow
   - SliderSprite
+  - InventoryItem
   layers:
   - Default
   - TransparentFX

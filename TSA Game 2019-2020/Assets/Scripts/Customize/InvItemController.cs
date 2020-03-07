@@ -4,16 +4,31 @@ using UnityEngine;
 
 public class InvItemController : MonoBehaviour
 {
+    public int id;
+    public string itemName;
+    public string rarity;
+
     public bool isDragging = false;
     public Vector3 screenPoint;
     public Vector3 offset;
     public Vector3 originalPos;
-    public bool shouldBeDropped = false; //If true, snap to a slot position instead of returning to original pos
 
-    // Start is called before the first frame update
-    void Start()
+    public GameObject slot;
+
+    public Transform originalParent;
+    public Transform beingDraggedParent;
+
+    public void InitializeItem(int id, string itemName, string rarity)
     {
-        
+        this.id = id;
+        this.itemName = itemName;
+        this.rarity = rarity;
+    }
+
+    private void Start()
+    {
+        originalPos = transform.position;
+        originalParent = transform.parent;
     }
 
     // Update is called once per frame
@@ -29,17 +44,21 @@ public class InvItemController : MonoBehaviour
 
     public void StartDrag()
     {
+        transform.SetParent(beingDraggedParent);
         screenPoint = Camera.main.WorldToScreenPoint(transform.position);
         offset = transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
-        originalPos = transform.position;
         isDragging = true;
-        shouldBeDropped = false;
     }
 
     public void EndDrag()
     {
         isDragging = false;
-        if(!shouldBeDropped)
+        if (slot == null)
+        {
+            transform.SetParent(originalParent);
             transform.position = originalPos;
+        }
+        else
+            transform.position = slot.transform.position;
     }
 }
