@@ -5,6 +5,7 @@ using UnityEngine;
 public class InvItemController : MonoBehaviour
 {
     public int id;
+    public int type; //0 = helmet, 1 = shirt, 2 = pants, 3 = shoes
     public string itemName;
     public string rarity;
 
@@ -53,12 +54,12 @@ public class InvItemController : MonoBehaviour
     public void EndDrag()
     {
         isDragging = false;
-        if (slot == null)
+        if (slot != null && slot.GetComponent<SlotContorller>().slotType == type)
+            transform.position = slot.transform.position;
+        else
         {
             transform.SetParent(originalParent);
             transform.position = originalPos;
         }
-        else
-            transform.position = slot.transform.position;
     }
 }

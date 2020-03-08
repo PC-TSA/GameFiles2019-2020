@@ -23,6 +23,8 @@ public class AccountManager : MonoBehaviour
     public TMP_InputField signUpUsernameInput;
     public TMP_InputField signUpPasswordInput;
 
+    public AccountData tempAccountData;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -87,9 +89,9 @@ public class AccountManager : MonoBehaviour
         await table.ExecuteAsync(replace);
     }
 
-    public async void GetInventory(string username)
+    public async void GetAccountData(string username)
     {
-        Debug.Log("Pulling inventory from: " + username);
+        Debug.Log("Pulling data from: " + username);
         CloudTableClient tableClient = StorageAccount.CreateCloudTableClient();
 
         // Create a table client for interacting with the table service 
@@ -99,7 +101,7 @@ public class AccountManager : MonoBehaviour
         TableResult result = await table.ExecuteAsync(retrieve);
         AccountData dat = (AccountData)result.Result;
 
-        Debug.Log("Inventory: " + dat.inventory);
+        tempAccountData = dat;
     }
 
     List<int> InvToInt(string inv)
@@ -272,5 +274,8 @@ public class AccountData : TableEntity
     }
 
     public string inventory { get; set; }
+
+    public string equiped { get; set; }
+
     public bool isFemale { get; set; }
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SlotContorller : MonoBehaviour
 {
+    public int slotType; //0 = helmet, 1 = shirt, 2 = pants, 3 = shoes
+
     private void OnTriggerEnter(Collider collision)
     {
         if (collision.tag == "InventoryItem")

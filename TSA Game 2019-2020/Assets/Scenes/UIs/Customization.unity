@@ -1511,6 +1511,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16fbd5d5b4f9a564f8db21833cd698fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotType: 0
 --- !u!65 &446116971
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1843,6 +1844,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16fbd5d5b4f9a564f8db21833cd698fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotType: 3
 --- !u!1 &477792009
 GameObject:
   m_ObjectHideFlags: 0
@@ -2503,6 +2505,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16fbd5d5b4f9a564f8db21833cd698fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotType: 2
 --- !u!1001 &794248848
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3834,6 +3837,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16fbd5d5b4f9a564f8db21833cd698fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotType: 1
 --- !u!1 &1097986600
 GameObject:
   m_ObjectHideFlags: 0
@@ -6654,6 +6658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+  type: 0
   itemName: 
   rarity: 
   isDragging: 0
