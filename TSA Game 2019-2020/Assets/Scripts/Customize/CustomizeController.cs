@@ -8,6 +8,10 @@ using UnityEngine.UI;
 public class CustomizeController : MonoBehaviour
 {
     public AccountManager accMan;
+    public ItemsManager itemsMan;
+
+    public List<GameObject> slots;
+    public List<GameObject> equipped;
 
     //Right tab UI
     public bool tabSelectorMoving;
@@ -29,6 +33,13 @@ public class CustomizeController : MonoBehaviour
     public GameObject inventoryContentObj;
     public GameObject inventoryItemPrefab;
 
+    private void Start()
+    {
+        accMan.SetupCustomizer(PlayerPrefs.GetString("username"), this);
+        for (int i = 0; i < 3; i++)
+            equipped.Add(null);
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -38,11 +49,38 @@ public class CustomizeController : MonoBehaviour
             if (Vector3.Distance(tabSelector.transform.localPosition, tabSelectorGoalPos) < 0.001)
                 tabSelectorMoving = false;
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.X))
-            accMan.RemoveInvItem("gabrieltm8", 3);
-        if (Input.GetKeyDown(KeyCode.Z))
-            accMan.AddInvItem("gabrieltm8", 3);
+    public void EquipItem(int id, int slot, GameObject obj)
+    {
+        InstantiateInvItem(equipped[slot].GetComponent<InvItemController>().id);
+        equipped[slot] = obj;
+        accMan.EquipItem(PlayerPrefs.GetString("username"), id, slot);
+    }
+
+    public void LoadItems(AccountData dat)
+    {
+        //Load inventory items
+        List<int> inv = accMan.InvToInt(dat.inventory);
+        foreach (int id in inv)
+            InstantiateInvItem(id);
+
+        InstantiateEquippedItem(dat.hat, 0);
+        InstantiateEquippedItem(dat.shirt, 1);
+        InstantiateEquippedItem(dat.pants, 2);
+        InstantiateEquippedItem(dat.shoes, 3);
+    }
+
+    public GameObject InstantiateInvItem(int itemID)
+    {
+        GameObject newItem = Instantiate(inventoryItemPrefab, inventoryContentObj.transform);
+        Instantiate(itemsMan.items[itemID], newItem.GetComponent<InvItemController>().itemPrefabParent.transform);
+        return newItem;
+    }
+
+    public GameObject InstantiateEquippedItem(int itemID, int slot)
+    {
+        return Instantiate(itemsMan.items[itemID], slots[slot].transform);
     }
 
     public void SpawnSplashTitle(string titleText, Color titleColor)

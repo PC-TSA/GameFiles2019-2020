@@ -281,12 +281,6 @@
     <Reference Include="UnityEditor.Networking">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.18f1/Editor/Data/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="Vuforia.UnityExtensions.Editor">
-      <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.18f1/Editor/Data/PlaybackEngines/VuforiaSupport/Managed/Editor/Vuforia.UnityExtensions.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Vuforia.UnityExtensions">
-      <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.18f1/Editor/Data/PlaybackEngines/VuforiaSupport/Managed/Runtime/Vuforia.UnityExtensions.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor.GoogleAudioSpatializer">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.18f1/Editor/Data/UnityExtensions/Unity/UnityGoogleAudioSpatializer/Editor/UnityEditor.GoogleAudioSpatializer.dll</HintPath>
     </Reference>
@@ -308,35 +302,29 @@
     <Reference Include="UnityEditor.Android.Extensions">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.18f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.WebGL.Extensions">
-      <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.18f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor.LinuxStandalone.Extensions">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.18f1/Editor/Data/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.WindowsStandalone.Extensions">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.18f1/Editor/Data/PlaybackEngines/windowsstandalonesupport/UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.OSXStandalone.Extensions">
-      <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.18f1/Editor/Data/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.WindowsAzure.Storage">
-      <HintPath>E:/Game Making/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/Microsoft.WindowsAzure.Storage.dll</HintPath>
+      <HintPath>D:/Game Making/GameFiles2019-2020/TSA Game 2019-2020/Assets/Plugins/Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
     <Reference Include="NAudio">
-      <HintPath>E:/Game Making/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/NAudio.dll</HintPath>
+      <HintPath>D:/Game Making/GameFiles2019-2020/TSA Game 2019-2020/Assets/Plugins/NAudio.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>E:/Game Making/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/Newtonsoft.Json.dll</HintPath>
+      <HintPath>D:/Game Making/GameFiles2019-2020/TSA Game 2019-2020/Assets/Plugins/Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Reflection.TypeExtensions">
-      <HintPath>E:/Game Making/GameFiles 2019-2020/TSA Game 2019-2020/Assets/Plugins/System.Reflection.TypeExtensions.dll</HintPath>
+      <HintPath>D:/Game Making/GameFiles2019-2020/TSA Game 2019-2020/Assets/Plugins/System.Reflection.TypeExtensions.dll</HintPath>
     </Reference>
     <Reference Include="Ookii.Dialogs">
-      <HintPath>E:/Game Making/GameFiles 2019-2020/TSA Game 2019-2020/Assets/StandaloneFileBrowser/Plugins/Ookii.Dialogs.dll</HintPath>
+      <HintPath>D:/Game Making/GameFiles2019-2020/TSA Game 2019-2020/Assets/StandaloneFileBrowser/Plugins/Ookii.Dialogs.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms">
-      <HintPath>E:/Game Making/GameFiles 2019-2020/TSA Game 2019-2020/Assets/StandaloneFileBrowser/Plugins/System.Windows.Forms.dll</HintPath>
+      <HintPath>D:/Game Making/GameFiles2019-2020/TSA Game 2019-2020/Assets/StandaloneFileBrowser/Plugins/System.Windows.Forms.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.18f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

@@ -47,6 +47,39 @@ public class AccountManager : MonoBehaviour
         mainMenuController.LoadMainUI();
     }
 
+    public async void EquipItem(string username, int itemID, int slot)
+    {
+        Debug.Log("Equiping item: " + itemID + " to username " + username);
+        CloudTableClient tableClient = StorageAccount.CreateCloudTableClient();
+
+        // Create a table client for interacting with the table service 
+        CloudTable table = tableClient.GetTableReference("AccountData");
+
+        //Update current inventory by adding this id to the end of the string
+        TableOperation retrieve = TableOperation.Retrieve<AccountData>(username, username);
+        TableResult result = await table.ExecuteAsync(retrieve);
+        AccountData dat = (AccountData)result.Result;
+
+        switch(slot)
+        {
+            case 0:
+                dat.hat = itemID;
+                break;
+            case 1:
+                dat.shirt = itemID;
+                break;
+            case 2:
+                dat.pants = itemID;
+                break;
+            case 3:
+                dat.shoes = itemID;
+                break;
+        }
+
+        TableOperation replace = TableOperation.InsertOrReplace(dat);
+        await table.ExecuteAsync(replace);
+    }
+
     public async void AddInvItem(string username, int itemID)
     {
         Debug.Log("Adding item: " + itemID + " to username " + username);
@@ -104,7 +137,37 @@ public class AccountManager : MonoBehaviour
         tempAccountData = dat;
     }
 
-    List<int> InvToInt(string inv)
+    public async void SetupCustomizer(string username, CustomizeController cc)
+    {
+        Debug.Log("Pulling data from: " + username);
+        CloudTableClient tableClient = StorageAccount.CreateCloudTableClient();
+
+        // Create a table client for interacting with the table service 
+        CloudTable table = tableClient.GetTableReference("AccountData");
+
+        TableOperation retrieve = TableOperation.Retrieve<AccountData>(username, username);
+        TableResult result = await table.ExecuteAsync(retrieve);
+        AccountData dat = (AccountData)result.Result;
+
+        cc.LoadItems(dat);
+    }
+
+    public async void ApplyItems(string username, ItemsManager im)
+    {
+        Debug.Log("Pulling data from: " + username);
+        CloudTableClient tableClient = StorageAccount.CreateCloudTableClient();
+
+        // Create a table client for interacting with the table service 
+        CloudTable table = tableClient.GetTableReference("AccountData");
+
+        TableOperation retrieve = TableOperation.Retrieve<AccountData>(username, username);
+        TableResult result = await table.ExecuteAsync(retrieve);
+        AccountData dat = (AccountData)result.Result;
+
+        im.ApplyItems(dat);
+    }
+
+    public List<int> InvToInt(string inv)
     {
         List<int> list = new List<int>();
         string[] c = inv.Split('_');
@@ -113,7 +176,7 @@ public class AccountManager : MonoBehaviour
         return list;
     }
 
-    string InvToString(List<int> inv)
+    public string InvToString(List<int> inv)
     {
         string newInvStr = "";
         foreach (int i in inv)
@@ -272,10 +335,12 @@ public class AccountData : TableEntity
         this.RowKey = username;
         this.inventory = inventory;
     }
+    public bool isFemale { get; set; }
 
     public string inventory { get; set; }
 
-    public string equiped { get; set; }
-
-    public bool isFemale { get; set; }
+    public int hat { get; set; }
+    public int shirt { get; set; }
+    public int pants { get; set; }
+    public int shoes { get; set; }
 }

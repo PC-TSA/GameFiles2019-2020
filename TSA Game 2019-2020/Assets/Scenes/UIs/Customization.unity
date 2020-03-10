@@ -1252,7 +1252,7 @@ GameObject:
   - component: {fileID: 382774091}
   - component: {fileID: 382774090}
   m_Layer: 0
-  m_Name: ScrollView
+  m_Name: Inventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2590,6 +2590,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03810d34141d9b14693e01c4ccbd7050, type: 3}
+--- !u!1 &794248849 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4107320904186456279, guid: 03810d34141d9b14693e01c4ccbd7050,
+    type: 3}
+  m_PrefabInstance: {fileID: 794248848}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &794248850 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4107320904186456259, guid: 03810d34141d9b14693e01c4ccbd7050,
+    type: 3}
+  m_PrefabInstance: {fileID: 794248848}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &794248851 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4107320904186456317, guid: 03810d34141d9b14693e01c4ccbd7050,
+    type: 3}
+  m_PrefabInstance: {fileID: 794248848}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &794248852 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4107320904186456357, guid: 03810d34141d9b14693e01c4ccbd7050,
+    type: 3}
+  m_PrefabInstance: {fileID: 794248848}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &796692659
 GameObject:
   m_ObjectHideFlags: 0
@@ -4566,6 +4590,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   accMan: {fileID: 1331919534}
+  itemsMan: {fileID: 0}
   tabSelectorMoving: 0
   tabSelector: {fileID: 389345454}
   tabSelectorGoalPos: {x: 0, y: 0, z: 0}
@@ -5968,6 +5993,23 @@ MonoBehaviour:
   rotSpeed: 10
   x: 1
   y: 0
+--- !u!114 &1947354286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1947354282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d21970bed6b199347a0c535b0a792597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hatParent: {fileID: 794248851}
+  shirtParent: {fileID: 794248852}
+  pantsPrefab: {fileID: 0}
+  leftShoePrefab: {fileID: 794248850}
+  rightShoePrefab: {fileID: 794248849}
 --- !u!1 &1980911988
 GameObject:
   m_ObjectHideFlags: 0
@@ -6213,7 +6255,7 @@ GameObject:
   - component: {fileID: 2083955117}
   - component: {fileID: 2083955116}
   m_Layer: 0
-  m_Name: Content
+  m_Name: InvContent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6661,6 +6703,7 @@ MonoBehaviour:
   type: 0
   itemName: 
   rarity: 
+  itemPrefabParent: {fileID: 0}
   isDragging: 0
   screenPoint: {x: 0, y: 0, z: 0}
   offset: {x: 0, y: 0, z: 0}

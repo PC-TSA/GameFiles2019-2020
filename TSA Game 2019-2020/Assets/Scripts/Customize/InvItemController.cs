@@ -9,6 +9,8 @@ public class InvItemController : MonoBehaviour
     public string itemName;
     public string rarity;
 
+    public GameObject itemPrefabParent;
+
     public bool isDragging = false;
     public Vector3 screenPoint;
     public Vector3 offset;
@@ -55,7 +57,10 @@ public class InvItemController : MonoBehaviour
     {
         isDragging = false;
         if (slot != null && slot.GetComponent<SlotContorller>().slotType == type)
+        {
             transform.position = slot.transform.position;
+            GameObject.FindObjectOfType<CustomizeController>().EquipItem(id, slot.GetComponent<SlotContorller>().slotType, gameObject);
+        }
         else
         {
             transform.SetParent(originalParent);
